@@ -1,0 +1,6380 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>לוח ניהול סרטונים</title>
+  <style>
+    :root {
+      --bg: #f7f1e7;
+      --bg-2: #fff9f2;
+      --ink: #1c242c;
+      --muted: #66717d;
+      --line: rgba(22, 39, 56, 0.12);
+      --card: rgba(255, 255, 255, 0.78);
+      --card-strong: rgba(255, 255, 255, 0.9);
+      --shadow: 0 20px 45px rgba(54, 42, 24, 0.12);
+      --accent: #0f766e;
+      --accent-strong: #0b5b55;
+      --warm: #d97745;
+      --warm-strong: #c25f2d;
+      --red: #d4455f;
+      --yellow: #d39f0e;
+      --green: #199b68;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --space: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --chip: rgba(15, 118, 110, 0.08);
+      --published: rgba(212, 69, 95, 0.12);
+      --ready: rgba(25, 155, 104, 0.12);
+      --idea: rgba(217, 119, 69, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Heebo", "Assistant", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(217, 119, 69, 0.2), transparent 30%),
+        linear-gradient(180deg, #fff8ef 0%, #f7f0e4 52%, #efe6d7 100%);
+    }
+
+    body.compact {
+      --space: 0.7rem;
+      --space-lg: 1rem;
+      --space-xl: 1.3rem;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      color: inherit;
+      background: none;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    code {
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 0.95em;
+    }
+
+    .shell {
+      width: min(1500px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 1.25rem 0 2rem;
+    }
+
+    .topbar {
+      display: grid;
+      gap: 1rem;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: calc(var(--radius-xl) + 8px);
+      background: linear-gradient(160deg, rgba(255, 252, 246, 0.94), rgba(251, 243, 228, 0.88));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.35rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin: 0;
+    }
+
+    .title-block h1 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .title-block .subtitle {
+      margin-top: 0.5rem;
+      color: var(--muted);
+      max-width: 58rem;
+    }
+
+    .header-actions,
+    .filters-row,
+    .stats-strip,
+    .progress-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      min-height: 42px;
+      padding: 0.75rem 1rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: rgba(15, 118, 110, 0.08);
+      transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: white;
+      box-shadow: 0 12px 25px rgba(15, 118, 110, 0.24);
+    }
+
+    .btn.warm {
+      background: linear-gradient(135deg, var(--warm), var(--warm-strong));
+      color: white;
+      box-shadow: 0 12px 25px rgba(201, 106, 61, 0.24);
+    }
+
+    .btn.ghost {
+      border-color: var(--line);
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .btn.active {
+      background: rgba(15, 118, 110, 0.15);
+      border-color: rgba(15, 118, 110, 0.25);
+    }
+
+    .stat-card {
+      min-width: 140px;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: var(--card-strong);
+      box-shadow: 0 10px 18px rgba(28, 36, 44, 0.06);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.35rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .filters-row {
+      padding: 0.8rem;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid var(--line);
+    }
+
+    .field {
+      display: grid;
+      gap: 0.35rem;
+      min-width: 160px;
+      flex: 1 1 160px;
+    }
+
+    .field.small {
+      flex: 0 0 160px;
+    }
+
+    .field span,
+    .filters-title,
+    .panel-head small,
+    .muted {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      min-height: 46px;
+      padding: 0.78rem 0.95rem;
+      border: 1px solid rgba(28, 36, 44, 0.12);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+      border-color: rgba(15, 118, 110, 0.55);
+      box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+    }
+
+    .progress-box {
+      display: grid;
+      gap: 0.45rem;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.08), rgba(217, 119, 69, 0.08));
+    }
+
+    .progress-track {
+      height: 14px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(28, 36, 44, 0.08);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--warm));
+      transition: width 0.2s ease;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .board-panel,
+    .sidebar .panel {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(255, 250, 242, 0.82));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .board-panel {
+      padding: 1rem;
+    }
+
+    .board-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      align-items: start;
+    }
+
+    .category-card {
+      display: grid;
+      gap: 0.85rem;
+      min-height: 180px;
+      padding: 0.95rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: 0 12px 25px rgba(31, 42, 55, 0.06);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+
+    .category-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 30px rgba(31, 42, 55, 0.1);
+    }
+
+    .category-card.ready-card {
+      background: linear-gradient(180deg, rgba(25, 155, 104, 0.08), rgba(255, 255, 255, 0.82));
+    }
+
+    .category-card.published-card {
+      background: linear-gradient(180deg, rgba(212, 69, 95, 0.09), rgba(255, 255, 255, 0.82));
+    }
+
+    .category-card.schedule-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.1), rgba(255, 255, 255, 0.9), rgba(217, 119, 69, 0.08));
+      border-color: rgba(15, 118, 110, 0.18);
+    }
+
+    .category-top,
+    .panel-head,
+    .subcat-head,
+    .item-head,
+    .schedule-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .category-title-wrap {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .category-title {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .count-badge,
+    .role-badge,
+    .tiny-pill,
+    .priority-pill,
+    .source-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      min-height: 28px;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+
+    .count-badge {
+      background: rgba(28, 36, 44, 0.08);
+      color: var(--muted);
+    }
+
+    .role-badge.ready {
+      background: var(--ready);
+      color: var(--green);
+    }
+
+    .role-badge.published {
+      background: var(--published);
+      color: var(--red);
+    }
+
+    .tiny-pill {
+      background: rgba(15, 118, 110, 0.09);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .category-actions,
+    .item-actions,
+    .subcat-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .icon-btn {
+      min-width: 34px;
+      min-height: 34px;
+      padding: 0.55rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.66);
+      border: 1px solid rgba(28, 36, 44, 0.08);
+    }
+
+    .icon-btn.danger {
+      color: #8f1f36;
+      background: rgba(212, 69, 95, 0.12);
+    }
+
+    .drag-handle {
+      cursor: grab;
+    }
+
+    .dragging {
+      opacity: 0.45;
+    }
+
+    .category-body,
+    .subcategory,
+    .items-stack,
+    .schedule-columns,
+    .schedule-list,
+    .task-list,
+    .tag-manager,
+    .tag-wrap,
+    .links-row,
+    .outfit-row {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .subcategory {
+      padding: 0.8rem;
+      border-radius: var(--radius-md);
+      border: 1px dashed rgba(28, 36, 44, 0.14);
+      background: rgba(255, 255, 255, 0.54);
+    }
+
+    .items-stack {
+      min-height: 56px;
+    }
+
+    .empty-box {
+      display: grid;
+      place-items: center;
+      min-height: 56px;
+      padding: 0.85rem;
+      text-align: center;
+      color: var(--muted);
+      border-radius: var(--radius-md);
+      border: 1px dashed rgba(28, 36, 44, 0.14);
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .item-card,
+    .schedule-item {
+      display: grid;
+      gap: 0.7rem;
+      padding: 0.9rem;
+      border-radius: 18px;
+      border: 1px solid rgba(28, 36, 44, 0.1);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 8px 16px rgba(31, 42, 55, 0.05);
+    }
+
+    .item-card[draggable="true"] {
+      cursor: grab;
+    }
+
+    .schedule-item.draggable {
+      cursor: grab;
+    }
+
+    .item-card.priority-red,
+    .schedule-item.priority-red {
+      box-shadow: inset 4px 0 0 var(--red), 0 8px 16px rgba(31, 42, 55, 0.05);
+    }
+
+    .item-card.priority-yellow,
+    .schedule-item.priority-yellow {
+      box-shadow: inset 4px 0 0 var(--yellow), 0 8px 16px rgba(31, 42, 55, 0.05);
+    }
+
+    .item-card.priority-green,
+    .schedule-item.priority-green {
+      box-shadow: inset 4px 0 0 var(--green), 0 8px 16px rgba(31, 42, 55, 0.05);
+    }
+
+    .item-head h4 {
+      font-size: 1.05rem;
+      line-height: 1.25;
+    }
+
+    .meta-row,
+    .tag-wrap,
+    .links-row,
+    .outfit-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .priority-pill.red {
+      background: rgba(212, 69, 95, 0.12);
+      color: var(--red);
+    }
+
+    .priority-pill.yellow {
+      background: rgba(211, 159, 14, 0.14);
+      color: #996f00;
+    }
+
+    .priority-pill.green {
+      background: rgba(25, 155, 104, 0.12);
+      color: var(--green);
+    }
+
+    .tag {
+      --tag-color: #d8e7e4;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.28rem;
+      padding: 0.36rem 0.72rem;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--tag-color) 60%, white 40%);
+      background: color-mix(in srgb, var(--tag-color) 22%, white 78%);
+      font-size: 0.83rem;
+      font-weight: 700;
+    }
+
+    .tag.clickable {
+      cursor: pointer;
+    }
+
+    .source-pill {
+      background: rgba(28, 36, 44, 0.08);
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .link-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.42rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.08);
+      color: var(--accent-strong);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .schedule-columns {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .schedule-panel {
+      padding: 0.85rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(28, 36, 44, 0.09);
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .schedule-panel h3 {
+      margin-bottom: 0.7rem;
+      font-size: 1rem;
+    }
+
+    .sidebar {
+      display: grid;
+      gap: 1rem;
+      position: sticky;
+      top: 1rem;
+    }
+
+    .sidebar .panel {
+      padding: 1rem;
+    }
+
+    .panel-head {
+      margin-bottom: 0.85rem;
+    }
+
+    .inline-form,
+    .task-row,
+    .tag-manager-row,
+    .dialog-actions,
+    .checkline {
+      display: flex;
+      gap: 0.55rem;
+      align-items: center;
+    }
+
+    .inline-form {
+      margin-bottom: 0.9rem;
+    }
+
+    .task-row {
+      justify-content: space-between;
+      padding: 0.7rem 0.8rem;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(28, 36, 44, 0.08);
+    }
+
+    .task-row.done {
+      opacity: 0.75;
+    }
+
+    .task-row.done .task-text {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .checkline input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .tag-manager-row {
+      justify-content: space-between;
+      padding: 0.7rem 0.8rem;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid rgba(28, 36, 44, 0.08);
+    }
+
+    .tag-manager-row input[type="color"] {
+      width: 44px;
+      height: 34px;
+      border: 0;
+      padding: 0;
+      background: none;
+    }
+
+    .helper-box {
+      padding: 0.85rem;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(217, 119, 69, 0.1), rgba(255, 255, 255, 0.55));
+      color: #5b4a32;
+      line-height: 1.6;
+    }
+
+    dialog {
+      width: min(720px, calc(100% - 1rem));
+      border: 0;
+      padding: 0;
+      border-radius: 28px;
+      background: rgba(255, 252, 247, 0.98);
+      box-shadow: 0 25px 70px rgba(22, 27, 33, 0.28);
+    }
+
+    dialog::backdrop {
+      background: rgba(18, 24, 31, 0.36);
+      backdrop-filter: blur(8px);
+    }
+
+    .dialog-shell {
+      padding: 1.15rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .dialog-grid {
+      display: grid;
+      gap: 0.9rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dialog-grid .full {
+      grid-column: 1 / -1;
+    }
+
+    .checkstack {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .field label {
+      font-weight: 700;
+    }
+
+    .footnote {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    body.compact .topbar,
+    body.compact .board-panel,
+    body.compact .sidebar .panel,
+    body.compact .category-card,
+    body.compact .item-card,
+    body.compact .schedule-item {
+      padding: 0.8rem;
+    }
+
+    body.compact .btn {
+      min-height: 38px;
+      padding: 0.62rem 0.88rem;
+    }
+
+    body.compact .input,
+    body.compact .select {
+      min-height: 40px;
+      padding: 0.62rem 0.82rem;
+    }
+
+    @media (max-width: 1160px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+    }
+
+    @media (max-width: 860px) {
+      .schedule-columns,
+      .dialog-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .shell {
+        width: min(100% - 1rem, 1500px);
+      }
+    }
+
+    @media (max-width: 620px) {
+      .title-row,
+      .header-actions,
+      .filters-row,
+      .item-head,
+      .category-top,
+      .subcat-head,
+      .panel-head,
+      .task-row,
+      .tag-manager-row,
+      .dialog-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .category-actions,
+      .item-actions,
+      .subcat-actions,
+      .task-actions {
+        justify-content: flex-start;
+      }
+
+      .inline-form {
+        flex-direction: column;
+      }
+    }
+    /* Mobile-first purple UI refactor */
+    :root {
+      --bg: #f6f0ff;
+      --bg-2: #fcf9ff;
+      --ink: #24183f;
+      --muted: #6f6790;
+      --line: rgba(91, 33, 182, 0.14);
+      --card: rgba(255, 255, 255, 0.92);
+      --card-strong: rgba(255, 255, 255, 0.98);
+      --shadow: 0 18px 42px rgba(76, 39, 143, 0.14);
+      --accent: #7c3aed;
+      --accent-strong: #5b21b6;
+      --warm: #a855f7;
+      --warm-strong: #7e22ce;
+      --chip: rgba(124, 58, 237, 0.09);
+      --published: rgba(236, 72, 153, 0.13);
+      --ready: rgba(34, 197, 94, 0.14);
+      --idea: rgba(124, 58, 237, 0.08);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top right, rgba(168, 85, 247, 0.22), transparent 34%),
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.18), transparent 32%),
+        linear-gradient(180deg, #f8f3ff 0%, #f1ebff 52%, #ece5fb 100%);
+    }
+
+    .shell {
+      width: min(100%, 760px);
+      padding: 0.75rem 0.75rem 2rem;
+    }
+
+    .topbar,
+    .sidebar .panel,
+    .category-card {
+      border-color: rgba(255, 255, 255, 0.48);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 244, 255, 0.92));
+      box-shadow: var(--shadow);
+    }
+
+    .topbar {
+      gap: 0.8rem;
+      padding: 1rem;
+      border-radius: 26px;
+    }
+
+    .title-row,
+    .header-actions,
+    .filters-row,
+    .stats-strip,
+    .progress-row,
+    .workspace,
+    .sidebar,
+    .board-grid,
+    .schedule-columns {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .title-block h1 {
+      font-size: clamp(1.55rem, 8vw, 2.35rem);
+      line-height: 1.05;
+    }
+
+    .title-block .subtitle {
+      max-width: none;
+      font-size: 0.93rem;
+      line-height: 1.5;
+    }
+
+    .header-actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .btn,
+    .icon-btn,
+    .mini-btn {
+      min-height: 38px;
+      padding: 0.68rem 0.85rem;
+      border-radius: 14px;
+      font-weight: 700;
+    }
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      box-shadow: 0 12px 24px rgba(91, 33, 182, 0.2);
+    }
+
+    .btn.warm {
+      background: linear-gradient(135deg, var(--warm), var(--warm-strong));
+      box-shadow: 0 12px 24px rgba(126, 34, 206, 0.2);
+    }
+
+    .btn.ghost,
+    .icon-btn,
+    .mini-btn {
+      border: 1px solid rgba(91, 33, 182, 0.1);
+      background: rgba(124, 58, 237, 0.06);
+    }
+
+    .btn.active {
+      background: rgba(124, 58, 237, 0.16);
+      border-color: rgba(124, 58, 237, 0.22);
+    }
+
+    .stats-strip {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stat-card {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      padding: 0.8rem 0.9rem;
+      border-radius: 18px;
+    }
+
+    .stat-card strong {
+      margin: 0;
+      font-size: 1.08rem;
+      line-height: 1;
+    }
+
+    .stat-card span {
+      text-align: left;
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+
+    .filters-row {
+      padding: 0.8rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid var(--line);
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    .input,
+    .select,
+    .textarea {
+      min-height: 42px;
+      border-radius: 14px;
+      border-color: rgba(91, 33, 182, 0.12);
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+      border-color: rgba(124, 58, 237, 0.55);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+    }
+
+    .progress-box {
+      padding: 0.85rem 0.9rem;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.11), rgba(168, 85, 247, 0.09));
+      border-color: rgba(91, 33, 182, 0.1);
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, var(--accent), var(--warm));
+    }
+
+    .workspace {
+      align-items: stretch;
+    }
+
+    .board-panel {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .board-grid {
+      gap: 0.75rem;
+    }
+
+    .category-card {
+      min-height: 0;
+      padding: 0;
+      overflow: hidden;
+      border-radius: 24px;
+      transition: none;
+    }
+
+    .category-card:hover {
+      transform: none;
+      box-shadow: var(--shadow);
+    }
+
+    .category-card.schedule-card {
+      background: linear-gradient(180deg, rgba(123, 92, 255, 0.14), rgba(255, 255, 255, 0.98));
+      border-color: rgba(124, 58, 237, 0.18);
+    }
+
+    .category-top,
+    .schedule-head,
+    .panel-head {
+      display: grid;
+      gap: 0.65rem;
+      align-items: start;
+      padding: 0.95rem 1rem;
+    }
+
+    .category-top {
+      border-bottom: 1px solid rgba(91, 33, 182, 0.08);
+    }
+
+    .category-title-wrap {
+      gap: 0.4rem;
+    }
+
+    .category-title {
+      gap: 0.45rem;
+    }
+
+    .category-title h2,
+    .panel-head h2,
+    .schedule-head h2 {
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .muted,
+    .panel-head small,
+    .field span,
+    .footnote {
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.45;
+    }
+
+    .count-badge,
+    .role-badge,
+    .tiny-pill,
+    .priority-pill,
+    .source-pill,
+    .count-hint {
+      min-height: 25px;
+      padding: 0.16rem 0.58rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .count-badge {
+      background: rgba(91, 33, 182, 0.08);
+      color: var(--accent-strong);
+    }
+
+    .tiny-pill,
+    .count-hint {
+      background: var(--chip);
+      color: var(--accent-strong);
+    }
+
+    .source-pill {
+      background: rgba(36, 24, 63, 0.06);
+      color: var(--muted);
+    }
+
+    .category-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      width: 100%;
+      text-align: right;
+      padding: 0;
+    }
+
+    .accordion-state {
+      flex: 0 0 auto;
+      color: var(--accent);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .category-actions,
+    .subcat-actions,
+    .task-actions {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 0.1rem;
+    }
+
+    .icon-btn {
+      min-width: max-content;
+      background: rgba(124, 58, 237, 0.07);
+    }
+
+    .icon-btn.danger,
+    .mini-btn.danger {
+      color: #9d174d;
+      background: rgba(236, 72, 153, 0.11);
+      border-color: rgba(236, 72, 153, 0.16);
+    }
+
+    .category-body,
+    .schedule-columns {
+      padding: 0.75rem;
+      gap: 0.65rem;
+    }
+
+    .schedule-panel,
+    .subcategory,
+    .helper-box {
+      padding: 0.75rem;
+      border-radius: 18px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(124, 58, 237, 0.04);
+    }
+
+    .subcategory {
+      gap: 0.55rem;
+    }
+
+    .subcat-head {
+      display: grid;
+      gap: 0.5rem;
+      align-items: start;
+      padding-bottom: 0.55rem;
+      border-bottom: 1px dashed rgba(91, 33, 182, 0.14);
+    }
+
+    .items-stack,
+    .schedule-list,
+    .task-list,
+    .tag-manager {
+      gap: 0.45rem;
+    }
+
+    .item-card,
+    .schedule-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.55rem;
+      align-items: center;
+      min-height: 0;
+      padding: 0.72rem 0.78rem;
+      border-radius: 16px;
+      box-shadow: none;
+      background: rgba(255, 255, 255, 0.97);
+    }
+
+    .item-card.priority-red,
+    .schedule-item.priority-red {
+      box-shadow: inset 4px 0 0 var(--red);
+    }
+
+    .item-card.priority-yellow,
+    .schedule-item.priority-yellow {
+      box-shadow: inset 4px 0 0 var(--yellow);
+    }
+
+    .item-card.priority-green,
+    .schedule-item.priority-green {
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+
+    .row-main {
+      min-width: 0;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .row-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      min-width: 0;
+    }
+
+    .row-title h4 {
+      margin: 0;
+      min-width: 0;
+      font-size: 0.96rem;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .row-meta,
+    .row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
+    .row-actions {
+      justify-content: flex-end;
+    }
+
+    .mini-btn {
+      flex: 0 0 auto;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .tag-wrap {
+      gap: 0.35rem;
+    }
+
+    .tag {
+      padding: 0.3rem 0.64rem;
+      font-size: 0.79rem;
+      font-weight: 800;
+    }
+
+    .link-chip {
+      justify-content: center;
+      padding: 0.55rem 0.72rem;
+      border-radius: 14px;
+      background: rgba(124, 58, 237, 0.08);
+      color: var(--accent-strong);
+    }
+
+    .task-row,
+    .tag-manager-row {
+      padding: 0.72rem 0.8rem;
+      border-radius: 16px;
+      border-color: rgba(91, 33, 182, 0.08);
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    .inline-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.55rem;
+    }
+
+    dialog {
+      width: min(680px, calc(100% - 0.9rem));
+      border-radius: 24px;
+      background: rgba(255, 251, 255, 0.98);
+      box-shadow: 0 30px 60px rgba(47, 24, 82, 0.28);
+    }
+
+    dialog::backdrop {
+      background: rgba(29, 17, 52, 0.42);
+      backdrop-filter: blur(10px);
+    }
+
+    .dialog-shell {
+      gap: 0.9rem;
+      padding: 1rem;
+    }
+
+    .dialog-grid,
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .detail-card {
+      padding: 0.8rem;
+      border-radius: 18px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(124, 58, 237, 0.04);
+    }
+
+    .detail-card h3 {
+      margin-bottom: 0.45rem;
+      font-size: 0.94rem;
+    }
+
+    .detail-list,
+    .detail-links {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .detail-links a {
+      text-decoration: none;
+    }
+
+    .dialog-actions {
+      flex-wrap: wrap;
+    }
+
+    .helper-box {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(255, 255, 255, 0.78));
+      color: #4b2d78;
+    }
+
+    .empty-box {
+      min-height: 52px;
+      border-radius: 16px;
+      border-color: rgba(91, 33, 182, 0.14);
+      background: rgba(255, 255, 255, 0.72);
+      font-size: 0.9rem;
+    }
+
+    body.compact .topbar,
+    body.compact .sidebar .panel,
+    body.compact .category-card {
+      border-radius: 20px;
+    }
+
+    body.compact .category-top,
+    body.compact .schedule-head,
+    body.compact .panel-head,
+    body.compact .category-body,
+    body.compact .schedule-columns,
+    body.compact .sidebar .panel,
+    body.compact .dialog-shell {
+      padding: 0.75rem;
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        padding: 0.6rem 0.6rem 1.4rem;
+      }
+
+      .header-actions,
+      .stats-strip,
+      .inline-form {
+        grid-template-columns: 1fr;
+      }
+
+      .item-card,
+      .schedule-item {
+        grid-template-columns: 1fr;
+      }
+
+      .row-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    /* UX refinement pass */
+    .topbar,
+    .sidebar .panel,
+    .category-card {
+      box-shadow: 0 10px 24px rgba(77, 45, 130, 0.1);
+      border-color: rgba(255, 255, 255, 0.36);
+    }
+
+    .topbar {
+      gap: 0.95rem;
+      padding: 0.9rem;
+    }
+
+    .workspace,
+    .board-grid,
+    .sidebar {
+      gap: 1rem;
+    }
+
+    .title-block h1 {
+      font-size: clamp(1.45rem, 6vw, 2rem);
+    }
+
+    .title-block .subtitle,
+    .muted,
+    .panel-head small,
+    .field span,
+    .footnote,
+    .progress-caption {
+      font-size: 0.81rem;
+    }
+
+    .header-actions {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+    }
+
+    .menu-wrap,
+    .row-menu {
+      position: relative;
+    }
+
+    .menu-trigger {
+      min-width: 88px;
+    }
+
+    .menu-popover {
+      position: absolute;
+      inset-inline-end: 0;
+      top: calc(100% + 0.45rem);
+      z-index: 40;
+      display: grid;
+      gap: 0.22rem;
+      min-width: 190px;
+      padding: 0.42rem;
+      border-radius: 18px;
+      border: 1px solid rgba(91, 33, 182, 0.11);
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 20px 34px rgba(61, 29, 110, 0.16);
+    }
+
+    .header-popover {
+      min-width: 210px;
+    }
+
+    .row-popover {
+      min-width: 138px;
+    }
+
+    .menu-item {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      padding: 0.72rem 0.78rem;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      background: transparent;
+      font-weight: 700;
+      transition: background 0.16s ease, transform 0.16s ease;
+    }
+
+    .menu-item:hover,
+    .menu-item:focus-visible {
+      background: rgba(124, 58, 237, 0.08);
+      outline: none;
+    }
+
+    .menu-item.danger {
+      color: #9d174d;
+    }
+
+    .progress-headline {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .progress-value {
+      color: var(--accent-strong);
+      font-size: 1.55rem;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .progress-caption {
+      margin-top: 0.18rem;
+      color: var(--muted);
+    }
+
+    .category-card {
+      --tone: rgba(124, 58, 237, 0.06);
+    }
+
+    .tone-ideas {
+      --tone: rgba(168, 85, 247, 0.1);
+    }
+
+    .tone-scheduled {
+      --tone: rgba(99, 102, 241, 0.1);
+    }
+
+    .tone-filmed {
+      --tone: rgba(59, 130, 246, 0.09);
+    }
+
+    .tone-edit {
+      --tone: rgba(139, 92, 246, 0.1);
+    }
+
+    .tone-ready {
+      --tone: rgba(34, 197, 94, 0.12);
+    }
+
+    .tone-published {
+      --tone: rgba(236, 72, 153, 0.12);
+    }
+
+    .tone-generic {
+      --tone: rgba(124, 58, 237, 0.06);
+    }
+
+    .category-top {
+      position: relative;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.7rem;
+      padding: 0.78rem 0.85rem;
+      background: linear-gradient(180deg, var(--tone), rgba(255, 255, 255, 0));
+      cursor: pointer;
+      transition: background 0.18s ease, transform 0.16s ease;
+    }
+
+    .category-top:hover {
+      background: linear-gradient(180deg, var(--tone), rgba(255, 255, 255, 0.2));
+    }
+
+    .category-top:focus-visible {
+      outline: 2px solid rgba(124, 58, 237, 0.35);
+      outline-offset: -2px;
+    }
+
+    .category-top:active {
+      transform: scale(0.997);
+    }
+
+    .category-toggle {
+      min-height: 44px;
+      align-items: center;
+    }
+
+    .accordion-arrow {
+      color: var(--accent-strong);
+      font-size: 1rem;
+      font-weight: 800;
+      transition: transform 0.24s ease;
+    }
+
+    .category-card.is-collapsed .accordion-arrow,
+    .accordion-shell.collapsed + .accordion-arrow {
+      transform: rotate(90deg);
+    }
+
+    .accordion-shell {
+      display: block;
+      height: auto;
+      overflow: hidden;
+      opacity: 1;
+    }
+
+    .accordion-shell.collapsed {
+      height: 0;
+      opacity: 0;
+    }
+
+    .accordion-body {
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .category-body,
+    .schedule-columns,
+    .sidebar .panel,
+    .dialog-shell {
+      padding: 0.7rem;
+    }
+
+    .schedule-head,
+    .panel-head {
+      padding: 0.8rem 0.85rem;
+    }
+
+    .category-icon {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--accent-strong);
+      font-size: 0.88rem;
+      box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.08);
+    }
+
+    .category-title h2,
+    .schedule-head h2,
+    .panel-head h2 {
+      font-size: 0.98rem;
+    }
+
+    .subcat-head {
+      padding-bottom: 0.45rem;
+    }
+
+    .subcat-head h3,
+    .schedule-panel h3 {
+      font-size: 0.85rem;
+    }
+
+    .items-stack,
+    .schedule-list {
+      gap: 0;
+    }
+
+    .item-card,
+    .schedule-item {
+      gap: 0.6rem;
+      padding: 0.7rem 0.1rem;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+      transition: background 0.18s ease, transform 0.16s ease, opacity 0.16s ease;
+    }
+
+    .items-stack > .item-card + .item-card,
+    .schedule-list > .schedule-item + .schedule-item {
+      border-top: 1px solid rgba(91, 33, 182, 0.1);
+    }
+
+    .item-card:hover,
+    .schedule-item:hover {
+      background: rgba(124, 58, 237, 0.035);
+    }
+
+    .item-card:active,
+    .schedule-item:active {
+      transform: scale(0.995);
+    }
+
+    .row-main {
+      gap: 0.28rem;
+    }
+
+    .row-title h4 {
+      font-size: 0.98rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .row-meta {
+      gap: 0.28rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .priority-pill,
+    .tiny-pill,
+    .source-pill,
+    .count-hint {
+      min-height: 22px;
+      font-size: 0.7rem;
+    }
+
+    .row-actions {
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .btn,
+    .icon-btn,
+    .mini-btn,
+    .category-toggle,
+    .menu-item,
+    .checkline {
+      min-height: 44px;
+    }
+
+    .mini-btn,
+    .icon-btn {
+      padding-inline: 0.85rem;
+    }
+
+    .btn:active,
+    .icon-btn:active,
+    .mini-btn:active,
+    .menu-item:active {
+      transform: scale(0.98);
+    }
+
+    .dragging {
+      opacity: 0.48;
+      transform: scale(0.985);
+    }
+
+    .empty-box {
+      justify-items: start;
+      text-align: right;
+      gap: 0.22rem;
+      padding: 0.85rem 0.9rem;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .empty-icon {
+      color: var(--accent);
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .empty-box strong {
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .task-row,
+    .tag-manager-row,
+    .schedule-panel,
+    .subcategory,
+    .helper-box {
+      box-shadow: none;
+    }
+
+    @media (max-width: 560px) {
+      .menu-popover {
+        min-width: 168px;
+      }
+
+      .title-block .subtitle {
+        display: none;
+      }
+
+      .filters-row {
+        gap: 0.6rem;
+      }
+
+      .row-title h4 {
+        font-size: 0.94rem;
+      }
+    }
+
+    /* Compact product polish */
+    .topbar,
+    .sidebar .panel,
+    .category-card {
+      box-shadow: 0 8px 20px rgba(77, 45, 130, 0.08);
+      border-color: rgba(255, 255, 255, 0.26);
+    }
+
+    .topbar {
+      gap: 0.75rem;
+      padding: 0.8rem;
+    }
+
+    .title-row {
+      align-items: center;
+    }
+
+    .title-block h1 {
+      font-size: clamp(1.35rem, 5vw, 1.85rem);
+      line-height: 1.1;
+    }
+
+    .header-actions {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.55rem;
+    }
+
+    .header-actions .btn.primary {
+      min-height: 44px;
+    }
+
+    .menu-trigger,
+    .filter-toggle,
+    .filter-clear {
+      min-width: auto;
+      width: auto;
+      padding-inline: 0.85rem;
+    }
+
+    .filters-row {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      gap: 0.45rem;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .search-input {
+      min-height: 42px;
+      padding-block: 0.65rem;
+    }
+
+    .filters-panel {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+      padding: 0.65rem 0.75rem;
+      border-radius: 18px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .filters-panel .field span {
+      font-size: 0.75rem;
+    }
+
+    .progress-box {
+      padding: 0.8rem 0.9rem;
+      gap: 0.4rem;
+    }
+
+    .progress-headline h2 {
+      font-size: 0.95rem;
+    }
+
+    .progress-value {
+      font-size: 1.7rem;
+    }
+
+    .progress-caption,
+    .progress-mini {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .stats-strip {
+      gap: 0.55rem;
+    }
+
+    .stat-card {
+      padding: 0.7rem 0.8rem;
+      border-color: rgba(91, 33, 182, 0.08);
+      box-shadow: none;
+    }
+
+    .category-card {
+      gap: 0;
+    }
+
+    .category-top {
+      padding: 0.62rem 0.72rem;
+      gap: 0.4rem;
+      border-bottom-color: rgba(91, 33, 182, 0.06);
+    }
+
+    .category-title h2 {
+      font-size: 0.92rem;
+    }
+
+    .category-title-wrap .muted {
+      font-size: 0.74rem;
+    }
+
+    .category-actions {
+      flex: 0 0 auto;
+      gap: 0.3rem;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .category-actions .icon-btn,
+    .category-actions .row-menu > .icon-btn {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0;
+      border-radius: 14px;
+    }
+
+    .category-actions .row-popover {
+      min-width: 176px;
+    }
+
+    .schedule-head {
+      padding: 0.72rem 0.82rem;
+    }
+
+    .schedule-head .muted {
+      font-size: 0.76rem;
+    }
+
+    .schedule-columns {
+      padding-top: 0.2rem;
+    }
+
+    .schedule-panel,
+    .subcategory,
+    .helper-box,
+    .task-row,
+    .tag-manager-row {
+      border-color: rgba(91, 33, 182, 0.06);
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    .schedule-panel.schedule-unified {
+      padding: 0.15rem 0.65rem;
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .items-stack > .item-card + .item-card,
+    .schedule-list > .schedule-item + .schedule-item {
+      border-top-color: rgba(91, 33, 182, 0.08);
+    }
+
+    .item-card,
+    .schedule-item {
+      padding-block: 0.62rem;
+    }
+
+    .row-title h4 {
+      font-size: 0.95rem;
+    }
+
+    .row-meta {
+      gap: 0.24rem;
+      font-size: 0.72rem;
+    }
+
+    .count-hint,
+    .priority-pill,
+    .tiny-pill,
+    .source-pill {
+      min-height: 21px;
+      font-size: 0.68rem;
+      padding-inline: 0.5rem;
+    }
+
+    .row-actions {
+      gap: 0.35rem;
+    }
+
+    .row-actions .mini-btn {
+      min-width: 44px;
+      min-height: 44px;
+      padding-inline: 0.72rem;
+      border-radius: 14px;
+    }
+
+    .row-actions .row-popover {
+      min-width: 132px;
+    }
+
+    .empty-box {
+      min-height: 0;
+      padding: 0.78rem 0.82rem;
+    }
+
+    .empty-box strong {
+      font-size: 0.86rem;
+    }
+
+    .sidebar {
+      gap: 0.8rem;
+    }
+
+    .sidebar .panel {
+      padding: 0.82rem;
+    }
+
+    @media (max-width: 560px) {
+      .search-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .filter-clear {
+        grid-column: 1 / -1;
+      }
+
+      .filters-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .top-icon-btn {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0;
+      border-radius: 14px;
+      background: rgba(124, 58, 237, 0.08);
+    }
+
+    .quick-add-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .quick-add-input {
+      min-height: 42px;
+    }
+
+    .quick-add-btn,
+    .slim-btn {
+      min-height: 42px;
+      width: auto;
+      padding-inline: 0.8rem;
+    }
+
+    .view-state-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .view-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(124, 58, 237, 0.09);
+      color: var(--accent-strong);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-height: 42px;
+      padding: 0.2rem 0.2rem 0.2rem 0.4rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .toggle-row input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+
+    .accordion-head {
+      cursor: pointer;
+    }
+
+    .panel-accordion.is-collapsed .accordion-arrow {
+      transform: rotate(90deg);
+    }
+
+    .row-actions {
+      justify-content: flex-end;
+    }
+
+    .row-actions .mini-btn {
+      padding-inline: 0.8rem;
+    }
+
+    .drop-highlight {
+      background: rgba(124, 58, 237, 0.07) !important;
+      box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.22);
+    }
+
+    .item-card,
+    .schedule-item {
+      position: relative;
+    }
+
+    .drop-before::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      right: 0;
+      left: 0;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--warm));
+    }
+
+    .dragging {
+      opacity: 0.58;
+      transform: scale(1.01);
+      z-index: 3;
+    }
+
+    .fab {
+      position: fixed;
+      inset-inline-end: 1rem;
+      bottom: 1rem;
+      z-index: 45;
+      width: 58px;
+      height: 58px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--warm));
+      color: white;
+      box-shadow: 0 18px 36px rgba(91, 33, 182, 0.28);
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .fab:active {
+      transform: scale(0.97);
+    }
+
+    .snackbar {
+      position: fixed;
+      right: 0.75rem;
+      left: 0.75rem;
+      bottom: 4.9rem;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 18px;
+      background: rgba(36, 24, 63, 0.94);
+      color: white;
+      box-shadow: 0 18px 38px rgba(19, 12, 34, 0.28);
+    }
+
+    .snackbar .btn {
+      min-height: 38px;
+      color: white;
+      border-color: rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .board-empty-card {
+      padding: 0.4rem;
+    }
+
+    dialog.calendar-dialog {
+      width: min(100%, 1080px);
+      max-width: 1080px;
+      min-height: 100vh;
+      max-height: 100vh;
+      margin: 0 auto;
+      border-radius: 0;
+      background: linear-gradient(180deg, rgba(252, 248, 255, 0.98), rgba(243, 237, 255, 0.98));
+    }
+
+    .calendar-shell {
+      display: grid;
+      gap: 0.8rem;
+      min-height: calc(100vh - 2rem);
+    }
+
+    .calendar-topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .calendar-actions {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .calendar-month {
+      padding: 0.75rem;
+      border-radius: 20px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(255, 255, 255, 0.84);
+    }
+
+    .calendar-month-head {
+      margin-bottom: 0.6rem;
+      font-size: 0.96rem;
+      font-weight: 800;
+    }
+
+    .calendar-weekdays,
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 0.28rem;
+    }
+
+    .calendar-weekdays {
+      margin-bottom: 0.28rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-align: center;
+    }
+
+    .calendar-cell {
+      min-height: 76px;
+      padding: 0.28rem;
+      border-radius: 12px;
+      background: rgba(124, 58, 237, 0.03);
+      box-shadow: inset 0 0 0 1px rgba(91, 33, 182, 0.05);
+    }
+
+    .calendar-cell.empty {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .calendar-cell.today {
+      background: rgba(124, 58, 237, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.2);
+    }
+
+    .calendar-date {
+      margin-bottom: 0.2rem;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--accent-strong);
+    }
+
+    .calendar-events {
+      display: grid;
+      gap: 0.18rem;
+    }
+
+    .calendar-pill {
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-height: 22px;
+      padding: 0.14rem 0.36rem;
+      border-radius: 8px;
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-align: right;
+      border: 0;
+    }
+
+    .calendar-pill.holiday {
+      background: rgba(91, 33, 182, 0.12);
+      color: var(--accent-strong);
+    }
+
+    .calendar-pill.status-ready {
+      background: rgba(34, 197, 94, 0.18);
+      color: #166534;
+    }
+
+    .calendar-pill.status-filmed {
+      background: rgba(234, 179, 8, 0.2);
+      color: #854d0e;
+    }
+
+    .calendar-pill.status-early {
+      background: rgba(239, 68, 68, 0.18);
+      color: #991b1b;
+    }
+
+    .calendar-pill.status-edit {
+      background: rgba(124, 58, 237, 0.18);
+      color: #5b21b6;
+    }
+
+    @media (max-width: 860px) {
+      .calendar-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .quick-add-row {
+        grid-template-columns: 1fr;
+      }
+
+      .calendar-cell {
+        min-height: 66px;
+      }
+
+      .calendar-pill {
+        font-size: 0.62rem;
+      }
+    }
+
+    /* Final mobile polish */
+    :root {
+      --shadow: 0 10px 28px rgba(76, 39, 143, 0.08);
+      --line: rgba(91, 33, 182, 0.11);
+      --card: rgba(255, 255, 255, 0.94);
+    }
+
+    .topbar,
+    .sidebar .panel,
+    .category-card,
+    .task-row,
+    .tag-manager-row,
+    .schedule-panel,
+    .subcategory,
+    .stat-card,
+    .item-card,
+    .schedule-item {
+      box-shadow: none;
+    }
+
+    .topbar,
+    .sidebar .panel,
+    .category-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 244, 255, 0.94));
+    }
+
+    .topbar {
+      padding: 0.85rem;
+      gap: 0.65rem;
+    }
+
+    .header-actions {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header-actions .btn.primary {
+      min-height: 44px;
+    }
+
+    .menu-trigger,
+    .top-icon-btn {
+      width: auto;
+    }
+
+    .stats-strip {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    .stat-card {
+      min-width: 0;
+      padding: 0.72rem 0.8rem;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .filters-row {
+      padding: 0.65rem;
+      gap: 0.55rem;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .category-card {
+      border-radius: 20px;
+    }
+
+    .category-top,
+    .schedule-head,
+    .panel-head {
+      padding: 0.78rem 0.85rem;
+      gap: 0.55rem;
+    }
+
+    .category-top {
+      border-bottom-color: rgba(91, 33, 182, 0.06);
+    }
+
+    .schedule-head .muted,
+    .category-title-wrap .muted,
+    .panel-head small {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .category-body,
+    .schedule-columns,
+    .task-list,
+    .tag-manager {
+      gap: 0.55rem;
+    }
+
+    .schedule-panel,
+    .subcategory {
+      padding: 0.6rem;
+      background: rgba(124, 58, 237, 0.035);
+    }
+
+    .item-card,
+    .schedule-item {
+      padding: 0.62rem 0.7rem;
+      border-radius: 14px;
+      border-color: rgba(91, 33, 182, 0.08);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .item-card + .item-card,
+    .schedule-item + .schedule-item {
+      margin-top: 0.2rem;
+    }
+
+    .row-title h4 {
+      font-size: 0.96rem;
+      font-weight: 800;
+    }
+
+    .row-meta {
+      color: var(--muted);
+      font-size: 0.74rem;
+      gap: 0.3rem;
+    }
+
+    .priority-pill,
+    .source-pill,
+    .tiny-pill,
+    .count-badge {
+      min-height: 22px;
+      padding: 0.12rem 0.48rem;
+      font-size: 0.72rem;
+    }
+
+    .task-row,
+    .tag-manager-row {
+      padding: 0.65rem 0.75rem;
+      border-radius: 14px;
+    }
+
+    .checkline {
+      min-height: 44px;
+    }
+
+    .task-actions .icon-btn {
+      min-height: 36px;
+      padding: 0.5rem 0.7rem;
+    }
+
+    .progress-box {
+      padding: 0.8rem 0.85rem;
+    }
+
+    .progress-caption {
+      font-size: 0.78rem;
+    }
+
+    .menu-popover {
+      box-shadow: 0 14px 30px rgba(76, 39, 143, 0.16);
+      border: 1px solid rgba(91, 33, 182, 0.1);
+    }
+
+    .item-card:active,
+    .schedule-item:active,
+    .btn:active,
+    .icon-btn:active,
+    .mini-btn:active {
+      transform: scale(0.985);
+    }
+
+    @media (max-width: 560px) {
+      .header-actions {
+        grid-template-columns: minmax(0, 1fr) auto auto;
+      }
+
+      .stats-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stat-card span {
+        font-size: 0.76rem;
+      }
+
+      .quick-add-row {
+        gap: 0.4rem;
+      }
+    }
+
+    /* Additional mobile UX refinements */
+    .quick-add-row {
+      grid-template-columns: minmax(122px, 34%) minmax(0, 1fr) auto;
+    }
+
+    .quick-add-select {
+      min-height: 42px;
+    }
+
+    .filter-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      min-height: 36px;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 33, 182, 0.1);
+      background: rgba(124, 58, 237, 0.08);
+      color: var(--accent-strong);
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .progress-note {
+      color: var(--accent-strong);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .tag-actions,
+    .task-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .empty-cta {
+      width: auto;
+      margin-top: 0.2rem;
+    }
+
+    .snackbar.notice {
+      justify-content: center;
+      background: rgba(42, 24, 78, 0.94);
+    }
+
+    dialog.day-dialog {
+      width: min(680px, calc(100% - 1rem));
+      max-height: min(92vh, 860px);
+      border-radius: 26px;
+      background: rgba(252, 249, 255, 0.98);
+    }
+
+    .calendar-shell {
+      gap: 0.65rem;
+    }
+
+    .calendar-actions {
+      align-items: center;
+    }
+
+    .calendar-month-select {
+      min-height: 38px;
+      min-width: 126px;
+      width: auto;
+    }
+
+    .calendar-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .legend-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0.14rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .calendar-grid.month-mode {
+      grid-template-columns: 1fr;
+    }
+
+    .calendar-grid.year-mode {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .calendar-month.compact .calendar-cell {
+      min-height: 66px;
+    }
+
+    .calendar-cell {
+      width: 100%;
+      min-height: 64px;
+      border: 0;
+      text-align: right;
+      cursor: pointer;
+    }
+
+    .calendar-cell:focus-visible {
+      outline: 2px solid rgba(124, 58, 237, 0.45);
+      outline-offset: 2px;
+    }
+
+    .calendar-events {
+      gap: 0.14rem;
+    }
+
+    .calendar-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.24rem;
+      min-height: 20px;
+      padding: 0.12rem 0.32rem;
+    }
+
+    .calendar-status-short {
+      flex: 0 0 auto;
+      font-weight: 800;
+      opacity: 0.85;
+    }
+
+    .calendar-more {
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 700;
+    }
+
+    .legend-pill.holiday,
+    .calendar-pill.holiday {
+      background: rgba(91, 33, 182, 0.12);
+      color: var(--accent-strong);
+    }
+
+    .legend-pill.status-ready,
+    .calendar-pill.status-ready {
+      background: rgba(34, 197, 94, 0.18);
+      color: #166534;
+    }
+
+    .legend-pill.status-filmed,
+    .calendar-pill.status-filmed {
+      background: rgba(234, 179, 8, 0.2);
+      color: #854d0e;
+    }
+
+    .legend-pill.status-early,
+    .calendar-pill.status-early {
+      background: rgba(239, 68, 68, 0.18);
+      color: #991b1b;
+    }
+
+    .legend-pill.status-edit,
+    .calendar-pill.status-edit {
+      background: rgba(124, 58, 237, 0.18);
+      color: #5b21b6;
+    }
+
+    .day-shell {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .day-date-list,
+    .day-video-list {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .important-date-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+      padding: 0.65rem 0.75rem;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(91, 33, 182, 0.07);
+    }
+
+    .day-video-item {
+      width: 100%;
+      display: grid;
+      gap: 0.22rem;
+      padding: 0.72rem 0.8rem;
+      border-radius: 16px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(255, 255, 255, 0.9);
+      text-align: right;
+    }
+
+    .day-video-item.status-ready {
+      box-shadow: inset 4px 0 0 rgba(34, 197, 94, 0.45);
+    }
+
+    .day-video-item.status-filmed {
+      box-shadow: inset 4px 0 0 rgba(234, 179, 8, 0.45);
+    }
+
+    .day-video-item.status-edit {
+      box-shadow: inset 4px 0 0 rgba(124, 58, 237, 0.45);
+    }
+
+    .day-video-item.status-early {
+      box-shadow: inset 4px 0 0 rgba(239, 68, 68, 0.45);
+    }
+
+    .day-video-status {
+      color: var(--accent-strong);
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+
+    .day-video-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .day-video-meta {
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .day-form {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    @media (max-width: 860px) {
+      .calendar-grid.year-mode {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .quick-add-row,
+      .day-form {
+        grid-template-columns: 1fr;
+      }
+
+      .calendar-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+      }
+
+      .calendar-month-select {
+        min-width: 0;
+        width: 100%;
+        grid-column: 1 / -1;
+      }
+
+      .calendar-cell,
+      .calendar-month.compact .calendar-cell {
+        min-height: 56px;
+      }
+
+      .calendar-pill {
+        min-height: 18px;
+        font-size: 0.6rem;
+      }
+
+      .calendar-more {
+        font-size: 0.64rem;
+      }
+    }
+
+    /* Current UX refinement pass */
+    .topbar {
+      padding: 0.72rem;
+      gap: 0.55rem;
+      border-radius: 20px;
+    }
+
+    .title-row {
+      align-items: center;
+    }
+
+    .title-block h1 {
+      font-size: clamp(1.28rem, 5vw, 1.7rem);
+    }
+
+    .header-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto auto;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .header-actions .btn.primary {
+      min-height: 44px;
+      padding-inline: 0.9rem;
+    }
+
+    .top-icon-btn,
+    .settings-trigger {
+      width: 44px;
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0;
+      border-radius: 14px;
+      background: rgba(124, 58, 237, 0.08);
+      box-shadow: none;
+    }
+
+    .top-icon-btn.active {
+      background: rgba(124, 58, 237, 0.16);
+      border-color: rgba(124, 58, 237, 0.16);
+    }
+
+    .filters-row {
+      padding: 0;
+      background: transparent;
+      border: 0;
+      gap: 0.45rem;
+    }
+
+    .filters-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .compact-search-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .search-input {
+      min-height: 42px;
+      padding-block: 0.62rem;
+    }
+
+    .filters-panel {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+      padding: 0.58rem 0.65rem;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(91, 33, 182, 0.08);
+    }
+
+    .menu-divider {
+      height: 1px;
+      margin: 0.2rem 0;
+      background: rgba(91, 33, 182, 0.08);
+    }
+
+    .menu-label {
+      padding: 0.15rem 0.2rem 0.3rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .menu-item.active {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--accent-strong);
+    }
+
+    .category-manager-panel {
+      margin-bottom: 0.85rem;
+      padding: 0.75rem;
+      border-radius: 20px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 244, 255, 0.94));
+    }
+
+    .category-manager-list {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .category-manager-row {
+      display: grid;
+      gap: 0.45rem;
+      padding: 0.6rem 0.65rem;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(91, 33, 182, 0.06);
+    }
+
+    .category-manager-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .category-manager-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .category-top,
+    .schedule-head {
+      padding: 0.58rem 0.72rem;
+      min-height: 44px;
+    }
+
+    .category-top {
+      cursor: pointer;
+    }
+
+    .compact-title {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-width: 0;
+      flex-wrap: nowrap;
+    }
+
+    .compact-title h2 {
+      min-width: 0;
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .count-badge,
+    .role-badge {
+      min-height: 20px;
+      padding: 0.08rem 0.42rem;
+      font-size: 0.68rem;
+    }
+
+    .category-actions,
+    .drag-handle,
+    .category-icon {
+      display: none !important;
+    }
+
+    .item-card,
+    .schedule-item {
+      padding: 0.6rem 0.2rem;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .items-stack > .item-card + .item-card,
+    .schedule-list > .schedule-item + .schedule-item {
+      border-top: 1px solid rgba(91, 33, 182, 0.09);
+      margin-top: 0;
+    }
+
+    .row-title h4 {
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .row-meta {
+      gap: 0.24rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .row-actions .mini-btn {
+      min-width: 44px;
+      min-height: 44px;
+      padding-inline: 0.72rem;
+      border-radius: 14px;
+    }
+
+    .progress-box {
+      gap: 0.45rem;
+    }
+
+    .stacked-progress {
+      display: flex;
+      overflow: hidden;
+      min-height: 12px;
+      border-radius: 999px;
+      background: rgba(91, 33, 182, 0.08);
+    }
+
+    .progress-segment {
+      display: block;
+      min-width: 8px;
+      height: 12px;
+    }
+
+    .stage-ideas {
+      background: #ef4444;
+    }
+
+    .stage-scheduled {
+      background: #f97316;
+    }
+
+    .stage-filmed {
+      background: #eab308;
+    }
+
+    .stage-editing {
+      background: #7c3aed;
+    }
+
+    .stage-ready {
+      background: #22c55e;
+    }
+
+    .stage-published {
+      background: #86efac;
+    }
+
+    .stage-empty {
+      background: rgba(91, 33, 182, 0.1);
+    }
+
+    .progress-caption,
+    .progress-mini {
+      font-size: 0.76rem;
+      line-height: 1.35;
+    }
+
+    .calendar-pill.note {
+      background: rgba(91, 33, 182, 0.12);
+      color: var(--accent-strong);
+    }
+
+    .calendar-pill.filming-day,
+    .legend-pill.filming-day {
+      background: rgba(249, 115, 22, 0.16);
+      color: #9a3412;
+    }
+
+    .important-date-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .day-form {
+      grid-template-columns: minmax(0, 1fr) minmax(132px, 34%) auto;
+    }
+
+    .day-video-item {
+      min-height: 44px;
+    }
+
+    @media (max-width: 560px) {
+      .header-actions {
+        grid-template-columns: minmax(0, 1fr) auto auto auto;
+      }
+
+      .compact-search-row,
+      .day-form,
+      .filters-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .category-manager-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <dialog id="itemDialog">
+    <form id="itemForm" class="dialog-shell">
+      <div class="panel-head">
+        <div>
+          <h2 id="itemDialogTitle">פריט וידאו</h2>
+          <p class="muted">יצירה ועריכה של סרטון, תגיות, תאריך יעד והשראות.</p>
+        </div>
+        <button type="button" class="btn ghost" data-action="close-dialog" data-dialog-id="itemDialog">סגירה</button>
+      </div>
+
+      <input type="hidden" name="itemId">
+
+      <div class="dialog-grid">
+        <div class="field full">
+          <label for="itemTitle">כותרת</label>
+          <input id="itemTitle" class="input" name="title" required maxlength="160" placeholder="למשל: וולוג בוקר יום צילום">
+        </div>
+
+        <div class="field">
+          <label for="itemCategory">קטגוריה</label>
+          <select id="itemCategory" class="select" name="categoryId" required></select>
+        </div>
+
+        <div class="field">
+          <label for="itemSubcategory">תת־קטגוריה</label>
+          <select id="itemSubcategory" class="select" name="subcat"></select>
+        </div>
+
+        <div class="field">
+          <label for="itemPriority">עדיפות</label>
+          <select id="itemPriority" class="select" name="priority">
+            <option value="red">אדום</option>
+            <option value="yellow">צהוב</option>
+            <option value="green">ירוק</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="itemDue">תאריך יעד</label>
+          <input id="itemDue" class="input" type="date" name="due">
+        </div>
+
+        <div class="field full">
+          <label for="itemTags">תגיות</label>
+          <input id="itemTags" class="input" name="tags" placeholder="מופרדות בפסיקים או בשורה חדשה">
+        </div>
+
+        <div class="field">
+          <label for="itemOutfitRotem">לוק של רותם</label>
+          <input id="itemOutfitRotem" class="input" name="outfitRotem" placeholder="לדוגמה: ג׳קט ג׳ינס">
+        </div>
+
+        <div class="field">
+          <label for="itemOutfitMeir">לוק של מאיר</label>
+          <input id="itemOutfitMeir" class="input" name="outfitMeir" placeholder="לדוגמה: חולצה לבנה">
+        </div>
+
+        <div class="field full">
+          <label for="itemLinks">קישורי השראה</label>
+          <textarea id="itemLinks" class="textarea" name="links" placeholder="קישור אחד בכל שורה"></textarea>
+        </div>
+      </div>
+
+      <p class="footnote">פריטים ללא תאריך יוצגו בתצוגת <strong>סדר עלייה ⏰</strong> לפי סדר ידני שניתן לגרור ולעדכן.</p>
+
+      <div class="dialog-actions">
+        <button type="submit" class="btn primary">שמירה</button>
+        <button type="button" class="btn ghost" data-action="close-dialog" data-dialog-id="itemDialog">ביטול</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="categoryDialog">
+    <form id="categoryForm" class="dialog-shell">
+      <div class="panel-head">
+        <div>
+          <h2 id="categoryDialogTitle">קטגוריה</h2>
+          <p class="muted">שם, תפקיד מיוחד, ומצב פתוח או סגור.</p>
+        </div>
+        <button type="button" class="btn ghost" data-action="close-dialog" data-dialog-id="categoryDialog">סגירה</button>
+      </div>
+
+      <input type="hidden" name="categoryId">
+
+      <div class="dialog-grid">
+        <div class="field full">
+          <label for="categoryTitle">שם הקטגוריה</label>
+          <input id="categoryTitle" class="input" name="title" required maxlength="120" placeholder="למשל: עריכה בסיסית">
+        </div>
+
+        <div class="field">
+          <label for="categoryRole">תפקיד</label>
+          <select id="categoryRole" class="select" name="role">
+            <option value="">רגילה</option>
+            <option value="ready">מוכן לעלייה</option>
+            <option value="published">עלה</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="categoryCollapsed">תצוגה</label>
+          <div class="checkstack">
+            <label class="checkline">
+              <input id="categoryCollapsed" type="checkbox" name="collapsed">
+              <span>להתחיל במצב מכווץ</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <p class="footnote">השם <strong>סדר עלייה ⏰</strong> שמור לתצוגה וירטואלית ולכן לא ניתן להשתמש בו כקטגוריה אמיתית.</p>
+
+      <div class="dialog-actions">
+        <button type="submit" class="btn primary">שמירה</button>
+        <button type="button" class="btn ghost" data-action="close-dialog" data-dialog-id="categoryDialog">ביטול</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="detailDialog">
+    <div id="detailContent" class="dialog-shell"></div>
+  </dialog>
+
+  <dialog id="calendarDialog" class="calendar-dialog">
+    <div id="calendarContent" class="dialog-shell"></div>
+  </dialog>
+
+  <dialog id="dayDialog" class="day-dialog">
+    <div id="dayContent" class="dialog-shell"></div>
+  </dialog>
+
+  <input id="importInput" type="file" accept="application/json,.json" hidden>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const STORAGE_KEY = "video-board-v6";
+      const VIRTUAL_SCHEDULE_TITLE = "סדר עלייה ⏰";
+      const READY_TITLE = "מוכן לעלייה";
+      const PUBLISHED_TITLE = "עלה";
+      const HOLIDAYS = [
+        { date: "2026-04-22", title: "יום העצמאות" },
+        { date: "2026-09-11", title: "ראש השנה" },
+        { date: "2026-09-20", title: "יום כיפור" }
+      ];
+      const MONTH_NAMES = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
+      const WEEKDAY_SHORT = ["א", "ב", "ג", "ד", "ה", "ו", "ש"];
+      const DAY_FORMATTER = new Intl.DateTimeFormat("he-IL", { weekday: "long" });
+      const DATE_FORMATTER = new Intl.DateTimeFormat("he-IL", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+
+      const refs = {
+        app: document.getElementById("app"),
+        itemDialog: document.getElementById("itemDialog"),
+        itemForm: document.getElementById("itemForm"),
+        categoryDialog: document.getElementById("categoryDialog"),
+        categoryForm: document.getElementById("categoryForm"),
+        detailDialog: document.getElementById("detailDialog"),
+        detailContent: document.getElementById("detailContent"),
+        calendarDialog: document.getElementById("calendarDialog"),
+        calendarContent: document.getElementById("calendarContent"),
+        dayDialog: document.getElementById("dayDialog"),
+        dayContent: document.getElementById("dayContent"),
+        importInput: document.getElementById("importInput")
+      };
+
+      const initialDate = new Date();
+      const state = {
+        board: loadBoard(),
+        filters: {
+          search: "",
+          priority: "all",
+          tag: "all",
+          upcomingRange: "all"
+        },
+        drag: null,
+        editingItemId: null,
+        editingCategoryId: null,
+        openItemMenuKey: null,
+        topMenuOpen: false,
+        filtersPanelOpen: false,
+        searchOpen: false,
+        categoryManagerOpen: false,
+        focusCategoryId: null,
+        openWorkOnly: false,
+        calendarYear: initialDate.getFullYear(),
+        calendarMonth: initialDate.getMonth(),
+        calendarDayDate: "",
+        dialogReturn: null,
+        undoToast: null,
+        noticeToast: null,
+        dropHint: null
+      };
+
+      commit({ saveOnly: true });
+      bindEvents();
+
+      function bindEvents() {
+        document.addEventListener("click", handleClick);
+        document.addEventListener("keydown", handleKeydown);
+        document.addEventListener("submit", handleSubmit);
+        document.addEventListener("change", handleChange);
+        document.addEventListener("input", handleInput);
+        document.addEventListener("dragstart", handleDragStart);
+        document.addEventListener("dragover", handleDragOver);
+        document.addEventListener("drop", handleDrop);
+        document.addEventListener("dragend", clearDragState);
+        refs.importInput.addEventListener("change", handleImportFile);
+      }
+
+      function closeUiMenus() {
+        state.openItemMenuKey = null;
+        state.topMenuOpen = false;
+      }
+
+      function loadBoard() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) {
+            return defaultBoard();
+          }
+          return normalizeBoard(JSON.parse(raw));
+        } catch (error) {
+          return defaultBoard();
+        }
+      }
+
+      function defaultBoard() {
+        return {
+          tasks: [],
+          tagColors: {},
+          scheduleManual: [],
+          calendarDates: [],
+          categories: [
+            makeCategory("רעיונות"),
+            makeCategory("נקבע תאריך"),
+            makeCategory("צילמנו"),
+            makeCategory("עריכה בסיסית"),
+            makeCategory(READY_TITLE, "ready"),
+            makeCategory(PUBLISHED_TITLE, "published")
+          ],
+          ui: {
+            compact: false,
+            scheduleCollapsed: false,
+            tasksCollapsed: false,
+            tagsCollapsed: true,
+            hideCompletedTasks: false,
+            calendarView: "month"
+          }
+        };
+      }
+
+      function makeCategory(title, role = "") {
+        return {
+          id: createId("cat"),
+          title,
+          collapsed: false,
+          role,
+          subcategories: [],
+          items: []
+        };
+      }
+
+      function normalizeBoard(raw) {
+        const board = raw && typeof raw === "object" ? raw : {};
+        const fallback = defaultBoard();
+        const categoriesSource = Array.isArray(board.categories) && board.categories.length ? board.categories : fallback.categories;
+
+        const normalized = {
+          tasks: normalizeTasks(board.tasks),
+          tagColors: normalizeTagColors(board.tagColors),
+          scheduleManual: Array.isArray(board.scheduleManual) ? board.scheduleManual.filter(isNonEmptyString) : [],
+          calendarDates: normalizeCalendarDates(board.calendarDates),
+          categories: categoriesSource.map(normalizeCategory).filter(Boolean),
+          ui: {
+            compact: Boolean(board.ui && board.ui.compact),
+            scheduleCollapsed: Boolean(board.ui && board.ui.scheduleCollapsed),
+            tasksCollapsed: Boolean(board.ui && board.ui.tasksCollapsed),
+            tagsCollapsed: board.ui && typeof board.ui.tagsCollapsed === "boolean" ? board.ui.tagsCollapsed : true,
+            hideCompletedTasks: Boolean(board.ui && board.ui.hideCompletedTasks),
+            calendarView: board.ui && board.ui.calendarView === "year" ? "year" : "month"
+          }
+        };
+
+        if (!normalized.categories.length) {
+          normalized.categories = fallback.categories;
+        }
+
+        return normalized;
+      }
+
+      function normalizeCalendarDates(calendarDates) {
+        if (!Array.isArray(calendarDates)) {
+          return [];
+        }
+
+        return calendarDates.map((entry) => {
+          if (!entry || typeof entry !== "object") {
+            return null;
+          }
+
+          const date = normalizeDateValue(entry.date);
+          const title = String(entry.title || "").trim();
+          if (!date || !title) {
+            return null;
+          }
+
+          return {
+            id: isNonEmptyString(entry.id) ? entry.id : createId("date"),
+            date,
+            title,
+            type: normalizeCalendarDateType(entry.type)
+          };
+        }).filter(Boolean);
+      }
+
+      function normalizeCalendarDateType(type) {
+        return type === "filming-day" ? "filming-day" : "note";
+      }
+
+      function normalizeTasks(tasks) {
+        if (!Array.isArray(tasks)) {
+          return [];
+        }
+
+        return tasks.map((task) => {
+          if (typeof task === "string") {
+            const text = task.trim();
+            return text ? { id: createId("task"), text, done: false } : null;
+          }
+
+          if (!task || typeof task !== "object") {
+            return null;
+          }
+
+          const text = String(task.text || "").trim();
+          if (!text) {
+            return null;
+          }
+
+          return {
+            id: isNonEmptyString(task.id) ? task.id : createId("task"),
+            text,
+            done: Boolean(task.done)
+          };
+        }).filter(Boolean);
+      }
+
+      function normalizeTagColors(tagColors) {
+        const safe = {};
+        if (!tagColors || typeof tagColors !== "object") {
+          return safe;
+        }
+
+        Object.entries(tagColors).forEach(([tag, color]) => {
+          const cleanTag = String(tag || "").trim();
+          if (!cleanTag) {
+            return;
+          }
+          safe[cleanTag] = sanitizeColor(color, colorFromString(cleanTag));
+        });
+
+        return safe;
+      }
+
+      function normalizeCategory(category) {
+        if (!category || typeof category !== "object") {
+          return null;
+        }
+
+        const title = String(category.title || "").trim() || "קטגוריה";
+        const role = normalizeRole(category.role, title);
+        const subcategories = normalizeSubcategories(category.subcategories);
+        const subcategoryIds = new Set(subcategories.map((sub) => sub.id));
+        const items = Array.isArray(category.items) ? category.items.map((item) => normalizeItem(item, subcategoryIds)).filter(Boolean) : [];
+
+        return {
+          id: isNonEmptyString(category.id) ? category.id : createId("cat"),
+          title,
+          collapsed: Boolean(category.collapsed),
+          role,
+          subcategories,
+          items
+        };
+      }
+
+      function normalizeSubcategories(subcategories) {
+        if (!Array.isArray(subcategories)) {
+          return [];
+        }
+
+        const seen = new Set();
+        return subcategories.map((subcat) => {
+          if (typeof subcat === "string") {
+            const title = subcat.trim();
+            if (!title) {
+              return null;
+            }
+            return {
+              id: createId("sub"),
+              title
+            };
+          }
+
+          if (!subcat || typeof subcat !== "object") {
+            return null;
+          }
+
+          const title = String(subcat.title || "").trim();
+          if (!title) {
+            return null;
+          }
+
+          const id = isNonEmptyString(subcat.id) ? subcat.id : createId("sub");
+          if (seen.has(id)) {
+            return null;
+          }
+          seen.add(id);
+
+          return {
+            id,
+            title
+          };
+        }).filter(Boolean);
+      }
+
+      function normalizeItem(item, subcategoryIds) {
+        if (!item || typeof item !== "object") {
+          return null;
+        }
+
+        const title = String(item.title || "").trim();
+        if (!title) {
+          return null;
+        }
+
+        const priority = ["red", "yellow", "green"].includes(item.priority) ? item.priority : "yellow";
+        const due = normalizeDateValue(item.due);
+        const tags = splitList(item.tags, /[,\n]/g);
+        const inspirationLinks = normalizeLinks(item.inspirationLinks);
+
+        return {
+          id: isNonEmptyString(item.id) ? item.id : createId("item"),
+          title,
+          priority,
+          due,
+          tags,
+          inspirationLinks,
+          outfits: {
+            rotem: String(item.outfits && item.outfits.rotem || "").trim(),
+            meir: String(item.outfits && item.outfits.meir || "").trim()
+          },
+          subcat: isNonEmptyString(item.subcat) && subcategoryIds.has(item.subcat) ? item.subcat : null
+        };
+      }
+
+      function normalizeLinks(links) {
+        const list = Array.isArray(links) ? links : [];
+        return list.map(normalizeLink).filter(Boolean);
+      }
+
+      function normalizeLink(value) {
+        let url = String(value || "").trim();
+        if (!url) {
+          return "";
+        }
+
+        if (!/^https?:\/\//i.test(url)) {
+          url = "https://" + url;
+        }
+
+        try {
+          const parsed = new URL(url);
+          if (!/^https?:$/i.test(parsed.protocol)) {
+            return "";
+          }
+          return parsed.href;
+        } catch (error) {
+          return "";
+        }
+      }
+
+      function normalizeRole(role, title) {
+        if (role === "ready" || role === "published") {
+          return role;
+        }
+
+        const cleanTitle = String(title || "").trim();
+        if (cleanTitle === READY_TITLE) {
+          return "ready";
+        }
+        if (cleanTitle === PUBLISHED_TITLE) {
+          return "published";
+        }
+        return "";
+      }
+
+      function normalizeDateValue(value) {
+        const date = String(value || "").trim();
+        return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : "";
+      }
+
+      function isNonEmptyString(value) {
+        return typeof value === "string" && value.trim().length > 0;
+      }
+
+      function splitList(value, separatorRegex) {
+        if (Array.isArray(value)) {
+          return uniqueStrings(value);
+        }
+
+        const text = String(value || "");
+        return uniqueStrings(text.split(separatorRegex));
+      }
+
+      function uniqueStrings(values) {
+        const seen = new Set();
+        const result = [];
+
+        values.forEach((value) => {
+          const clean = String(value || "").trim();
+          if (!clean || seen.has(clean)) {
+            return;
+          }
+          seen.add(clean);
+          result.push(clean);
+        });
+
+        return result;
+      }
+
+      function commit(options = {}) {
+        state.board = normalizeBoard(state.board);
+        syncBoard();
+        saveBoard();
+        if (!options.saveOnly) {
+          render();
+        } else {
+          render();
+        }
+      }
+
+      function syncBoard() {
+        const allScheduleUndatedIds = getScheduleSourceEntries()
+          .filter((entry) => !entry.item.due)
+          .map((entry) => entry.item.id);
+        const validUndatedSet = new Set(allScheduleUndatedIds);
+        state.board.scheduleManual = state.board.scheduleManual.filter((id) => validUndatedSet.has(id));
+        state.board.calendarDates = normalizeCalendarDates(state.board.calendarDates);
+
+        const tagColors = { ...state.board.tagColors };
+        getAllTags().forEach((tag) => {
+          if (!tagColors[tag]) {
+            tagColors[tag] = colorFromString(tag);
+          } else {
+            tagColors[tag] = sanitizeColor(tagColors[tag], colorFromString(tag));
+          }
+        });
+        state.board.tagColors = tagColors;
+
+        state.board.categories.forEach((category) => {
+          const subIds = new Set((category.subcategories || []).map((sub) => sub.id));
+          category.items.forEach((item) => {
+            if (item.subcat && !subIds.has(item.subcat)) {
+              item.subcat = null;
+            }
+            item.priority = ["red", "yellow", "green"].includes(item.priority) ? item.priority : "yellow";
+            item.due = normalizeDateValue(item.due);
+            item.tags = uniqueStrings(item.tags || []);
+            item.inspirationLinks = normalizeLinks(item.inspirationLinks || []);
+            item.outfits = item.outfits || { rotem: "", meir: "" };
+            item.outfits.rotem = String(item.outfits.rotem || "").trim();
+            item.outfits.meir = String(item.outfits.meir || "").trim();
+            item.title = String(item.title || "").trim() || "ללא כותרת";
+          });
+        });
+
+        document.body.classList.toggle("compact", Boolean(state.board.ui && state.board.ui.compact));
+      }
+
+      function saveBoard() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state.board));
+        } catch (error) {
+          alert("לא הצלחתי לשמור את הלוח ב־localStorage.");
+        }
+      }
+
+      function render() {
+        const stats = getStats();
+        const allTags = getAllTags();
+        const activeFilterCount = getActiveFilterCount();
+        const hasActiveSearchOrFilters = isFiltersActive();
+        const showFiltersPanel = state.filtersPanelOpen || state.filters.priority !== "all" || state.filters.tag !== "all";
+        const showSearchRow = state.searchOpen;
+
+        if (state.focusCategoryId && !findCategory(state.focusCategoryId)) {
+          state.focusCategoryId = null;
+        }
+
+        const categoriesToRender = getRenderableCategories();
+        const focusedCategory = state.focusCategoryId ? findCategory(state.focusCategoryId) : null;
+
+        refs.app.innerHTML = `
+          <div class="shell">
+            <header class="topbar">
+              <div class="title-row">
+                <div class="title-block">
+                  <h1>לוח ניהול סרטונים</h1>
+                </div>
+
+                <div class="header-actions">
+                  <button class="btn primary" type="button" data-action="open-item-dialog">+ סרטון חדש</button>
+                  <button class="icon-btn top-icon-btn" type="button" data-action="open-calendar" aria-label="פתיחת לוח שנה">📅</button>
+                  <button class="icon-btn top-icon-btn ${showSearchRow || state.filters.search ? "active" : ""}" type="button" data-action="toggle-search" aria-expanded="${showSearchRow ? "true" : "false"}" aria-label="חיפוש">⌕</button>
+                  <div class="menu-wrap">
+                    <button class="icon-btn top-icon-btn settings-trigger" type="button" data-action="toggle-top-menu" aria-expanded="${state.topMenuOpen ? "true" : "false"}" aria-label="הגדרות">⚙️</button>
+                    ${state.topMenuOpen ? `
+                      <div class="menu-popover header-popover">
+                        <button class="menu-item" type="button" data-action="open-category-dialog">+ קטגוריה</button>
+                        <button class="menu-item" type="button" data-action="toggle-category-manager">${state.categoryManagerOpen ? "סגירת ניהול קטגוריות" : "ניהול קטגוריות"}</button>
+                        <button class="menu-item" type="button" data-action="toggle-ui-panel" data-panel-key="tagsCollapsed" data-panel-id="tags">${state.board.ui.tagsCollapsed ? "תגיות וצבעים" : "הסתרת תגיות"}</button>
+                        <div class="menu-divider"></div>
+                        <div class="menu-label">תראה לי רק סרטונים שאמורים לעשות ב־</div>
+                        ${renderUpcomingMenuItems()}
+                        <div class="menu-divider"></div>
+                        <button class="menu-item" type="button" data-action="import-json">ייבוא JSON</button>
+                        <button class="menu-item" type="button" data-action="export-json">ייצוא JSON</button>
+                        <button class="menu-item" type="button" data-action="toggle-compact">${state.board.ui.compact ? "מצב רגיל" : "מצב קומפקטי"}</button>
+                        <button class="menu-item" type="button" data-action="toggle-open-work">${state.openWorkOnly ? "הצגי הכל" : "עבודה פתוחה בלבד"}</button>
+                        ${isFiltersActive() ? '<button class="menu-item" type="button" data-action="clear-filters">ניקוי פילטרים</button>' : ""}
+                      </div>
+                    ` : ""}
+                  </div>
+                </div>
+              </div>
+
+              ${(focusedCategory || state.openWorkOnly) ? `
+                <div class="view-state-row">
+                  ${focusedCategory ? `<span class="view-chip">פוקוס: ${escapeHtml(focusedCategory.title)}</span>` : ""}
+                  ${state.openWorkOnly ? '<span class="view-chip">עבודה פתוחה בלבד</span>' : ""}
+                  ${focusedCategory ? '<button class="btn ghost slim-btn" type="button" data-action="clear-focus">יציאה מפוקוס</button>' : ""}
+                  ${state.openWorkOnly ? '<button class="btn ghost slim-btn" type="button" data-action="toggle-open-work">הצגי הכל</button>' : ""}
+                </div>
+              ` : ""}
+
+              <div class="stats-strip">
+                <div class="stat-card">
+                  <strong>${stats.totalItems}</strong>
+                  <span>סך כל הסרטונים</span>
+                </div>
+                <div class="stat-card">
+                  <strong>${stats.readyItems}</strong>
+                  <span>מוכנים לעלייה</span>
+                </div>
+                <div class="stat-card">
+                  <strong>${stats.publishedItems}</strong>
+                  <span>כבר עלו</span>
+                </div>
+                <div class="stat-card">
+                  <strong>${stats.tasksDone}/${stats.tasksTotal}</strong>
+                  <span>משימות שהושלמו</span>
+                </div>
+              </div>
+
+              <div class="filters-row">
+                <div class="filters-toolbar">
+                  <button class="btn ghost filter-toggle ${showFiltersPanel ? "active" : ""}" type="button" data-action="toggle-filters-panel">סינון${activeFilterCount ? ` (${activeFilterCount})` : ""}</button>
+                </div>
+
+                ${showSearchRow ? `
+                  <div class="search-row compact-search-row">
+                    <input class="input search-input" id="searchInput" type="search" placeholder="חיפוש סרטון..." value="${escapeAttr(state.filters.search)}">
+                    ${state.filters.search ? '<button class="btn ghost filter-clear" type="button" data-action="clear-search">ניקוי</button>' : ""}
+                    <button class="btn ghost filter-clear" type="button" data-action="toggle-search">סגירה</button>
+                  </div>
+                ` : ""}
+
+                ${showFiltersPanel ? `
+                  <div class="filters-panel">
+                    <div class="field small">
+                      <span>עדיפות</span>
+                      <select class="select" id="priorityFilter">
+                        ${renderPriorityFilterOptions()}
+                      </select>
+                    </div>
+
+                    <div class="field small">
+                      <span>תגית</span>
+                      <select class="select" id="tagFilter">
+                        <option value="all">כל התגיות</option>
+                        ${allTags.map((tag) => `<option value="${escapeAttr(tag)}" ${state.filters.tag === tag ? "selected" : ""}>${escapeHtml(tag)}</option>`).join("")}
+                      </select>
+                    </div>
+                  </div>
+                ` : ""}
+              </div>
+
+              ${hasActiveSearchOrFilters ? renderActiveFilterChips() : ""}
+
+              <div class="progress-row">
+                <div class="progress-box" style="flex: 1 1 100%;">
+                  <div class="progress-headline">
+                    <div>
+                      <h2>התקדמות עבודה</h2>
+                      <div class="progress-caption">${stats.remaining}% עבודה נותרה</div>
+                    </div>
+                    <strong class="progress-value">${stats.progress}%</strong>
+                  </div>
+                  <div class="progress-track stacked-progress" aria-label="התפלגות הסרטונים לפי שלבי העבודה">
+                    ${renderWorkflowSegments(stats)}
+                  </div>
+                  <div class="progress-mini">${stats.breakdown}</div>
+                  ${stats.insight ? `<div class="progress-note">${escapeHtml(stats.insight)}</div>` : ""}
+                </div>
+              </div>
+            </header>
+
+            ${state.categoryManagerOpen ? renderCategoryManagerPanel() : ""}
+
+            <main class="workspace">
+              <section class="board-panel">
+                <div class="board-grid">
+                  ${focusedCategory ? "" : renderScheduleCard()}
+                  ${categoriesToRender.length ? categoriesToRender.map((category) => renderCategoryCard(category)).join("") : renderBoardEmptyState()}
+                </div>
+              </section>
+
+              <aside class="sidebar">
+                <section class="panel">
+                  ${renderTasksPanel()}
+                </section>
+
+                <section class="panel">
+                  ${renderTagsPanel(allTags)}
+                </section>
+              </aside>
+            </main>
+
+            <button class="fab" type="button" data-action="open-item-dialog" aria-label="הוספת סרטון">+</button>
+            ${renderSnackbar()}
+          </div>
+        `;
+
+        if (refs.calendarDialog.open) {
+          renderCalendarDialog();
+        }
+        if (refs.dayDialog.open && state.calendarDayDate) {
+          renderCalendarDayDialog(state.calendarDayDate);
+        }
+      }
+
+      function renderUpcomingMenuItems() {
+        return getUpcomingRangeOptions().map((option) => `
+          <button class="menu-item ${state.filters.upcomingRange === option.value ? "active" : ""}" type="button" data-action="set-upcoming-range" data-range="${escapeAttr(option.value)}">${escapeHtml(option.label)}</button>
+        `).join("");
+      }
+
+      function getUpcomingRangeOptions() {
+        return [
+          { value: "all", label: "ללא סינון תאריכים" },
+          { value: "7", label: "שבוע קרוב" },
+          { value: "14", label: "שבועיים קרובים" },
+          { value: "21", label: "שלושה שבועות" },
+          { value: "30", label: "עד חודש" }
+        ];
+      }
+
+      function renderCategoryManagerPanel() {
+        return `
+          <section class="panel category-manager-panel">
+            <div class="panel-head">
+              <div>
+                <h2>ניהול קטגוריות</h2>
+                <small>כל פעולות הקטגוריות מרוכזות כאן כדי לשמור על שורות נקיות.</small>
+              </div>
+              <button class="btn ghost slim-btn" type="button" data-action="toggle-category-manager">סגירה</button>
+            </div>
+            <div class="category-manager-list">
+              ${state.board.categories.map((category) => `
+                <div class="category-manager-row">
+                  <div class="category-manager-meta">
+                    <strong>${escapeHtml(category.title)}</strong>
+                    <span class="muted">${category.items.length} פריטים</span>
+                  </div>
+                  <div class="category-manager-actions">
+                    <button class="mini-btn" type="button" data-action="open-item-dialog" data-category-id="${escapeAttr(category.id)}">+ סרטון</button>
+                    <button class="mini-btn" type="button" data-action="add-subcategory" data-category-id="${escapeAttr(category.id)}">+ תת</button>
+                    <button class="mini-btn" type="button" data-action="${state.focusCategoryId === category.id ? "clear-focus" : "focus-category"}" data-category-id="${escapeAttr(category.id)}">${state.focusCategoryId === category.id ? "פוקוס פעיל" : "פוקוס"}</button>
+                    <button class="mini-btn" type="button" data-action="open-category-dialog" data-category-id="${escapeAttr(category.id)}">עריכה</button>
+                    <button class="mini-btn danger" type="button" data-action="delete-category" data-category-id="${escapeAttr(category.id)}">מחק</button>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+          </section>
+        `;
+      }
+
+      function renderWorkflowSegments(stats) {
+        const segments = [
+          { label: "רעיונות", count: stats.stageCounts.ideas, className: "stage-ideas" },
+          { label: "נקבע תאריך", count: stats.stageCounts.scheduled, className: "stage-scheduled" },
+          { label: "צילמנו", count: stats.stageCounts.filmed, className: "stage-filmed" },
+          { label: "עריכה", count: stats.stageCounts.editing, className: "stage-editing" },
+          { label: "מוכן", count: stats.stageCounts.ready, className: "stage-ready" },
+          { label: "עלה", count: stats.stageCounts.published, className: "stage-published" }
+        ].filter((segment) => segment.count > 0);
+
+        if (!stats.totalItems) {
+          return '<span class="progress-segment stage-empty" style="width:100%"></span>';
+        }
+
+        return segments.map((segment) => `
+          <span class="progress-segment ${segment.className}" style="width:${(segment.count / stats.totalItems) * 100}%" title="${escapeAttr(`${segment.label}: ${segment.count}`)}" aria-label="${escapeAttr(`${segment.label}: ${segment.count}`)}"></span>
+        `).join("");
+      }
+
+      function renderPriorityFilterOptions() {
+        const options = [
+          { value: "all", label: "כל העדיפויות" },
+          { value: "red", label: "אדום" },
+          { value: "yellow", label: "צהוב" },
+          { value: "green", label: "ירוק" }
+        ];
+
+        return options.map((option) => `<option value="${option.value}" ${state.filters.priority === option.value ? "selected" : ""}>${escapeHtml(option.label)}</option>`).join("");
+      }
+
+      function renderActiveFilterChips() {
+        const chips = [];
+        if (state.filters.search) {
+          chips.push(renderFilterChip(`חיפוש: ${state.filters.search}`, "search"));
+        }
+        if (state.filters.priority !== "all") {
+          const labels = {
+            red: "אדום",
+            yellow: "צהוב",
+            green: "ירוק"
+          };
+          chips.push(renderFilterChip(`עדיפות: ${labels[state.filters.priority] || state.filters.priority}`, "priority"));
+        }
+        if (state.filters.tag !== "all") {
+          chips.push(renderFilterChip(`תגית: ${state.filters.tag}`, "tag"));
+        }
+        if (state.filters.upcomingRange !== "all") {
+          const selected = getUpcomingRangeOptions().find((option) => option.value === state.filters.upcomingRange);
+          chips.push(renderFilterChip(`קרוב: ${selected ? selected.label : state.filters.upcomingRange}`, "upcoming"));
+        }
+        if (state.openWorkOnly) {
+          chips.push(renderFilterChip("עבודה פתוחה בלבד", "openWork"));
+        }
+
+        if (!chips.length) {
+          return "";
+        }
+
+        return `<div class="filter-chip-row">${chips.join("")}</div>`;
+      }
+
+      function renderFilterChip(label, key) {
+        return `
+          <button class="filter-chip" type="button" data-action="clear-filter-chip" data-filter-key="${escapeAttr(key)}" aria-label="הסרת סינון ${escapeAttr(label)}">
+            <span>${escapeHtml(label)}</span>
+            <span aria-hidden="true">×</span>
+          </button>
+        `;
+      }
+
+      function renderBoardEmptyState() {
+        return `
+          <section class="category-card board-empty-card">
+            ${renderEmptyState("אין מה להציג כרגע", "נסי לבטל פוקוס או סינונים כדי לראות שוב את כל הלוח")}
+          </section>
+        `;
+      }
+
+      function renderSnackbar() {
+        if (state.undoToast) {
+          return `
+            <div class="snackbar" role="status" aria-live="polite">
+              <span>${escapeHtml(state.undoToast.message)}</span>
+              <button class="btn ghost slim-btn" type="button" data-action="undo-delete">בטל</button>
+            </div>
+          `;
+        }
+
+        if (state.noticeToast) {
+          return `
+            <div class="snackbar notice" role="status" aria-live="polite">
+              <span>${escapeHtml(state.noticeToast.message)}</span>
+            </div>
+          `;
+        }
+
+        return "";
+      }
+
+      function getRenderableCategories() {
+        let categories = [...state.board.categories];
+
+        if (state.focusCategoryId) {
+          categories = categories.filter((category) => category.id === state.focusCategoryId);
+        }
+
+        if (state.openWorkOnly) {
+          categories = categories.filter((category) => !isPublishedCategory(category));
+        }
+
+        return categories;
+      }
+
+      function renderScheduleCard() {
+        const schedule = getScheduleBuckets();
+        const combined = [...schedule.dated, ...schedule.undated];
+        const collapsed = Boolean(state.board.ui && state.board.ui.scheduleCollapsed);
+
+        return `
+          <section class="category-card schedule-card panel-accordion ${collapsed ? "is-collapsed" : ""}" data-panel-id="schedule">
+            <div class="schedule-head accordion-head" data-action="toggle-ui-panel" data-panel-key="scheduleCollapsed" data-panel-id="schedule" role="button" tabindex="0" aria-expanded="${collapsed ? "false" : "true"}">
+              <div class="category-title compact-title">
+                <h2>${escapeHtml(VIRTUAL_SCHEDULE_TITLE)}</h2>
+                <span class="count-badge">${schedule.total}</span>
+              </div>
+              <span class="accordion-arrow" aria-hidden="true">▾</span>
+            </div>
+
+            <div class="accordion-shell ${collapsed ? "collapsed" : ""}">
+              <div class="accordion-body">
+                <div class="schedule-columns">
+                  <div class="schedule-panel schedule-unified">
+                    <div class="schedule-list" data-drop-type="schedule-list">
+                      ${combined.length ? combined.map((entry) => renderScheduleItem(entry, !entry.item.due)).join("") : renderEmptyState("אין פריטים בסדר העלייה", "סרטונים עם עבודה פתוחה יופיעו כאן")}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      function renderScheduleItem(entry, draggable) {
+        const item = entry.item;
+        const category = entry.category;
+        const meta = renderDateMeta(item.due);
+
+        return `
+          <article class="schedule-item priority-${escapeAttr(item.priority)} ${draggable ? "draggable" : ""}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="schedule" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" ${draggable ? 'draggable="true"' : ""} ${draggable ? `data-drag-type="schedule" data-item-id="${escapeAttr(item.id)}"` : ""} ${draggable ? `data-drop-type="schedule-item" data-item-id="${escapeAttr(item.id)}"` : ""}>
+            <div class="row-main">
+              <div class="row-title">
+                <h4>${escapeHtml(item.title)}</h4>
+              </div>
+              <div class="row-meta">
+                ${renderPriorityPill(item.priority)}
+                ${meta}
+                <span class="source-pill">${escapeHtml(category.title)}</span>
+                ${draggable ? '<span class="count-hint">ידני</span>' : ""}
+              </div>
+            </div>
+
+            ${renderItemActions(item, { allowDelete: false, allowDetails: false, menuKey: `schedule:${item.id}`, allowEdit: true, categoryId: category.id })}
+          </article>
+        `;
+      }
+
+      function renderCategoryCard(category) {
+        const visibleItems = category.items.filter((item) => matchesFilters(item, category));
+        const filteredCount = visibleItems.length;
+        const totalCount = category.items.length;
+        const countLabel = isFiltersActive() && filteredCount !== totalCount ? `${filteredCount} / ${totalCount}` : `${totalCount}`;
+        const roleClass = category.role === "ready" ? "ready-card" : category.role === "published" ? "published-card" : "";
+        const toneClass = getCategoryToneClass(category);
+
+        return `
+          <section class="category-card ${roleClass} ${toneClass} ${category.collapsed ? "is-collapsed" : ""}" data-drop-type="category" data-category-id="${escapeAttr(category.id)}" data-item-drop="category">
+            <div class="category-top" data-action="toggle-category" data-category-id="${escapeAttr(category.id)}" data-drag-type="category" draggable="true" role="button" tabindex="0" aria-expanded="${category.collapsed ? "false" : "true"}">
+              <div class="category-toggle">
+                <div class="category-title compact-title">
+                  <h2>${escapeHtml(category.title)}</h2>
+                  <span class="count-badge">${escapeHtml(countLabel)}</span>
+                  ${renderRoleBadge(category)}
+                </div>
+                <span class="accordion-arrow" aria-hidden="true">▾</span>
+              </div>
+            </div>
+
+            <div class="accordion-shell ${category.collapsed ? "collapsed" : ""}">
+              <div class="accordion-body">
+                ${renderCategoryBody(category, visibleItems)}
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      function renderRoleBadge(category) {
+        if (category.role === "ready") {
+          return '<span class="role-badge ready">מוכן</span>';
+        }
+        if (category.role === "published") {
+          return '<span class="role-badge published">פורסם</span>';
+        }
+        return "";
+      }
+
+      function renderCategoryBody(category, visibleItems) {
+        if (!category.subcategories.length) {
+          return `
+            <div class="category-body">
+              <div class="items-stack" data-drop-type="items" data-category-id="${escapeAttr(category.id)}" data-subcat-id="">
+                ${visibleItems.length ? visibleItems.map((item) => renderBoardItem(item, category)).join("") : renderCategoryEmptyState(category.id)}
+              </div>
+            </div>
+          `;
+        }
+
+        const groups = category.subcategories.map((subcat) => {
+          const items = visibleItems.filter((item) => item.subcat === subcat.id);
+          return `
+            <div class="subcategory">
+              <div class="subcat-head">
+                <div class="category-title">
+                  <h3>${escapeHtml(subcat.title)}</h3>
+                  <span class="tiny-pill">${items.length}</span>
+                </div>
+                <div class="subcat-actions">
+                  <button class="icon-btn" type="button" data-action="edit-subcategory" data-category-id="${escapeAttr(category.id)}" data-subcat-id="${escapeAttr(subcat.id)}">עריכה</button>
+                  <button class="icon-btn danger" type="button" data-action="delete-subcategory" data-category-id="${escapeAttr(category.id)}" data-subcat-id="${escapeAttr(subcat.id)}">מחק</button>
+                </div>
+              </div>
+              <div class="items-stack" data-drop-type="items" data-category-id="${escapeAttr(category.id)}" data-subcat-id="${escapeAttr(subcat.id)}">
+                ${items.length ? items.map((item) => renderBoardItem(item, category)).join("") : renderCategoryEmptyState(category.id, "אין פריטים בתת־קטגוריה")}
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        const ungrouped = visibleItems.filter((item) => !item.subcat);
+
+        return `
+          <div class="category-body">
+            ${groups}
+            <div class="subcategory">
+              <div class="subcat-head">
+                <div class="category-title">
+                  <h3>ללא תת־קטגוריה</h3>
+                  <span class="tiny-pill">${ungrouped.length}</span>
+                </div>
+              </div>
+              <div class="items-stack" data-drop-type="items" data-category-id="${escapeAttr(category.id)}" data-subcat-id="">
+                ${ungrouped.length ? ungrouped.map((item) => renderBoardItem(item, category)).join("") : renderCategoryEmptyState(category.id, "אין פריטים ללא שיוך")}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderBoardItem(item, category) {
+        const meta = renderDateMeta(item.due);
+
+        return `
+          <article class="item-card priority-${escapeAttr(item.priority)}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="board" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" draggable="true" data-drag-type="item" data-category-id="${escapeAttr(category.id)}" data-subcat-id="${escapeAttr(item.subcat || "")}" data-drop-type="item">
+            <div class="row-main">
+              <div class="row-title">
+                <h4>${escapeHtml(item.title)}</h4>
+              </div>
+              <div class="row-meta">
+                ${renderPriorityPill(item.priority)}
+                ${meta}
+              </div>
+            </div>
+            ${renderItemActions(item, { allowDelete: true, allowDetails: false, menuKey: `board:${item.id}`, allowEdit: true, categoryId: category.id })}
+          </article>
+        `;
+      }
+
+      function renderPriorityPill(priority) {
+        const labels = {
+          red: "אדום",
+          yellow: "צהוב",
+          green: "ירוק"
+        };
+
+        return `<span class="priority-pill ${escapeAttr(priority)}">${escapeHtml(labels[priority] || "צהוב")}</span>`;
+      }
+
+      function renderDateMeta(due) {
+        if (!due) {
+          return '<span class="tiny-pill">ללא תאריך</span>';
+        }
+
+        return `<span class="tiny-pill">${escapeHtml(formatDate(due))} · ${escapeHtml(getWeekday(due))}</span>`;
+      }
+
+      function renderItemHintPills(item) {
+        const hints = [];
+        if (item.tags && item.tags.length) {
+          hints.push(`${item.tags.length} תגיות`);
+        }
+        if (item.outfits && (item.outfits.rotem || item.outfits.meir)) {
+          hints.push("לוקים");
+        }
+        if (item.inspirationLinks && item.inspirationLinks.length) {
+          hints.push(`${item.inspirationLinks.length} קישורים`);
+        }
+
+        return hints.map((hint) => `<span class="count-hint">${escapeHtml(hint)}</span>`).join("");
+      }
+
+      function renderItemActions(item, options = {}) {
+        const allowDelete = options.allowDelete !== false;
+        const allowDetails = options.allowDetails !== false;
+        const allowEdit = options.allowEdit !== false;
+        const categoryId = options.categoryId || "";
+        const menuKey = String(options.menuKey || item.id);
+        const menuOpen = state.openItemMenuKey === menuKey;
+        const nextStage = categoryId ? getNextStageCategory(categoryId) : null;
+
+        return `
+          <div class="row-actions" data-action="noop">
+            <div class="row-menu">
+              <button class="mini-btn" type="button" data-action="toggle-item-menu" data-menu-key="${escapeAttr(menuKey)}" aria-expanded="${menuOpen ? "true" : "false"}" aria-label="פעולות נוספות עבור ${escapeAttr(item.title)}">⋯</button>
+              ${menuOpen ? `
+                <div class="menu-popover row-popover">
+                  ${allowEdit ? `<button class="menu-item" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}">עריכה</button>` : ""}
+                  ${allowDetails ? `<button class="menu-item" type="button" data-action="open-item-details" data-item-id="${escapeAttr(item.id)}">פרטים</button>` : ""}
+                  ${nextStage ? `<button class="menu-item" type="button" data-action="move-to-next-stage" data-item-id="${escapeAttr(item.id)}">העברה ל־${escapeHtml(nextStage.title)}</button>` : ""}
+                  ${allowDelete ? `<button class="menu-item danger" type="button" data-action="delete-item" data-item-id="${escapeAttr(item.id)}">מחק</button>` : ""}
+                </div>
+              ` : ""}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderCategoryEmptyState(categoryId, title = "אין פריטים בקטגוריה הזו") {
+        return renderEmptyState(title, "", `<button class="btn ghost slim-btn empty-cta" type="button" data-action="open-item-dialog" data-category-id="${escapeAttr(categoryId)}">+ הוספת סרטון</button>`);
+      }
+
+      function renderEmptyState(title, hint, cta = "") {
+        return `
+          <div class="empty-box">
+            <span class="empty-icon" aria-hidden="true">+</span>
+            <strong>${escapeHtml(title)}</strong>
+            ${hint ? `<span class="muted">${escapeHtml(hint)}</span>` : ""}
+            ${cta}
+          </div>
+        `;
+      }
+
+      function renderTagWrap(tags, clickable = true) {
+        if (!tags || !tags.length) {
+          return "";
+        }
+
+        return `
+          <div class="tag-wrap">
+            ${tags.map((tag) => renderTagChip(tag, clickable)).join("")}
+          </div>
+        `;
+      }
+
+      function renderTagChip(tag, clickable) {
+        const color = sanitizeColor(state.board.tagColors[tag], colorFromString(tag));
+        const clickableAttrs = clickable ? ` role="button" tabindex="0" data-action="filter-tag" data-tag="${escapeAttr(tag)}"` : "";
+        const clickableClass = clickable ? "clickable" : "";
+        return `<span class="tag ${clickableClass}" style="--tag-color:${escapeAttr(color)}"${clickableAttrs}>#${escapeHtml(tag)}</span>`;
+      }
+
+      function renderOutfits(item) {
+        const values = [];
+        if (item.outfits && item.outfits.rotem) {
+          values.push(`<span class="source-pill">רותם: ${escapeHtml(item.outfits.rotem)}</span>`);
+        }
+        if (item.outfits && item.outfits.meir) {
+          values.push(`<span class="source-pill">מאיר: ${escapeHtml(item.outfits.meir)}</span>`);
+        }
+        if (!values.length) {
+          return "";
+        }
+        return `<div class="outfit-row">${values.join("")}</div>`;
+      }
+
+      function renderLinks(links) {
+        if (!links || !links.length) {
+          return "";
+        }
+
+        return `
+          <div class="links-row detail-links">
+            ${links.map((link, index) => `<a class="link-chip" href="${escapeAttr(link)}" target="_blank" rel="noreferrer noopener">השראה ${index + 1}</a>`).join("")}
+          </div>
+        `;
+      }
+
+      function renderItemDetail(location) {
+        const { category, item } = location;
+        const subcategoryTitle = item.subcat ? getSubcategoryTitle(category, item.subcat) : "";
+        const tags = renderTagWrap(item.tags, false) || '<p class="muted">אין תגיות לפריט הזה.</p>';
+        const outfits = renderOutfits(item) || '<p class="muted">לא הוגדרו לוקים לפריט הזה.</p>';
+        const links = renderLinks(item.inspirationLinks) || '<p class="muted">אין קישורי השראה לפריט הזה.</p>';
+
+        return `
+          <div class="panel-head">
+            <div>
+              <h2>${escapeHtml(item.title)}</h2>
+              <small>כל הפרטים של הסרטון במקום אחד.</small>
+            </div>
+            <button type="button" class="btn ghost" data-action="close-dialog" data-dialog-id="detailDialog">סגירה</button>
+          </div>
+
+          <div class="detail-grid">
+            <section class="detail-card">
+              <h3>סקירה</h3>
+              <div class="row-meta">
+                ${renderPriorityPill(item.priority)}
+                ${renderDateMeta(item.due)}
+                <span class="source-pill">${escapeHtml(category.title)}</span>
+                ${subcategoryTitle ? `<span class="source-pill">${escapeHtml(subcategoryTitle)}</span>` : ""}
+              </div>
+            </section>
+
+            <section class="detail-card">
+              <h3>תגיות</h3>
+              ${tags}
+            </section>
+
+            <section class="detail-card">
+              <h3>לוקים</h3>
+              ${outfits}
+            </section>
+
+            <section class="detail-card">
+              <h3>קישורי השראה</h3>
+              ${links}
+            </section>
+          </div>
+
+          <div class="dialog-actions">
+            <button type="button" class="btn primary" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}">עריכת פריט</button>
+            <button type="button" class="btn ghost" data-action="close-dialog" data-dialog-id="detailDialog">סגירה</button>
+          </div>
+        `;
+      }
+
+      function renderCalendarDialog() {
+        const calendarView = state.board.ui && state.board.ui.calendarView === "year" ? "year" : "month";
+        const isYearView = calendarView === "year";
+        const currentMonthName = MONTH_NAMES[state.calendarMonth] || MONTH_NAMES[0];
+        const topbarTitle = isYearView ? `לוח שנה ${state.calendarYear}` : `${currentMonthName} ${state.calendarYear}`;
+
+        refs.calendarContent.innerHTML = `
+          <div class="calendar-shell">
+            <div class="calendar-topbar">
+              <div>
+                <h2>${escapeHtml(topbarTitle)}</h2>
+                <p class="muted">סרטונים עם תאריך, ימי צילום ותאריכים חשובים באותה תצוגה.</p>
+              </div>
+              <div class="calendar-actions">
+                <button class="btn ghost slim-btn" type="button" data-action="calendar-prev-month" aria-label="${isYearView ? "שנה קודמת" : "חודש קודם"}">${isYearView ? "‹ שנה" : "‹"}</button>
+                <select class="select calendar-month-select" id="calendarMonthJump" aria-label="מעבר מהיר בין חודשים">
+                  ${MONTH_NAMES.map((monthName, index) => `<option value="${index}" ${index === state.calendarMonth ? "selected" : ""}>${escapeHtml(monthName)}</option>`).join("")}
+                </select>
+                <button class="btn ghost slim-btn" type="button" data-action="calendar-next-month" aria-label="${isYearView ? "שנה הבאה" : "חודש הבא"}">${isYearView ? "שנה ›" : "›"}</button>
+                <button class="btn ghost slim-btn" type="button" data-action="calendar-today">היום</button>
+                <button class="btn ghost slim-btn" type="button" data-action="toggle-calendar-view">${isYearView ? "תצוגת חודש" : "תצוגת שנה"}</button>
+                <button class="btn ghost slim-btn" type="button" data-action="close-dialog" data-dialog-id="calendarDialog">סגירה</button>
+              </div>
+            </div>
+
+            <div class="calendar-legend" role="list" aria-label="מקרא צבעים בלוח השנה">
+              <span class="legend-pill status-ready" role="listitem">ירוק · מוכן לעלייה</span>
+              <span class="legend-pill status-filmed" role="listitem">צהוב · צולם</span>
+              <span class="legend-pill status-edit" role="listitem">סגול · בעריכה</span>
+              <span class="legend-pill status-early" role="listitem">אדום · טרם צולם</span>
+              <span class="legend-pill holiday" role="listitem">חשוב · תאריך מיוחד</span>
+              <span class="legend-pill filming-day" role="listitem">יום צילום</span>
+            </div>
+
+            <div class="calendar-grid ${isYearView ? "year-mode" : "month-mode"}">
+              ${isYearView
+                ? MONTH_NAMES.map((monthName, index) => renderCalendarMonth(state.calendarYear, index, monthName, { compact: true })).join("")
+                : renderCalendarMonth(state.calendarYear, state.calendarMonth, currentMonthName, { compact: false })}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderCalendarMonth(year, monthIndex, monthName, options = {}) {
+        const firstDay = new Date(year, monthIndex, 1);
+        const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+        const leadingEmpty = firstDay.getDay();
+        const compact = Boolean(options.compact);
+        const cells = [];
+
+        for (let i = 0; i < leadingEmpty; i += 1) {
+          cells.push('<div class="calendar-cell empty"></div>');
+        }
+
+        for (let day = 1; day <= daysInMonth; day += 1) {
+          const iso = `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          cells.push(renderCalendarDayCell(iso, day, compact));
+        }
+
+        return `
+          <section class="calendar-month ${compact ? "compact" : ""}">
+            <div class="calendar-month-head">${escapeHtml(monthName)}</div>
+            <div class="calendar-weekdays">
+              ${WEEKDAY_SHORT.map((day) => `<span>${escapeHtml(day)}</span>`).join("")}
+            </div>
+            <div class="calendar-days">
+              ${cells.join("")}
+            </div>
+          </section>
+        `;
+      }
+
+      function renderCalendarDayCell(isoDate, dayNumber, compact) {
+        const entries = getCalendarEntriesForDate(isoDate);
+        const importantDates = getCalendarImportantDatesForDate(isoDate);
+        const isToday = isoDate === getTodayIso();
+        const previewLimit = compact ? 2 : 3;
+        const previewEntries = [...importantDates, ...entries].slice(0, previewLimit);
+        const hiddenCount = Math.max(0, importantDates.length + entries.length - previewEntries.length);
+
+        return `
+          <button class="calendar-cell ${isToday ? "today" : ""}" type="button" data-action="open-calendar-day" data-date="${escapeAttr(isoDate)}" aria-label="פתיחת פרטי היום ${escapeAttr(formatDate(isoDate) || isoDate)}">
+            <div class="calendar-date">${dayNumber}</div>
+            <div class="calendar-events">
+              ${previewEntries.map((entry) => renderCalendarPreviewPill(entry)).join("")}
+              ${hiddenCount ? `<div class="calendar-more">+ ${hiddenCount} עוד</div>` : ""}
+            </div>
+          </button>
+        `;
+      }
+
+      function getCalendarEntriesForDate(isoDate) {
+        const entries = [];
+        state.board.categories.forEach((category) => {
+          category.items.forEach((item) => {
+            if (item.due === isoDate && matchesFilters(item, category)) {
+              entries.push({ category, item });
+            }
+          });
+        });
+
+        return entries.sort((a, b) => {
+          const dateCompare = compareDates(a.item.due, b.item.due);
+          if (dateCompare !== 0) {
+            return dateCompare;
+          }
+          return compareText(a.item.title, b.item.title);
+        });
+      }
+
+      function getCalendarImportantDatesForDate(isoDate) {
+        const staticDates = HOLIDAYS.filter((entry) => entry.date === isoDate).map((entry) => ({
+          type: "holiday",
+          title: entry.title,
+          date: entry.date
+        }));
+        const customDates = (state.board.calendarDates || []).filter((entry) => entry.date === isoDate).map((entry) => ({
+          type: entry.type || "note",
+          id: entry.id,
+          title: entry.title,
+          date: entry.date
+        }));
+        return [...staticDates, ...customDates];
+      }
+
+      function renderCalendarPreviewPill(entry) {
+        if (entry.type === "holiday" || entry.type === "note" || entry.type === "filming-day") {
+          const calendarType = getCalendarDateTypeMeta(entry.type);
+          return `<div class="calendar-pill ${escapeAttr(calendarType.className)}">${escapeHtml(entry.title)}</div>`;
+        }
+
+        const status = getCalendarStatusInfo(entry.category);
+        return `
+          <div class="calendar-pill ${escapeAttr(status.className)}" aria-label="${escapeAttr(`${entry.item.title} · ${status.label}`)}" title="${escapeAttr(`${entry.item.title} · ${status.label}`)}">
+            <span class="calendar-status-short">${escapeHtml(status.shortLabel)}</span>
+            <span>${escapeHtml(entry.item.title)}</span>
+          </div>
+        `;
+      }
+
+      function renderCalendarDayDialog(isoDate) {
+        const entries = getCalendarEntriesForDate(isoDate);
+        const importantDates = getCalendarImportantDatesForDate(isoDate);
+
+        refs.dayContent.innerHTML = `
+          <div class="day-shell">
+            <div class="panel-head">
+              <div>
+                <h2>${escapeHtml(formatDate(isoDate))}</h2>
+                <small>${escapeHtml(getWeekday(isoDate))}</small>
+              </div>
+              <div class="task-actions">
+                <button type="button" class="btn ghost slim-btn" data-action="return-calendar">ליומן</button>
+                <button type="button" class="btn ghost slim-btn" data-action="close-dialog" data-dialog-id="dayDialog">סגירה</button>
+              </div>
+            </div>
+
+            ${importantDates.length ? `
+              <section class="detail-card">
+                <h3>תאריכים חשובים</h3>
+                <div class="day-date-list">
+                  ${importantDates.map((entry) => renderImportantDateRow(entry)).join("")}
+                </div>
+              </section>
+            ` : ""}
+
+            ${entries.length ? `
+              <section class="detail-card">
+                <h3>סרטונים ביום הזה</h3>
+                <div class="day-video-list">
+                  ${entries.map((entry) => renderCalendarDayItem(entry)).join("")}
+                </div>
+              </section>
+            ` : ""}
+
+            <section class="detail-card">
+              <h3>הוספת אירוע ליום הזה</h3>
+              <form class="inline-form day-form" id="calendarDateForm">
+                <input type="hidden" name="date" value="${escapeAttr(isoDate)}">
+                <input class="input" name="title" maxlength="120" placeholder="למשל: צילום מתכון פסטה">
+                <select class="select" name="type" aria-label="סוג האירוע">
+                  <option value="note">אירוע / הערה</option>
+                  <option value="filming-day">סימון כיום צילום</option>
+                </select>
+                <button class="btn primary" type="submit">הוספה</button>
+              </form>
+            </section>
+          </div>
+        `;
+      }
+
+      function renderCalendarDayItem(entry) {
+        const status = getCalendarStatusInfo(entry.category);
+        return `
+          <button class="day-video-item ${escapeAttr(status.className)}" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(entry.item.id)}" data-source="calendar" aria-label="פתיחת עריכת ${escapeAttr(entry.item.title)}">
+            <span class="day-video-status">${escapeHtml(status.label)}</span>
+            <span class="day-video-title">${escapeHtml(entry.item.title)}</span>
+            <span class="day-video-meta">${escapeHtml(entry.category.title)}</span>
+          </button>
+        `;
+      }
+
+      function renderImportantDateRow(entry) {
+        const isCustom = entry.type !== "holiday";
+        const calendarType = getCalendarDateTypeMeta(entry.type);
+        return `
+          <div class="important-date-row">
+            <div class="important-date-meta">
+              <span class="calendar-pill ${escapeAttr(calendarType.className)}">${escapeHtml(entry.title)}</span>
+              <span class="tiny-pill">${escapeHtml(calendarType.label)}</span>
+            </div>
+            ${isCustom ? `
+              <div class="task-actions">
+                <button class="icon-btn" type="button" data-action="edit-calendar-date" data-date-id="${escapeAttr(entry.id)}" aria-label="עריכת תאריך חשוב ${escapeAttr(entry.title)}">עריכה</button>
+                <button class="icon-btn danger" type="button" data-action="delete-calendar-date" data-date-id="${escapeAttr(entry.id)}" aria-label="מחיקת תאריך חשוב ${escapeAttr(entry.title)}">מחק</button>
+              </div>
+            ` : '<span class="tiny-pill">חג מובנה</span>'}
+          </div>
+        `;
+      }
+
+      function getCalendarDateTypeMeta(type) {
+        if (type === "filming-day") {
+          return { className: "filming-day", label: "יום צילום" };
+        }
+        if (type === "holiday") {
+          return { className: "holiday", label: "חג" };
+        }
+        return { className: "note", label: "הערה" };
+      }
+
+      function getCalendarStatusInfo(category) {
+        if (isReadyCategory(category) || isPublishedCategory(category)) {
+          return { className: "status-ready", label: "מוכן לעלייה", shortLabel: "מוכן" };
+        }
+        if (category.title === "צילמנו") {
+          return { className: "status-filmed", label: "צולם", shortLabel: "צולם" };
+        }
+        if (category.title === "עריכה בסיסית") {
+          return { className: "status-edit", label: "בעריכה", shortLabel: "עריכה" };
+        }
+        return { className: "status-early", label: "טרם צולם", shortLabel: "לפני" };
+      }
+
+      function renderTasksPanel() {
+        const tasks = [...state.board.tasks].sort((a, b) => Number(a.done) - Number(b.done) || compareText(a.text, b.text));
+        const doneCount = tasks.filter((task) => task.done).length;
+        const openCount = tasks.length - doneCount;
+        const visibleTasks = state.board.ui.hideCompletedTasks ? tasks.filter((task) => !task.done) : tasks;
+        const collapsed = Boolean(state.board.ui && state.board.ui.tasksCollapsed);
+
+        return `
+          <section class="panel-accordion ${collapsed ? "is-collapsed" : ""}" data-panel-id="tasks">
+            <div class="panel-head accordion-head" data-action="toggle-ui-panel" data-panel-key="tasksCollapsed" data-panel-id="tasks" role="button" tabindex="0" aria-expanded="${collapsed ? "false" : "true"}">
+              <div>
+                <h2>משימות</h2>
+                <small>${tasks.length ? `סה"כ ${tasks.length} · פתוחות ${openCount} · הושלמו ${doneCount}` : "עדיין אין משימות"}</small>
+              </div>
+              <span class="accordion-arrow" aria-hidden="true">▾</span>
+            </div>
+
+            <div class="accordion-shell ${collapsed ? "collapsed" : ""}">
+              <div class="accordion-body">
+                <form class="inline-form" id="taskForm">
+                  <input class="input" name="taskText" placeholder="משימה חדשה..." maxlength="140">
+                  <button class="btn primary" type="submit">הוספה</button>
+                </form>
+
+                <label class="toggle-row">
+                  <input type="checkbox" id="hideCompletedTasks" ${state.board.ui.hideCompletedTasks ? "checked" : ""}>
+                  <span>הסתרת משימות שהושלמו</span>
+                </label>
+
+                <div class="task-list">
+                  ${visibleTasks.length ? visibleTasks.map((task) => `
+                    <div class="task-row ${task.done ? "done" : ""}">
+                      <label class="checkline">
+                        <input type="checkbox" data-action="toggle-task" data-task-id="${escapeAttr(task.id)}" ${task.done ? "checked" : ""}>
+                        <span class="task-text">${escapeHtml(task.text)}</span>
+                      </label>
+                      ${renderTaskActions(task)}
+                    </div>
+                  `).join("") : renderEmptyState(tasks.length ? "כל המשימות הושלמו" : "אין משימות עדיין", tasks.length ? "כרגע לא מוצגות משימות פתוחות" : "הוסיפי משימה שוטפת ללוח")}
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      function renderTaskActions(task) {
+        const menuKey = `task:${task.id}`;
+        const menuOpen = state.openItemMenuKey === menuKey;
+
+        return `
+          <div class="task-actions" data-action="noop">
+            <div class="row-menu">
+              <button class="mini-btn" type="button" data-action="toggle-item-menu" data-menu-key="${escapeAttr(menuKey)}" aria-expanded="${menuOpen ? "true" : "false"}" aria-label="פעולות נוספות עבור המשימה ${escapeAttr(task.text)}">⋯</button>
+              ${menuOpen ? `
+                <div class="menu-popover row-popover">
+                  <button class="menu-item" type="button" data-action="edit-task" data-task-id="${escapeAttr(task.id)}">עריכה</button>
+                  <button class="menu-item danger" type="button" data-action="delete-task" data-task-id="${escapeAttr(task.id)}">מחק</button>
+                </div>
+              ` : ""}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderTagsPanel(allTags) {
+        const collapsed = Boolean(state.board.ui && state.board.ui.tagsCollapsed);
+        return `
+          <section class="panel-accordion ${collapsed ? "is-collapsed" : ""}" data-panel-id="tags">
+            <div class="panel-head accordion-head" data-action="toggle-ui-panel" data-panel-key="tagsCollapsed" data-panel-id="tags" role="button" tabindex="0" aria-expanded="${collapsed ? "false" : "true"}">
+              <div>
+                <h2>תגיות וצבעים</h2>
+                <small>${allTags.length ? `${allTags.length} תגיות פעילות` : "אין תגיות פעילות"}</small>
+              </div>
+              <span class="accordion-arrow" aria-hidden="true">▾</span>
+            </div>
+
+            <div class="accordion-shell ${collapsed ? "collapsed" : ""}">
+              <div class="accordion-body">
+                <div class="tag-manager">
+                  ${allTags.length ? allTags.map((tag) => `
+                    <div class="tag-manager-row">
+                      <div class="tag-wrap">
+                        ${renderTagChip(tag, false)}
+                      </div>
+                      <div class="tag-actions">
+                        <input type="color" value="${escapeAttr(hexColor(sanitizeColor(state.board.tagColors[tag], colorFromString(tag))))}" data-action="tag-color" data-tag="${escapeAttr(tag)}" aria-label="בחירת צבע לתגית ${escapeAttr(tag)}">
+                        <button class="icon-btn" type="button" data-action="rename-tag" data-tag="${escapeAttr(tag)}" aria-label="שינוי שם לתגית ${escapeAttr(tag)}">שינוי שם</button>
+                        <button class="icon-btn" type="button" data-action="reset-tag-color" data-tag="${escapeAttr(tag)}" aria-label="איפוס צבע תגית ${escapeAttr(tag)}">איפוס</button>
+                      </div>
+                    </div>
+                  `).join("") : renderEmptyState("אין תגיות פעילות", "התגיות יופיעו אחרי שתוסיפי אותן לפריטים")}
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      function getStats() {
+        const categories = state.board.categories;
+        const totalItems = categories.reduce((sum, category) => sum + category.items.length, 0);
+        const readyItems = categories.filter(isReadyCategory).reduce((sum, category) => sum + category.items.length, 0);
+        const publishedItems = categories.filter(isPublishedCategory).reduce((sum, category) => sum + category.items.length, 0);
+        const tasksTotal = state.board.tasks.length;
+        const tasksDone = state.board.tasks.filter((task) => task.done).length;
+        const workflowCategories = categories.filter((category) => category.title !== VIRTUAL_SCHEDULE_TITLE);
+        const stageCounts = getWorkflowStageCounts(categories);
+        let progressSum = 0;
+
+        workflowCategories.forEach((category, index) => {
+          const stageProgress = getWorkflowStageProgress(category, index, workflowCategories.length);
+          progressSum += category.items.length * stageProgress;
+        });
+
+        const progress = totalItems ? Math.round((progressSum / totalItems) * 100) : 0;
+        const remaining = totalItems ? Math.max(0, 100 - progress) : 0;
+
+        return {
+          totalItems,
+          readyItems,
+          publishedItems,
+          tasksTotal,
+          tasksDone,
+          progress,
+          remaining,
+          stageCounts,
+          breakdown: getWorkflowBreakdown(stageCounts),
+          insight: getWorkflowInsight(stageCounts)
+        };
+      }
+
+      function getWorkflowStageCounts(categories) {
+        const counts = {
+          ideas: 0,
+          scheduled: 0,
+          filmed: 0,
+          editing: 0,
+          ready: 0,
+          published: 0
+        };
+
+        categories.forEach((category) => {
+          const count = category.items.length;
+          if (!count) {
+            return;
+          }
+
+          if (category.title === "רעיונות") {
+            counts.ideas += count;
+          } else if (category.title === "נקבע תאריך") {
+            counts.scheduled += count;
+          } else if (category.title === "צילמנו") {
+            counts.filmed += count;
+          } else if (category.title === "עריכה בסיסית") {
+            counts.editing += count;
+          } else if (isReadyCategory(category)) {
+            counts.ready += count;
+          } else if (isPublishedCategory(category)) {
+            counts.published += count;
+          } else {
+            counts.editing += count;
+          }
+        });
+
+        return counts;
+      }
+
+      function getWorkflowStageProgress(category, index, totalStages) {
+        if (category.title === "רעיונות") {
+          return 0.08;
+        }
+        if (category.title === "נקבע תאריך") {
+          return 0.22;
+        }
+        if (category.title === "צילמנו") {
+          return 0.45;
+        }
+        if (category.title === "עריכה בסיסית") {
+          return 0.7;
+        }
+        if (isReadyCategory(category)) {
+          return 0.9;
+        }
+        if (isPublishedCategory(category)) {
+          return 1;
+        }
+
+        const normalizedIndex = totalStages > 1 ? index / (totalStages - 1) : 0;
+        return Math.max(0, Math.min(1, normalizedIndex));
+      }
+
+      function getWorkflowBreakdown(stageCounts) {
+        const parts = [
+          `רעיונות: ${stageCounts.ideas}`,
+          `נקבע תאריך: ${stageCounts.scheduled}`,
+          `צילמנו: ${stageCounts.filmed}`,
+          `עריכה: ${stageCounts.editing}`,
+          `מוכנים: ${stageCounts.ready}`
+        ];
+
+        if (stageCounts.published) {
+          parts.push(`פורסמו: ${stageCounts.published}`);
+        }
+
+        return parts.join(" · ");
+      }
+
+      function getWorkflowInsight(stageCounts) {
+        const entries = [
+          { key: "ideas", count: stageCounts.ideas, message: "רוב העבודה עדיין בשלב הרעיונות" },
+          { key: "scheduled", count: stageCounts.scheduled, message: "רוב העבודה כרגע סביב תיאום ותאריכים" },
+          { key: "filmed", count: stageCounts.filmed, message: "רוב העבודה עדיין בצילום" },
+          { key: "editing", count: stageCounts.editing, message: "רוב הסרטונים כבר בשלב עריכה" },
+          { key: "ready", count: stageCounts.ready, message: "הרבה סרטונים כבר כמעט מוכנים לעלייה" },
+          { key: "published", count: stageCounts.published, message: "חלק גדול מהלוח כבר פורסם" }
+        ].filter((entry) => entry.count > 0);
+
+        if (!entries.length) {
+          return "עדיין אין סרטונים בלוח";
+        }
+
+        entries.sort((a, b) => b.count - a.count);
+        return entries[0].message;
+      }
+
+      function getAllTags() {
+        const tags = new Set(Object.keys(state.board.tagColors || {}));
+        state.board.categories.forEach((category) => {
+          category.items.forEach((item) => {
+            (item.tags || []).forEach((tag) => tags.add(tag));
+          });
+        });
+        return [...tags].sort(compareText);
+      }
+
+      function getScheduleSourceEntries() {
+        const entries = [];
+        state.board.categories.forEach((category) => {
+          if (category.title === VIRTUAL_SCHEDULE_TITLE || isPublishedCategory(category)) {
+            return;
+          }
+          category.items.forEach((item) => {
+            entries.push({ category, item });
+          });
+        });
+        return entries;
+      }
+
+      function getScheduleBuckets() {
+        const entries = getScheduleSourceEntries().filter((entry) => matchesFilters(entry.item, entry.category));
+        const dated = entries
+          .filter((entry) => Boolean(entry.item.due))
+          .sort((a, b) => compareDates(a.item.due, b.item.due) || compareText(a.item.title, b.item.title));
+
+        const manualOrder = getScheduleManualOrder();
+        const manualIndex = new Map(manualOrder.map((id, index) => [id, index]));
+        const undated = entries
+          .filter((entry) => !entry.item.due)
+          .sort((a, b) => {
+            const aIndex = manualIndex.has(a.item.id) ? manualIndex.get(a.item.id) : Number.MAX_SAFE_INTEGER;
+            const bIndex = manualIndex.has(b.item.id) ? manualIndex.get(b.item.id) : Number.MAX_SAFE_INTEGER;
+            if (aIndex !== bIndex) {
+              return aIndex - bIndex;
+            }
+            return compareText(a.item.title, b.item.title);
+          });
+
+        return {
+          dated,
+          undated,
+          total: dated.length + undated.length
+        };
+      }
+
+      function getScheduleManualOrder() {
+        const undatedEntries = getScheduleSourceEntries().filter((entry) => !entry.item.due);
+        const existingIds = undatedEntries.map((entry) => entry.item.id);
+        const manual = state.board.scheduleManual.filter((id) => existingIds.includes(id));
+        const missing = undatedEntries
+          .filter((entry) => !manual.includes(entry.item.id))
+          .sort((a, b) => compareText(a.item.title, b.item.title))
+          .map((entry) => entry.item.id);
+
+        return [...manual, ...missing];
+      }
+
+      function matchesFilters(item, category = null) {
+        const search = state.filters.search.trim().toLocaleLowerCase("he");
+        const searchHaystack = getItemSearchHaystack(item);
+
+        if (search && !searchHaystack.includes(search)) {
+          return false;
+        }
+
+        if (state.filters.priority !== "all" && item.priority !== state.filters.priority) {
+          return false;
+        }
+
+        if (state.filters.tag !== "all" && !(item.tags || []).includes(state.filters.tag)) {
+          return false;
+        }
+
+        if (category && state.openWorkOnly && isPublishedCategory(category)) {
+          return false;
+        }
+
+        if (!matchesUpcomingRange(item.due)) {
+          return false;
+        }
+
+        return true;
+      }
+
+      function matchesUpcomingRange(due) {
+        if (state.filters.upcomingRange === "all") {
+          return true;
+        }
+
+        const dueDate = parseDate(due);
+        if (!dueDate) {
+          return false;
+        }
+
+        const days = Number(state.filters.upcomingRange || 0);
+        if (!days) {
+          return true;
+        }
+
+        const today = parseDate(getTodayIso());
+        const diff = Math.floor((dueDate.getTime() - today.getTime()) / 86400000);
+        return diff >= 0 && diff <= days;
+      }
+
+      function getItemSearchHaystack(item) {
+        return [
+          item.title,
+          ...(item.tags || []),
+          item.outfits && item.outfits.rotem,
+          item.outfits && item.outfits.meir,
+          ...(item.inspirationLinks || [])
+        ].map((value) => String(value || "").toLocaleLowerCase("he")).join(" ");
+      }
+
+      function isFiltersActive() {
+        return Boolean(
+          state.filters.search
+          || state.filters.priority !== "all"
+          || state.filters.tag !== "all"
+          || state.filters.upcomingRange !== "all"
+          || state.openWorkOnly
+        );
+      }
+
+      function getActiveFilterCount() {
+        let count = 0;
+        if (state.filters.priority !== "all") {
+          count += 1;
+        }
+        if (state.filters.tag !== "all") {
+          count += 1;
+        }
+        if (state.filters.upcomingRange !== "all") {
+          count += 1;
+        }
+        if (state.openWorkOnly) {
+          count += 1;
+        }
+        return count;
+      }
+
+      function handleClick(event) {
+        const actionTarget = event.target.closest("[data-action]");
+        if (!actionTarget) {
+          if (state.openItemMenuKey || state.topMenuOpen) {
+            closeUiMenus();
+            render();
+          }
+          return;
+        }
+
+        const action = actionTarget.dataset.action;
+        if (!action) {
+          return;
+        }
+
+        const hadOpenMenus = Boolean(state.openItemMenuKey || state.topMenuOpen);
+
+        if (action !== "toggle-item-menu" && action !== "toggle-top-menu") {
+          closeUiMenus();
+          if (hadOpenMenus) {
+            render();
+          }
+        }
+
+        switch (action) {
+          case "noop":
+            break;
+          case "drag-category":
+            break;
+          case "toggle-search":
+            state.searchOpen = !state.searchOpen;
+            if (!state.searchOpen && !state.filters.search) {
+              state.filtersPanelOpen = false;
+            }
+            render();
+            if (state.searchOpen) {
+              window.setTimeout(() => {
+                const input = document.getElementById("searchInput");
+                if (input) {
+                  input.focus();
+                }
+              }, 30);
+            }
+            break;
+          case "clear-search":
+            state.filters.search = "";
+            state.searchOpen = false;
+            render();
+            break;
+          case "open-calendar":
+            openCalendarDialog();
+            break;
+          case "return-calendar":
+            openCalendarDialog({ preserveState: true });
+            break;
+          case "open-calendar-day":
+            openCalendarDayDialog(actionTarget.dataset.date || "");
+            break;
+          case "open-calendar-item":
+            openItemDialog(actionTarget.dataset.itemId || null, null, "calendar");
+            break;
+          case "calendar-prev-month":
+            shiftCalendarPeriod(-1);
+            break;
+          case "calendar-next-month":
+            shiftCalendarPeriod(1);
+            break;
+          case "calendar-today":
+            jumpCalendarToToday();
+            break;
+          case "toggle-calendar-view":
+            state.board.ui.calendarView = state.board.ui.calendarView === "year" ? "month" : "year";
+            saveBoard();
+            renderCalendarDialog();
+            break;
+          case "open-item-dialog":
+            openItemDialog(actionTarget.dataset.itemId || null, actionTarget.dataset.categoryId || null, actionTarget.dataset.source || "board");
+            break;
+          case "open-item-details":
+            openItemDetails(actionTarget.dataset.itemId || null);
+            break;
+          case "toggle-item-menu":
+            state.topMenuOpen = false;
+            state.openItemMenuKey = state.openItemMenuKey === actionTarget.dataset.menuKey ? null : actionTarget.dataset.menuKey;
+            render();
+            break;
+          case "toggle-top-menu":
+            state.openItemMenuKey = null;
+            state.topMenuOpen = !state.topMenuOpen;
+            render();
+            break;
+          case "toggle-category-manager":
+            state.categoryManagerOpen = !state.categoryManagerOpen;
+            render();
+            break;
+          case "toggle-filters-panel":
+            state.filtersPanelOpen = !state.filtersPanelOpen;
+            render();
+            break;
+          case "set-upcoming-range":
+            state.filters.upcomingRange = actionTarget.dataset.range || "all";
+            render();
+            break;
+          case "toggle-ui-panel":
+            toggleStoredPanel(actionTarget.dataset.panelKey, actionTarget.dataset.panelId);
+            break;
+          case "open-category-dialog":
+            openCategoryDialog(actionTarget.dataset.categoryId || null);
+            break;
+          case "focus-category":
+            state.focusCategoryId = actionTarget.dataset.categoryId || null;
+            render();
+            break;
+          case "clear-focus":
+            state.focusCategoryId = null;
+            render();
+            break;
+          case "toggle-open-work":
+            state.openWorkOnly = !state.openWorkOnly;
+            if (state.openWorkOnly && state.focusCategoryId) {
+              const focused = findCategory(state.focusCategoryId);
+              if (focused && isPublishedCategory(focused)) {
+                state.focusCategoryId = null;
+              }
+            }
+            render();
+            break;
+          case "clear-filter-chip":
+            clearFilterChip(actionTarget.dataset.filterKey || "");
+            break;
+          case "close-dialog":
+            closeDialog(actionTarget.dataset.dialogId);
+            break;
+          case "toggle-category":
+            toggleCategory(actionTarget.dataset.categoryId);
+            break;
+          case "delete-category":
+            deleteCategory(actionTarget.dataset.categoryId);
+            break;
+          case "add-subcategory":
+            addSubcategory(actionTarget.dataset.categoryId);
+            break;
+          case "edit-subcategory":
+            editSubcategory(actionTarget.dataset.categoryId, actionTarget.dataset.subcatId);
+            break;
+          case "delete-subcategory":
+            deleteSubcategory(actionTarget.dataset.categoryId, actionTarget.dataset.subcatId);
+            break;
+          case "delete-item":
+            deleteItem(actionTarget.dataset.itemId);
+            break;
+          case "move-to-next-stage":
+            moveItemToNextStage(actionTarget.dataset.itemId);
+            break;
+          case "clear-filters":
+            clearFilters();
+            break;
+          case "toggle-compact":
+            toggleCompactMode();
+            break;
+          case "export-json":
+            exportJson();
+            break;
+          case "import-json":
+            refs.importInput.click();
+            break;
+          case "edit-task":
+            editTask(actionTarget.dataset.taskId);
+            break;
+          case "delete-task":
+            deleteTask(actionTarget.dataset.taskId);
+            break;
+          case "filter-tag":
+            state.filters.tag = actionTarget.dataset.tag || "all";
+            render();
+            break;
+          case "rename-tag":
+            renameTagGlobally(actionTarget.dataset.tag);
+            break;
+          case "reset-tag-color":
+            resetTagColor(actionTarget.dataset.tag);
+            break;
+          case "edit-calendar-date":
+            editCalendarDate(actionTarget.dataset.dateId);
+            break;
+          case "delete-calendar-date":
+            deleteCalendarDate(actionTarget.dataset.dateId);
+            break;
+          case "undo-delete":
+            undoDelete();
+            break;
+          default:
+            break;
+        }
+      }
+
+      function handleKeydown(event) {
+        if (event.key === "Escape" && (state.openItemMenuKey || state.topMenuOpen)) {
+          closeUiMenus();
+          render();
+          return;
+        }
+
+        if (event.key !== "Enter" && event.key !== " ") {
+          return;
+        }
+
+        const actionTarget = event.target.closest("[data-action]");
+        if (!actionTarget) {
+          return;
+        }
+
+        if (actionTarget.matches("button, input, select, textarea")) {
+          return;
+        }
+
+        event.preventDefault();
+        actionTarget.click();
+      }
+
+      function handleInput(event) {
+        if (event.target.id === "searchInput") {
+          const nextValue = event.target.value || "";
+          state.filters.search = nextValue;
+          render();
+          const nextInput = document.getElementById("searchInput");
+          if (nextInput) {
+            nextInput.focus();
+            nextInput.setSelectionRange(nextValue.length, nextValue.length);
+          }
+        }
+      }
+
+      function handleChange(event) {
+        if (event.target.id === "priorityFilter") {
+          state.filters.priority = event.target.value || "all";
+          render();
+          return;
+        }
+
+        if (event.target.id === "tagFilter") {
+          state.filters.tag = event.target.value || "all";
+          render();
+          return;
+        }
+
+        if (event.target.id === "calendarMonthJump") {
+          state.calendarMonth = Number(event.target.value || 0);
+          renderCalendarDialog();
+          return;
+        }
+
+        if (event.target.id === "hideCompletedTasks") {
+          state.board.ui.hideCompletedTasks = event.target.checked;
+          commit();
+          return;
+        }
+
+        if (event.target.name === "categoryId" && event.target.form === refs.itemForm) {
+          populateSubcategoryOptions(event.target.value, refs.itemForm.elements.subcat.value);
+          return;
+        }
+
+        if (event.target.dataset.action === "toggle-task") {
+          toggleTask(event.target.dataset.taskId, event.target.checked);
+          return;
+        }
+
+        if (event.target.dataset.action === "tag-color") {
+          setTagColor(event.target.dataset.tag, event.target.value);
+        }
+      }
+
+      function handleSubmit(event) {
+        if (event.target === refs.itemForm) {
+          event.preventDefault();
+          saveItemFromForm();
+          return;
+        }
+
+        if (event.target === refs.categoryForm) {
+          event.preventDefault();
+          saveCategoryFromForm();
+          return;
+        }
+
+        if (event.target.id === "taskForm") {
+          event.preventDefault();
+          const formData = new FormData(event.target);
+          const text = String(formData.get("taskText") || "").trim();
+          if (!text) {
+            return;
+          }
+          state.board.tasks.push({
+            id: createId("task"),
+            text,
+            done: false
+          });
+          event.target.reset();
+          commit();
+          return;
+        }
+
+        if (event.target.id === "calendarDateForm") {
+          event.preventDefault();
+          saveCalendarDateFromForm(event.target);
+        }
+      }
+
+      function handleDragStart(event) {
+        const draggable = event.target.closest("[data-drag-type]");
+        if (!draggable) {
+          return;
+        }
+
+        clearDropHints();
+
+        const dragType = draggable.dataset.dragType;
+        if (dragType === "category") {
+          state.drag = {
+            type: "category",
+            categoryId: draggable.dataset.categoryId
+          };
+        } else if (dragType === "item") {
+          state.drag = {
+            type: "item",
+            itemId: draggable.dataset.itemId,
+            fromCategoryId: draggable.dataset.categoryId
+          };
+        } else if (dragType === "schedule") {
+          state.drag = {
+            type: "schedule",
+            itemId: draggable.dataset.itemId
+          };
+        } else {
+          return;
+        }
+
+        draggable.classList.add("dragging");
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.dropEffect = "move";
+          event.dataTransfer.setData("text/plain", JSON.stringify(state.drag));
+        }
+      }
+
+      function handleDragOver(event) {
+        if (!state.drag) {
+          return;
+        }
+
+        if (state.drag.type === "category") {
+          const categoryTarget = event.target.closest('[data-drop-type="category"]');
+          if (categoryTarget && categoryTarget.dataset.categoryId !== state.drag.categoryId) {
+            event.preventDefault();
+            setDropHint(categoryTarget, "drop-highlight");
+          }
+          return;
+        }
+
+        if (state.drag.type === "item") {
+          const itemTarget = event.target.closest('[data-drop-type="item"]');
+          const stackTarget = event.target.closest('[data-drop-type="items"]');
+          const categoryTarget = event.target.closest("[data-item-drop='category']");
+          if (itemTarget || stackTarget || categoryTarget) {
+            event.preventDefault();
+            if (itemTarget) {
+              setDropHint(itemTarget, "drop-before");
+            } else if (stackTarget) {
+              setDropHint(stackTarget, "drop-highlight");
+            } else if (categoryTarget) {
+              setDropHint(categoryTarget, "drop-highlight");
+            }
+          }
+          return;
+        }
+
+        if (state.drag.type === "schedule") {
+          const scheduleItem = event.target.closest('[data-drop-type="schedule-item"]');
+          const scheduleList = event.target.closest('[data-drop-type="schedule-list"]');
+          if (scheduleItem || scheduleList) {
+            event.preventDefault();
+            if (scheduleItem) {
+              setDropHint(scheduleItem, "drop-before");
+            } else {
+              setDropHint(scheduleList, "drop-highlight");
+            }
+          }
+        }
+      }
+
+      function handleDrop(event) {
+        if (!state.drag) {
+          return;
+        }
+
+        if (state.drag.type === "category") {
+          const categoryTarget = event.target.closest('[data-drop-type="category"]');
+          if (!categoryTarget || categoryTarget.dataset.categoryId === state.drag.categoryId) {
+            return;
+          }
+          event.preventDefault();
+          reorderCategories(state.drag.categoryId, categoryTarget.dataset.categoryId);
+          clearDragState();
+          commit();
+          return;
+        }
+
+        if (state.drag.type === "item") {
+          const itemTarget = event.target.closest('[data-drop-type="item"]');
+          const stackTarget = event.target.closest('[data-drop-type="items"]');
+          const categoryTarget = event.target.closest("[data-item-drop='category']");
+          event.preventDefault();
+
+          if (itemTarget) {
+            moveBoardItem({
+              itemId: state.drag.itemId,
+              fromCategoryId: state.drag.fromCategoryId,
+              toCategoryId: itemTarget.dataset.categoryId,
+              beforeItemId: itemTarget.dataset.itemId,
+              targetSubcat: itemTarget.dataset.subcatId || null
+            });
+            clearDragState();
+            commit();
+            return;
+          }
+
+          if (stackTarget) {
+            moveBoardItem({
+              itemId: state.drag.itemId,
+              fromCategoryId: state.drag.fromCategoryId,
+              toCategoryId: stackTarget.dataset.categoryId,
+              beforeItemId: null,
+              targetSubcat: stackTarget.dataset.subcatId || null
+            });
+            clearDragState();
+            commit();
+            return;
+          }
+
+          if (categoryTarget) {
+            moveBoardItem({
+              itemId: state.drag.itemId,
+              fromCategoryId: state.drag.fromCategoryId,
+              toCategoryId: categoryTarget.dataset.categoryId,
+              beforeItemId: null,
+              targetSubcat: null
+            });
+            clearDragState();
+            commit();
+          }
+          return;
+        }
+
+        if (state.drag.type === "schedule") {
+          const scheduleItem = event.target.closest('[data-drop-type="schedule-item"]');
+          const scheduleList = event.target.closest('[data-drop-type="schedule-list"]');
+          if (!scheduleItem && !scheduleList) {
+            return;
+          }
+          event.preventDefault();
+          reorderSchedule(state.drag.itemId, scheduleItem ? scheduleItem.dataset.itemId : null);
+          clearDragState();
+          commit();
+        }
+      }
+
+      function clearDragState() {
+        state.drag = null;
+        clearDropHints();
+        document.querySelectorAll(".dragging").forEach((node) => node.classList.remove("dragging"));
+      }
+
+      function setDropHint(node, className) {
+        if (!node) {
+          return;
+        }
+
+        if (state.dropHint && state.dropHint.node === node && state.dropHint.className === className) {
+          return;
+        }
+
+        clearDropHints();
+        node.classList.add(className);
+        state.dropHint = { node, className };
+      }
+
+      function clearDropHints() {
+        if (state.dropHint && state.dropHint.node) {
+          state.dropHint.node.classList.remove(state.dropHint.className);
+        }
+        state.dropHint = null;
+      }
+
+      function openItemDialog(itemId, preferredCategoryId, source = "board") {
+        closeUiMenus();
+        state.dialogReturn = source === "calendar" ? {
+          source,
+          dayDate: state.calendarDayDate,
+          calendarYear: state.calendarYear,
+          calendarMonth: state.calendarMonth,
+          calendarView: state.board.ui.calendarView
+        } : null;
+        closeDialog("detailDialog");
+        closeDialog("dayDialog", { preserveState: Boolean(state.dialogReturn) });
+        closeDialog("calendarDialog", { preserveState: Boolean(state.dialogReturn) });
+        const form = refs.itemForm;
+        form.reset();
+        const itemLocation = itemId ? findItemLocation(itemId) : null;
+        const categoryId = itemLocation ? itemLocation.category.id : preferredCategoryId || (state.board.categories[0] && state.board.categories[0].id) || "";
+        state.editingItemId = itemLocation ? itemLocation.item.id : null;
+
+        form.elements.itemId.value = state.editingItemId || "";
+        document.getElementById("itemDialogTitle").textContent = state.editingItemId ? "עריכת פריט" : "פריט חדש";
+        populateCategoryOptions(categoryId);
+
+        if (itemLocation) {
+          form.elements.title.value = itemLocation.item.title;
+          form.elements.categoryId.value = itemLocation.category.id;
+          populateSubcategoryOptions(itemLocation.category.id, itemLocation.item.subcat || "");
+          form.elements.subcat.value = itemLocation.item.subcat || "";
+          form.elements.priority.value = itemLocation.item.priority;
+          form.elements.due.value = itemLocation.item.due || "";
+          form.elements.tags.value = (itemLocation.item.tags || []).join(", ");
+          form.elements.outfitRotem.value = itemLocation.item.outfits.rotem || "";
+          form.elements.outfitMeir.value = itemLocation.item.outfits.meir || "";
+          form.elements.links.value = (itemLocation.item.inspirationLinks || []).join("\n");
+        } else {
+          populateSubcategoryOptions(categoryId, "");
+          form.elements.priority.value = "yellow";
+        }
+
+        refs.itemDialog.showModal();
+        window.setTimeout(() => form.elements.title.focus(), 30);
+      }
+
+      function populateCategoryOptions(selectedId) {
+        const options = state.board.categories.map((category) => `<option value="${escapeAttr(category.id)}" ${selectedId === category.id ? "selected" : ""}>${escapeHtml(category.title)}</option>`).join("");
+        refs.itemForm.elements.categoryId.innerHTML = options;
+      }
+
+      function populateSubcategoryOptions(categoryId, selectedId) {
+        const category = findCategory(categoryId);
+        const options = ['<option value="">ללא תת־קטגוריה</option>'];
+        if (category) {
+          category.subcategories.forEach((subcat) => {
+            options.push(`<option value="${escapeAttr(subcat.id)}" ${selectedId === subcat.id ? "selected" : ""}>${escapeHtml(subcat.title)}</option>`);
+          });
+        }
+        refs.itemForm.elements.subcat.innerHTML = options.join("");
+      }
+
+      function saveItemFromForm() {
+        const formData = new FormData(refs.itemForm);
+        const title = String(formData.get("title") || "").trim();
+        const categoryId = String(formData.get("categoryId") || "");
+        const category = findCategory(categoryId);
+        if (!title || !category) {
+          alert("יש להזין כותרת ולבחור קטגוריה.");
+          return;
+        }
+
+        const subcat = String(formData.get("subcat") || "");
+        const selectedSubcat = category.subcategories.some((entry) => entry.id === subcat) ? subcat : null;
+        const data = {
+          title,
+          priority: ["red", "yellow", "green"].includes(formData.get("priority")) ? formData.get("priority") : "yellow",
+          due: normalizeDateValue(formData.get("due")),
+          tags: splitList(formData.get("tags"), /[,\n]/g),
+          inspirationLinks: String(formData.get("links") || "").split("\n").map(normalizeLink).filter(Boolean),
+          outfits: {
+            rotem: String(formData.get("outfitRotem") || "").trim(),
+            meir: String(formData.get("outfitMeir") || "").trim()
+          },
+          subcat: selectedSubcat
+        };
+
+        if (state.editingItemId) {
+          const location = findItemLocation(state.editingItemId);
+          if (!location) {
+            return;
+          }
+
+          Object.assign(location.item, data);
+          if (location.category.id !== categoryId) {
+            location.category.items = location.category.items.filter((item) => item.id !== location.item.id);
+            category.items.push(location.item);
+          }
+        } else {
+          category.items.push({
+            id: createId("item"),
+            ...data
+          });
+        }
+
+        state.editingItemId = null;
+        commit();
+        closeDialog("itemDialog");
+      }
+
+      function openCategoryDialog(categoryId) {
+        closeUiMenus();
+        closeDialog("detailDialog");
+        closeDialog("dayDialog");
+        closeDialog("calendarDialog");
+        const form = refs.categoryForm;
+        form.reset();
+        const category = categoryId ? findCategory(categoryId) : null;
+        state.editingCategoryId = category ? category.id : null;
+        document.getElementById("categoryDialogTitle").textContent = category ? "עריכת קטגוריה" : "קטגוריה חדשה";
+
+        form.elements.categoryId.value = state.editingCategoryId || "";
+        form.elements.title.value = category ? category.title : "";
+        form.elements.role.value = category ? category.role : "";
+        form.elements.collapsed.checked = category ? category.collapsed : false;
+
+        refs.categoryDialog.showModal();
+        window.setTimeout(() => form.elements.title.focus(), 30);
+      }
+
+      function saveCategoryFromForm() {
+        const formData = new FormData(refs.categoryForm);
+        const title = String(formData.get("title") || "").trim();
+        if (!title) {
+          alert("יש להזין שם לקטגוריה.");
+          return;
+        }
+
+        if (title === VIRTUAL_SCHEDULE_TITLE) {
+          alert(`השם "${VIRTUAL_SCHEDULE_TITLE}" שמור לתצוגה וירטואלית.`);
+          return;
+        }
+
+        const role = normalizeRole(formData.get("role"), title);
+        const collapsed = Boolean(formData.get("collapsed"));
+
+        if (state.editingCategoryId) {
+          const category = findCategory(state.editingCategoryId);
+          if (!category) {
+            return;
+          }
+          category.title = title;
+          category.role = role;
+          category.collapsed = collapsed;
+        } else {
+          state.board.categories.push({
+            id: createId("cat"),
+            title,
+            role,
+            collapsed,
+            subcategories: [],
+            items: []
+          });
+        }
+
+        refs.categoryDialog.close();
+        state.editingCategoryId = null;
+        commit();
+      }
+
+      function closeDialog(dialogId, options = {}) {
+        const dialog = document.getElementById(dialogId);
+        if (dialog && dialog.open) {
+          dialog.close();
+        }
+        if (dialogId === "dayDialog" && !options.preserveState) {
+          state.calendarDayDate = "";
+        }
+        if (dialogId === "itemDialog") {
+          restoreDialogContext();
+        }
+      }
+
+      function openItemDetails(itemId) {
+        closeUiMenus();
+        closeDialog("dayDialog");
+        closeDialog("calendarDialog");
+        const location = itemId ? findItemLocation(itemId) : null;
+        if (!location) {
+          return;
+        }
+
+        refs.detailContent.innerHTML = renderItemDetail(location);
+        if (!refs.detailDialog.open) {
+          refs.detailDialog.showModal();
+        }
+      }
+
+      function openCalendarDialog(options = {}) {
+        const preserveState = Boolean(options.preserveState);
+        if (!preserveState) {
+          jumpCalendarToToday({ skipRender: true });
+          state.board.ui.calendarView = "month";
+          saveBoard();
+        }
+        closeDialog("dayDialog", { preserveState });
+        renderCalendarDialog();
+        if (!refs.calendarDialog.open) {
+          refs.calendarDialog.showModal();
+        }
+      }
+
+      function openCalendarDayDialog(isoDate) {
+        if (!normalizeDateValue(isoDate)) {
+          return;
+        }
+        closeDialog("calendarDialog", { preserveState: true });
+        state.calendarDayDate = isoDate;
+        renderCalendarDayDialog(isoDate);
+        if (!refs.dayDialog.open) {
+          refs.dayDialog.showModal();
+        }
+      }
+
+      function shiftCalendarPeriod(direction) {
+        if (state.board.ui.calendarView === "year") {
+          state.calendarYear += direction;
+        } else {
+          state.calendarMonth += direction;
+          if (state.calendarMonth < 0) {
+            state.calendarMonth = 11;
+            state.calendarYear -= 1;
+          } else if (state.calendarMonth > 11) {
+            state.calendarMonth = 0;
+            state.calendarYear += 1;
+          }
+        }
+        renderCalendarDialog();
+      }
+
+      function jumpCalendarToToday(options = {}) {
+        const today = new Date();
+        state.calendarYear = today.getFullYear();
+        state.calendarMonth = today.getMonth();
+        if (!options.skipRender) {
+          renderCalendarDialog();
+        }
+      }
+
+      function restoreDialogContext() {
+        if (!state.dialogReturn) {
+          return;
+        }
+
+        const context = { ...state.dialogReturn };
+        state.dialogReturn = null;
+        state.calendarYear = context.calendarYear;
+        state.calendarMonth = context.calendarMonth;
+        state.board.ui.calendarView = context.calendarView === "year" ? "year" : "month";
+
+        if (context.dayDate) {
+          state.calendarDayDate = context.dayDate;
+          renderCalendarDayDialog(context.dayDate);
+          if (!refs.dayDialog.open) {
+            refs.dayDialog.showModal();
+          }
+          return;
+        }
+
+        renderCalendarDialog();
+        if (!refs.calendarDialog.open) {
+          refs.calendarDialog.showModal();
+        }
+      }
+
+      function toggleStoredPanel(panelKey, panelId) {
+        if (!panelKey || !state.board.ui) {
+          return;
+        }
+
+        const selectorId = window.CSS && typeof window.CSS.escape === "function" ? window.CSS.escape(panelId || panelKey) : (panelId || panelKey);
+        const root = document.querySelector(`[data-panel-id="${selectorId}"]`);
+        const shell = root ? root.querySelector(".accordion-shell") : null;
+        const body = shell ? shell.querySelector(".accordion-body") : null;
+
+        state.board.ui[panelKey] = !state.board.ui[panelKey];
+        saveBoard();
+
+        if (!root || !shell || !body) {
+          render();
+          return;
+        }
+
+        animateAccordionToggle(root, shell, body, state.board.ui[panelKey]);
+      }
+
+      function toggleCategory(categoryId) {
+        const category = findCategory(categoryId);
+        if (!category) {
+          return;
+        }
+
+        const selectorId = window.CSS && typeof window.CSS.escape === "function" ? window.CSS.escape(categoryId) : categoryId;
+        const card = document.querySelector(`.category-card[data-category-id="${selectorId}"]`);
+        const shell = card ? card.querySelector(".accordion-shell") : null;
+        const body = shell ? shell.querySelector(".accordion-body") : null;
+        category.collapsed = !category.collapsed;
+        saveBoard();
+
+        if (!card || !shell || !body) {
+          render();
+          return;
+        }
+
+        animateAccordionToggle(card, shell, body, category.collapsed);
+      }
+
+      function deleteCategory(categoryId) {
+        const category = findCategory(categoryId);
+        if (!category) {
+          return;
+        }
+
+        if (state.board.categories.length === 1) {
+          alert("אי אפשר למחוק את הקטגוריה האחרונה בלוח.");
+          return;
+        }
+
+        const snapshot = cloneBoard(state.board);
+        const destination = state.board.categories.find((entry) => entry.id !== categoryId && entry.title === "רעיונות")
+          || state.board.categories.find((entry) => entry.id !== categoryId);
+
+        category.items.forEach((item) => {
+          item.subcat = null;
+          destination.items.push(item);
+        });
+
+        state.board.categories = state.board.categories.filter((entry) => entry.id !== categoryId);
+        if (state.focusCategoryId === categoryId) {
+          state.focusCategoryId = null;
+        }
+        commit();
+        showUndoToast(snapshot, `הקטגוריה "${category.title}" נמחקה`);
+      }
+
+      function addSubcategory(categoryId) {
+        const category = findCategory(categoryId);
+        if (!category) {
+          return;
+        }
+        const title = window.prompt("שם תת־הקטגוריה:");
+        if (!title) {
+          return;
+        }
+        const cleanTitle = title.trim();
+        if (!cleanTitle) {
+          return;
+        }
+        category.subcategories.push({
+          id: createId("sub"),
+          title: cleanTitle
+        });
+        commit();
+      }
+
+      function editSubcategory(categoryId, subcatId) {
+        const category = findCategory(categoryId);
+        if (!category) {
+          return;
+        }
+        const subcategory = category.subcategories.find((entry) => entry.id === subcatId);
+        if (!subcategory) {
+          return;
+        }
+        const title = window.prompt("שם חדש לתת־הקטגוריה:", subcategory.title);
+        if (!title) {
+          return;
+        }
+        const cleanTitle = title.trim();
+        if (!cleanTitle) {
+          return;
+        }
+        subcategory.title = cleanTitle;
+        commit();
+      }
+
+      function deleteSubcategory(categoryId, subcatId) {
+        const category = findCategory(categoryId);
+        if (!category) {
+          return;
+        }
+        const subcategory = category.subcategories.find((entry) => entry.id === subcatId);
+        if (!subcategory) {
+          return;
+        }
+        const snapshot = cloneBoard(state.board);
+
+        category.subcategories = category.subcategories.filter((entry) => entry.id !== subcatId);
+        category.items.forEach((item) => {
+          if (item.subcat === subcatId) {
+            item.subcat = null;
+          }
+        });
+        commit();
+        showUndoToast(snapshot, `תת־הקטגוריה "${subcategory.title}" נמחקה`);
+      }
+
+      function deleteItem(itemId) {
+        const location = findItemLocation(itemId);
+        if (!location) {
+          return;
+        }
+        const snapshot = cloneBoard(state.board);
+        location.category.items = location.category.items.filter((item) => item.id !== itemId);
+        commit();
+        showUndoToast(snapshot, `הפריט "${location.item.title}" נמחק`);
+      }
+
+      function clearFilters() {
+        state.filters.search = "";
+        state.filters.priority = "all";
+        state.filters.tag = "all";
+        state.filters.upcomingRange = "all";
+        state.openWorkOnly = false;
+        state.searchOpen = false;
+        state.filtersPanelOpen = false;
+        render();
+      }
+
+      function toggleCompactMode() {
+        state.board.ui.compact = !state.board.ui.compact;
+        commit();
+      }
+
+      function exportJson() {
+        const text = JSON.stringify(state.board, null, 2);
+        const blob = new Blob([text], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = `video-board-${new Date().toISOString().slice(0, 10)}.json`;
+        anchor.click();
+        URL.revokeObjectURL(url);
+      }
+
+      async function handleImportFile(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) {
+          return;
+        }
+
+        try {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          state.board = normalizeBoard(parsed);
+          commit();
+        } catch (error) {
+          alert("קובץ ה־JSON לא תקין.");
+        } finally {
+          event.target.value = "";
+        }
+      }
+
+      function editTask(taskId) {
+        const task = state.board.tasks.find((entry) => entry.id === taskId);
+        if (!task) {
+          return;
+        }
+        const nextText = window.prompt("עריכת משימה:", task.text);
+        if (!nextText) {
+          return;
+        }
+        const cleanText = nextText.trim();
+        if (!cleanText) {
+          return;
+        }
+        task.text = cleanText;
+        commit();
+      }
+
+      function deleteTask(taskId) {
+        const task = state.board.tasks.find((entry) => entry.id === taskId);
+        if (!task) {
+          return;
+        }
+        const snapshot = cloneBoard(state.board);
+        state.board.tasks = state.board.tasks.filter((task) => task.id !== taskId);
+        commit();
+        showUndoToast(snapshot, `המשימה "${task.text}" נמחקה`);
+      }
+
+      function toggleTask(taskId, done) {
+        const task = state.board.tasks.find((entry) => entry.id === taskId);
+        if (!task) {
+          return;
+        }
+        task.done = Boolean(done);
+        commit();
+      }
+
+      function setTagColor(tag, color) {
+        if (!tag) {
+          return;
+        }
+        state.board.tagColors[tag] = sanitizeColor(color, colorFromString(tag));
+        commit();
+      }
+
+      function resetTagColor(tag) {
+        if (!tag) {
+          return;
+        }
+        state.board.tagColors[tag] = colorFromString(tag);
+        commit();
+      }
+
+      function reorderCategories(draggedId, targetId) {
+        if (draggedId === targetId) {
+          return;
+        }
+
+        const categories = [...state.board.categories];
+        const fromIndex = categories.findIndex((category) => category.id === draggedId);
+        const targetIndex = categories.findIndex((category) => category.id === targetId);
+        if (fromIndex < 0 || targetIndex < 0) {
+          return;
+        }
+
+        const [moved] = categories.splice(fromIndex, 1);
+        const insertAt = fromIndex < targetIndex ? targetIndex - 1 : targetIndex;
+        categories.splice(insertAt, 0, moved);
+        state.board.categories = categories;
+      }
+
+      function moveBoardItem({ itemId, fromCategoryId, toCategoryId, beforeItemId, targetSubcat }) {
+        if (!itemId || !fromCategoryId || !toCategoryId) {
+          return;
+        }
+
+        if (beforeItemId === itemId && fromCategoryId === toCategoryId) {
+          return;
+        }
+
+        const fromCategory = findCategory(fromCategoryId);
+        const toCategory = findCategory(toCategoryId);
+        if (!fromCategory || !toCategory) {
+          return;
+        }
+
+        const itemIndex = fromCategory.items.findIndex((item) => item.id === itemId);
+        if (itemIndex < 0) {
+          return;
+        }
+
+        const [item] = fromCategory.items.splice(itemIndex, 1);
+        item.subcat = toCategory.subcategories.some((subcat) => subcat.id === targetSubcat) ? targetSubcat : null;
+
+        let insertAt = toCategory.items.length;
+        if (beforeItemId) {
+          const targetIndex = toCategory.items.findIndex((entry) => entry.id === beforeItemId);
+          if (targetIndex >= 0) {
+            insertAt = targetIndex;
+          }
+        }
+
+        toCategory.items.splice(insertAt, 0, item);
+      }
+
+      function reorderSchedule(itemId, beforeItemId) {
+        if (!itemId) {
+          return;
+        }
+
+        if (beforeItemId === itemId) {
+          return;
+        }
+
+        const order = getScheduleManualOrder().filter((id) => id !== itemId);
+        const insertIndex = beforeItemId ? order.indexOf(beforeItemId) : -1;
+
+        if (insertIndex >= 0) {
+          order.splice(insertIndex, 0, itemId);
+        } else {
+          order.push(itemId);
+        }
+
+        state.board.scheduleManual = order;
+      }
+
+      function showNoticeToast(message) {
+        window.clearTimeout(showNoticeToast._timer);
+        state.noticeToast = { message };
+        render();
+        showNoticeToast._timer = window.setTimeout(() => {
+          state.noticeToast = null;
+          render();
+        }, 2200);
+      }
+
+      function showUndoToast(boardSnapshot, message) {
+        window.clearTimeout(showUndoToast._timer);
+        state.noticeToast = null;
+        state.undoToast = {
+          boardSnapshot,
+          message
+        };
+        render();
+        showUndoToast._timer = window.setTimeout(() => {
+          state.undoToast = null;
+          render();
+        }, 5000);
+      }
+
+      function undoDelete() {
+        if (!state.undoToast) {
+          return;
+        }
+
+        window.clearTimeout(showUndoToast._timer);
+        state.board = normalizeBoard(cloneBoard(state.undoToast.boardSnapshot));
+        state.undoToast = null;
+        commit();
+      }
+
+      function clearFilterChip(filterKey) {
+        if (filterKey === "search") {
+          state.filters.search = "";
+          state.searchOpen = false;
+        } else if (filterKey === "priority") {
+          state.filters.priority = "all";
+        } else if (filterKey === "tag") {
+          state.filters.tag = "all";
+        } else if (filterKey === "upcoming") {
+          state.filters.upcomingRange = "all";
+        } else if (filterKey === "openWork") {
+          state.openWorkOnly = false;
+        }
+        render();
+      }
+
+      function renameTagGlobally(tag) {
+        if (!tag) {
+          return;
+        }
+        const nextTag = window.prompt("שם חדש לתגית:", tag);
+        if (!nextTag) {
+          return;
+        }
+        const cleanTag = nextTag.trim();
+        if (!cleanTag || cleanTag === tag) {
+          return;
+        }
+
+        state.board.categories.forEach((category) => {
+          category.items.forEach((item) => {
+            if (!item.tags || !item.tags.length) {
+              return;
+            }
+            item.tags = item.tags.map((entry) => entry === tag ? cleanTag : entry);
+            item.tags = uniqueStrings(item.tags);
+          });
+        });
+
+        if (state.board.tagColors[tag]) {
+          state.board.tagColors[cleanTag] = state.board.tagColors[cleanTag] || state.board.tagColors[tag];
+          delete state.board.tagColors[tag];
+        }
+
+        if (state.filters.tag === tag) {
+          state.filters.tag = cleanTag;
+        }
+
+        commit();
+        showNoticeToast(`התגית "${tag}" שונתה ל־"${cleanTag}"`);
+      }
+
+      function findCalendarDate(dateId) {
+        return (state.board.calendarDates || []).find((entry) => entry.id === dateId) || null;
+      }
+
+      function saveCalendarDateFromForm(form) {
+        const formData = new FormData(form);
+        const date = normalizeDateValue(formData.get("date"));
+        const title = String(formData.get("title") || "").trim();
+        const type = normalizeCalendarDateType(formData.get("type"));
+        if (!date || !title) {
+          return;
+        }
+
+        state.board.calendarDates.push({
+          id: createId("date"),
+          date,
+          title,
+          type
+        });
+        commit();
+        showNoticeToast(type === "filming-day" ? `סומן יום צילום ב־${formatDate(date)}` : `נוסף אירוע ל־${formatDate(date)}`);
+        renderCalendarDayDialog(date);
+        const nextTitle = refs.dayContent.querySelector("input[name='title']");
+        const nextType = refs.dayContent.querySelector("select[name='type']");
+        if (nextTitle) {
+          nextTitle.value = "";
+          nextTitle.focus();
+        }
+        if (nextType) {
+          nextType.value = "note";
+        }
+      }
+
+      function editCalendarDate(dateId) {
+        const entry = findCalendarDate(dateId);
+        if (!entry) {
+          return;
+        }
+        const nextTitle = window.prompt("עריכת תאריך חשוב:", entry.title);
+        if (!nextTitle) {
+          return;
+        }
+        const cleanTitle = nextTitle.trim();
+        if (!cleanTitle) {
+          return;
+        }
+        entry.title = cleanTitle;
+        commit();
+        showNoticeToast("התאריך החשוב עודכן");
+      }
+
+      function deleteCalendarDate(dateId) {
+        const entry = findCalendarDate(dateId);
+        if (!entry) {
+          return;
+        }
+        const snapshot = cloneBoard(state.board);
+        state.board.calendarDates = state.board.calendarDates.filter((date) => date.id !== dateId);
+        commit();
+        showUndoToast(snapshot, `התאריך "${entry.title}" נמחק`);
+      }
+
+      function moveItemToNextStage(itemId) {
+        const location = findItemLocation(itemId);
+        if (!location) {
+          return;
+        }
+        const nextCategory = getNextStageCategory(location.category.id);
+        if (!nextCategory) {
+          showNoticeToast("אין שלב הבא עבור הפריט הזה");
+          return;
+        }
+
+        location.category.items = location.category.items.filter((item) => item.id !== itemId);
+        location.item.subcat = null;
+        nextCategory.items.push(location.item);
+        commit();
+        showNoticeToast(`"${location.item.title}" הועבר ל־${nextCategory.title}`);
+      }
+
+      function findCategory(categoryId) {
+        return state.board.categories.find((category) => category.id === categoryId) || null;
+      }
+
+      function getNextStageCategory(categoryId) {
+        const currentIndex = state.board.categories.findIndex((category) => category.id === categoryId);
+        if (currentIndex < 0) {
+          return null;
+        }
+        return state.board.categories[currentIndex + 1] || null;
+      }
+
+      function getCategoryIcon(category) {
+        const title = String(category && category.title || "");
+        if (category && category.role === "ready") {
+          return "🚀";
+        }
+        if (category && category.role === "published") {
+          return "✓";
+        }
+        if (title === "רעיונות") {
+          return "✦";
+        }
+        if (title === "נקבע תאריך") {
+          return "🗓";
+        }
+        if (title === "צילמנו") {
+          return "🎥";
+        }
+        if (title === "עריכה בסיסית") {
+          return "✂";
+        }
+        return "◌";
+      }
+
+      function getCategoryToneClass(category) {
+        const title = String(category && category.title || "");
+        if (category && category.role === "ready") {
+          return "tone-ready";
+        }
+        if (category && category.role === "published") {
+          return "tone-published";
+        }
+        if (title === "רעיונות") {
+          return "tone-ideas";
+        }
+        if (title === "נקבע תאריך") {
+          return "tone-scheduled";
+        }
+        if (title === "צילמנו") {
+          return "tone-filmed";
+        }
+        if (title === "עריכה בסיסית") {
+          return "tone-edit";
+        }
+        return "tone-generic";
+      }
+
+      function getSubcategoryTitle(category, subcatId) {
+        if (!category || !subcatId) {
+          return "";
+        }
+
+        const subcategory = (category.subcategories || []).find((entry) => entry.id === subcatId);
+        return subcategory ? subcategory.title : "";
+      }
+
+      function animateAccordionToggle(root, shell, body, collapsed) {
+        if (!root || !shell || !body) {
+          render();
+          return;
+        }
+
+        const targetHeight = body.scrollHeight;
+        shell.style.overflow = "hidden";
+        shell.style.transition = "height 220ms ease, opacity 180ms ease";
+
+        if (collapsed) {
+          shell.classList.remove("collapsed");
+          shell.style.height = `${targetHeight}px`;
+          shell.style.opacity = "1";
+          requestAnimationFrame(() => {
+            root.classList.add("is-collapsed");
+            shell.classList.add("collapsed");
+            shell.style.height = "0px";
+            shell.style.opacity = "0";
+          });
+        } else {
+          root.classList.remove("is-collapsed");
+          shell.classList.remove("collapsed");
+          shell.style.height = "0px";
+          shell.style.opacity = "0";
+          requestAnimationFrame(() => {
+            shell.style.height = `${targetHeight}px`;
+            shell.style.opacity = "1";
+          });
+        }
+
+        window.clearTimeout(animateAccordionToggle._timer);
+        animateAccordionToggle._timer = window.setTimeout(() => {
+          render();
+        }, 240);
+      }
+
+      function cloneBoard(board) {
+        if (typeof structuredClone === "function") {
+          return structuredClone(board);
+        }
+        return JSON.parse(JSON.stringify(board));
+      }
+
+      function getTodayIso() {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+      }
+
+      function findItemLocation(itemId) {
+        for (const category of state.board.categories) {
+          const item = category.items.find((entry) => entry.id === itemId);
+          if (item) {
+            return { category, item };
+          }
+        }
+        return null;
+      }
+
+      function isReadyCategory(category) {
+        return category.role === "ready" || category.title === READY_TITLE;
+      }
+
+      function isPublishedCategory(category) {
+        return category.role === "published" || category.title === PUBLISHED_TITLE;
+      }
+
+      function compareText(a, b) {
+        return String(a || "").localeCompare(String(b || ""), "he", { sensitivity: "base", numeric: true });
+      }
+
+      function compareDates(a, b) {
+        const first = parseDate(a);
+        const second = parseDate(b);
+        if (!first || !second) {
+          return 0;
+        }
+        return first.getTime() - second.getTime();
+      }
+
+      function parseDate(value) {
+        const date = normalizeDateValue(value);
+        if (!date) {
+          return null;
+        }
+        const [year, month, day] = date.split("-").map(Number);
+        return new Date(year, month - 1, day, 12, 0, 0);
+      }
+
+      function formatDate(value) {
+        const date = parseDate(value);
+        return date ? DATE_FORMATTER.format(date) : "";
+      }
+
+      function getWeekday(value) {
+        const date = parseDate(value);
+        return date ? DAY_FORMATTER.format(date) : "";
+      }
+
+      function colorFromString(value) {
+        let hash = 0;
+        for (let i = 0; i < value.length; i += 1) {
+          hash = value.charCodeAt(i) + ((hash << 5) - hash);
+          hash |= 0;
+        }
+        const hue = Math.abs(hash) % 360;
+        return hslToHex(hue, 68, 78);
+      }
+
+      function hslToHex(h, s, l) {
+        s /= 100;
+        l /= 100;
+        const k = (n) => (n + h / 30) % 12;
+        const a = s * Math.min(l, 1 - l);
+        const f = (n) => {
+          const color = l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+          return Math.round(255 * color).toString(16).padStart(2, "0");
+        };
+        return `#${f(0)}${f(8)}${f(4)}`;
+      }
+
+      function sanitizeColor(value, fallback) {
+        const color = String(value || "").trim();
+        if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(color)) {
+          return color;
+        }
+        if (/^rgba?\([\d\s.,%]+\)$/i.test(color) || /^hsla?\([\d\s.,%]+\)$/i.test(color)) {
+          return color;
+        }
+        return fallback;
+      }
+
+      function hexColor(color) {
+        if (/^#([0-9a-f]{6})$/i.test(color)) {
+          return color;
+        }
+        return colorFromString(color);
+      }
+
+      function createId(prefix) {
+        if (window.crypto && typeof window.crypto.randomUUID === "function") {
+          return `${prefix}-${window.crypto.randomUUID()}`;
+        }
+        return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function escapeAttr(value) {
+        return escapeHtml(value).replace(/`/g, "&#96;");
+      }
+    })();
+  </script>
+</body>
+</html>
