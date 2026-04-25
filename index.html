@@ -1409,6 +1409,8 @@
     }
 
     .row-popover {
+      top: auto;
+      bottom: calc(100% + 0.35rem);
       min-width: 138px;
     }
 
@@ -2605,6 +2607,12 @@
       color: #166534;
     }
 
+    .legend-pill.status-published,
+    .calendar-pill.status-published {
+      background: rgba(148, 163, 184, 0.18);
+      color: #475569;
+    }
+
     .legend-pill.status-filmed,
     .calendar-pill.status-filmed {
       background: rgba(234, 179, 8, 0.2);
@@ -3033,6 +3041,304 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
+
+    /* UX fixes and color cleanup */
+    .dialog-head {
+      align-items: center;
+    }
+
+    .header-actions {
+      grid-template-columns: minmax(0, 1fr) auto auto auto auto;
+    }
+
+    .compact-dialog-head {
+      margin-bottom: 0.2rem;
+    }
+
+    .dialog-close-btn {
+      width: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      padding: 0;
+      border-radius: 12px;
+      font-size: 1rem;
+      background: rgba(124, 58, 237, 0.08);
+    }
+
+    .compact-item-grid {
+      gap: 0.65rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .compact-item-grid .field {
+      gap: 0.28rem;
+    }
+
+    .compact-input,
+    .compact-textarea {
+      min-height: 40px;
+    }
+
+    .compact-textarea {
+      min-height: 88px;
+    }
+
+    .dialog-actions-spacer {
+      flex: 1 1 auto;
+    }
+
+    .danger-btn {
+      color: #9f1239;
+      border-color: rgba(190, 24, 93, 0.12);
+      background: rgba(244, 114, 182, 0.09);
+    }
+
+    .tag-choice-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .tag-choice {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      cursor: pointer;
+    }
+
+    .tag-choice input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .tag-choice span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 0.35rem 0.72rem;
+      border-radius: 999px;
+      border: 1px solid rgba(124, 58, 237, 0.12);
+      background: rgba(124, 58, 237, 0.05);
+      color: var(--accent-strong);
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+    }
+
+    .tag-choice input:checked + span {
+      background: rgba(124, 58, 237, 0.16);
+      border-color: rgba(124, 58, 237, 0.28);
+      color: #4c1d95;
+    }
+
+    .tag-choice input:focus-visible + span {
+      outline: 2px solid rgba(124, 58, 237, 0.25);
+      outline-offset: 2px;
+    }
+
+    dialog.settings-dialog {
+      width: min(980px, calc(100% - 0.9rem));
+      max-height: min(94vh, 980px);
+    }
+
+    .settings-shell {
+      display: grid;
+      gap: 0.75rem;
+      max-height: min(88vh, 920px);
+      overflow: auto;
+    }
+
+    .settings-sections {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+      align-items: start;
+    }
+
+    .settings-group {
+      padding: 0.8rem;
+      border-radius: 18px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(124, 58, 237, 0.035);
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .settings-group h3 {
+      margin: 0;
+      font-size: 0.92rem;
+    }
+
+    .settings-actions,
+    .wrap-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .settings-chip.active {
+      background: rgba(124, 58, 237, 0.15);
+      border-color: rgba(124, 58, 237, 0.22);
+      color: #4c1d95;
+    }
+
+    .color-explainer {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+    }
+
+    .color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+    }
+
+    .color-green { background: #22c55e; }
+    .color-orange { background: #f97316; }
+    .color-red { background: #ef4444; }
+    .color-yellow { background: #eab308; }
+    .color-purple { background: #7c3aed; }
+    .color-lavender { background: #a78bfa; }
+    .color-tag { background: linear-gradient(135deg, #ec4899, #8b5cf6); }
+
+    .tone-ideas {
+      --tone: rgba(244, 114, 182, 0.09);
+    }
+
+    .tone-scheduled {
+      --tone: rgba(249, 115, 22, 0.1);
+    }
+
+    .tone-filmed {
+      --tone: rgba(234, 179, 8, 0.1);
+    }
+
+    .tone-dubbing,
+    .tone-edit {
+      --tone: rgba(99, 102, 241, 0.09);
+    }
+
+    .tone-ready {
+      --tone: rgba(34, 197, 94, 0.1);
+    }
+
+    .tone-published {
+      --tone: rgba(148, 163, 184, 0.09);
+    }
+
+    .tone-hold {
+      --tone: rgba(167, 139, 250, 0.1);
+    }
+
+    .priority-pill.red {
+      background: rgba(244, 63, 94, 0.13);
+      color: #be123c;
+    }
+
+    .priority-pill.yellow {
+      background: rgba(245, 158, 11, 0.14);
+      color: #b45309;
+    }
+
+    .priority-pill.green {
+      background: rgba(14, 165, 233, 0.14);
+      color: #0369a1;
+    }
+
+    .item-card.priority-green,
+    .schedule-item.priority-green {
+      box-shadow: inset 4px 0 0 #0ea5e9;
+    }
+
+    .deadline-soon {
+      box-shadow: inset 4px 0 0 #f97316;
+      background: rgba(249, 115, 22, 0.03);
+    }
+
+    .deadline-urgent {
+      box-shadow: inset 4px 0 0 #ef4444;
+      background: rgba(239, 68, 68, 0.04);
+    }
+
+    .tiny-pill.deadline-soon-pill {
+      background: rgba(249, 115, 22, 0.14);
+      color: #c2410c;
+    }
+
+    .tiny-pill.deadline-urgent-pill {
+      background: rgba(239, 68, 68, 0.14);
+      color: #b91c1c;
+    }
+
+    .stage-dubbing {
+      background: #6366f1;
+    }
+
+    .stage-hold {
+      background: #a78bfa;
+    }
+
+    .stage-published {
+      background: #94a3b8;
+    }
+
+    .legend-pill.status-edit,
+    .calendar-pill.status-edit {
+      background: rgba(99, 102, 241, 0.16);
+      color: #4338ca;
+    }
+
+    .legend-pill.status-hold,
+    .calendar-pill.status-hold {
+      background: rgba(167, 139, 250, 0.18);
+      color: #6d28d9;
+    }
+
+    .day-video-item.status-hold {
+      box-shadow: inset 4px 0 0 rgba(167, 139, 250, 0.55);
+    }
+
+    .day-video-item.status-published {
+      box-shadow: inset 4px 0 0 rgba(148, 163, 184, 0.5);
+    }
+
+    .calendar-actions {
+      align-items: center;
+    }
+
+    .calendar-actions .dialog-close-btn {
+      margin-inline-start: auto;
+    }
+
+    @media (max-width: 860px) {
+      .settings-sections {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .compact-item-grid,
+      .settings-sections {
+        grid-template-columns: 1fr;
+      }
+
+      .header-actions {
+        grid-template-columns: minmax(0, 1fr) auto auto auto auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -3040,17 +3346,16 @@
 
   <dialog id="itemDialog">
     <form id="itemForm" class="dialog-shell">
-      <div class="panel-head">
+      <div class="panel-head dialog-head compact-dialog-head">
         <div>
           <h2 id="itemDialogTitle">פריט וידאו</h2>
-          <p class="muted">יצירה ועריכה של סרטון, תגיות, תאריך יעד והשראות.</p>
         </div>
-        <button type="button" class="btn ghost" data-action="close-dialog" data-dialog-id="itemDialog">סגירה</button>
+        <button type="button" class="icon-btn dialog-close-btn" data-action="close-dialog" data-dialog-id="itemDialog" aria-label="סגירת עריכת הפריט">✕</button>
       </div>
 
       <input type="hidden" name="itemId">
 
-      <div class="dialog-grid">
+      <div class="dialog-grid compact-item-grid">
         <div class="field full">
           <label for="itemTitle">כותרת</label>
           <input id="itemTitle" class="input" name="title" required maxlength="160" placeholder="למשל: וולוג בוקר יום צילום">
@@ -3081,8 +3386,14 @@
         </div>
 
         <div class="field full">
-          <label for="itemTags">תגיות</label>
-          <input id="itemTags" class="input" name="tags" placeholder="מופרדות בפסיקים או בשורה חדשה">
+          <label>תגיות</label>
+          <div class="tag-choice-grid" id="fixedTagOptions">
+            <label class="tag-choice"><input type="checkbox" name="fixedTags" value="מצחיק"><span>מצחיק</span></label>
+            <label class="tag-choice"><input type="checkbox" name="fixedTags" value="מתכונים"><span>מתכונים</span></label>
+            <label class="tag-choice"><input type="checkbox" name="fixedTags" value="זוגי"><span>זוגי</span></label>
+            <label class="tag-choice"><input type="checkbox" name="fixedTags" value="דייטים א-ב"><span>דייטים א-ב</span></label>
+          </div>
+          <input id="itemExtraTags" class="input compact-input" name="extraTags" placeholder="תגיות נוספות קיימות, אם צריך">
         </div>
 
         <div class="field">
@@ -3097,13 +3408,13 @@
 
         <div class="field full">
           <label for="itemLinks">קישורי השראה</label>
-          <textarea id="itemLinks" class="textarea" name="links" placeholder="קישור אחד בכל שורה"></textarea>
+          <textarea id="itemLinks" class="textarea compact-textarea" name="links" placeholder="קישור אחד בכל שורה"></textarea>
         </div>
       </div>
 
-      <p class="footnote">פריטים ללא תאריך יוצגו בתצוגת <strong>סדר עלייה ⏰</strong> לפי סדר ידני שניתן לגרור ולעדכן.</p>
-
       <div class="dialog-actions">
+        <button type="button" class="btn ghost danger-btn" id="itemDeleteBtn" data-action="delete-current-item" hidden>מחק</button>
+        <span class="dialog-actions-spacer"></span>
         <button type="submit" class="btn primary">שמירה</button>
         <button type="button" class="btn ghost" data-action="close-dialog" data-dialog-id="itemDialog">ביטול</button>
       </div>
@@ -3169,6 +3480,10 @@
     <div id="dayContent" class="dialog-shell"></div>
   </dialog>
 
+  <dialog id="settingsDialog" class="settings-dialog">
+    <div id="settingsContent" class="dialog-shell"></div>
+  </dialog>
+
   <input id="importInput" type="file" accept="application/json,.json" hidden>
 
   <script>
@@ -3179,6 +3494,10 @@
       const VIRTUAL_SCHEDULE_TITLE = "סדר עלייה ⏰";
       const READY_TITLE = "מוכן לעלייה";
       const PUBLISHED_TITLE = "עלה";
+      const HOLD_TITLE = "מתלבטת";
+      const DUBBING_TITLE = "צריך לדובב";
+      const FIXED_TAG_OPTIONS = ["מצחיק", "מתכונים", "זוגי", "דייטים א-ב"];
+      const WORKFLOW_STAGE_TITLES = ["רעיונות", "נקבע תאריך", "צילמנו", DUBBING_TITLE, "עריכה בסיסית", READY_TITLE, PUBLISHED_TITLE];
       const HOLIDAYS = [
         { date: "2026-04-22", title: "יום העצמאות" },
         { date: "2026-09-11", title: "ראש השנה" },
@@ -3205,6 +3524,8 @@
         calendarContent: document.getElementById("calendarContent"),
         dayDialog: document.getElementById("dayDialog"),
         dayContent: document.getElementById("dayContent"),
+        settingsDialog: document.getElementById("settingsDialog"),
+        settingsContent: document.getElementById("settingsContent"),
         importInput: document.getElementById("importInput")
       };
 
@@ -3279,7 +3600,9 @@
             makeCategory("רעיונות"),
             makeCategory("נקבע תאריך"),
             makeCategory("צילמנו"),
+            makeCategory(DUBBING_TITLE),
             makeCategory("עריכה בסיסית"),
+            makeCategory(HOLD_TITLE),
             makeCategory(READY_TITLE, "ready"),
             makeCategory(PUBLISHED_TITLE, "published")
           ],
@@ -3326,11 +3649,28 @@
           }
         };
 
+        ensureCategoryExists(normalized.categories, DUBBING_TITLE, "עריכה בסיסית");
+        ensureCategoryExists(normalized.categories, HOLD_TITLE, PUBLISHED_TITLE);
+
         if (!normalized.categories.length) {
           normalized.categories = fallback.categories;
         }
 
         return normalized;
+      }
+
+      function ensureCategoryExists(categories, title, beforeTitle = "") {
+        if (categories.some((category) => category.title === title)) {
+          return;
+        }
+
+        const nextCategory = makeCategory(title);
+        const insertIndex = beforeTitle ? categories.findIndex((category) => category.title === beforeTitle) : -1;
+        if (insertIndex >= 0) {
+          categories.splice(insertIndex, 0, nextCategory);
+        } else {
+          categories.push(nextCategory);
+        }
       }
 
       function normalizeCalendarDates(calendarDates) {
@@ -3637,6 +3977,8 @@
         const hasActiveSearchOrFilters = isFiltersActive();
         const showFiltersPanel = state.filtersPanelOpen || state.filters.priority !== "all" || state.filters.tag !== "all";
         const showSearchRow = state.searchOpen;
+        const tasksPanelVisible = shouldShowTasksPanel();
+        const collapseToggle = getCollapseToggleState();
 
         if (state.focusCategoryId && !findCategory(state.focusCategoryId)) {
           state.focusCategoryId = null;
@@ -3655,27 +3997,10 @@
 
                 <div class="header-actions">
                   <button class="btn primary" type="button" data-action="open-item-dialog">+ סרטון חדש</button>
+                  <button class="icon-btn top-icon-btn" type="button" data-action="toggle-all-panels" aria-label="${escapeAttr(collapseToggle.labelText)}">${collapseToggle.symbol}</button>
                   <button class="icon-btn top-icon-btn" type="button" data-action="open-calendar" aria-label="פתיחת לוח שנה">📅</button>
                   <button class="icon-btn top-icon-btn ${showSearchRow || state.filters.search ? "active" : ""}" type="button" data-action="toggle-search" aria-expanded="${showSearchRow ? "true" : "false"}" aria-label="חיפוש">⌕</button>
-                  <div class="menu-wrap">
-                    <button class="icon-btn top-icon-btn settings-trigger" type="button" data-action="toggle-top-menu" aria-expanded="${state.topMenuOpen ? "true" : "false"}" aria-label="הגדרות">⚙️</button>
-                    ${state.topMenuOpen ? `
-                      <div class="menu-popover header-popover">
-                        <button class="menu-item" type="button" data-action="open-category-dialog">+ קטגוריה</button>
-                        <button class="menu-item" type="button" data-action="toggle-category-manager">${state.categoryManagerOpen ? "סגירת ניהול קטגוריות" : "ניהול קטגוריות"}</button>
-                        <button class="menu-item" type="button" data-action="toggle-ui-panel" data-panel-key="tagsCollapsed" data-panel-id="tags">${state.board.ui.tagsCollapsed ? "תגיות וצבעים" : "הסתרת תגיות"}</button>
-                        <div class="menu-divider"></div>
-                        <div class="menu-label">תראה לי רק סרטונים שאמורים לעשות ב־</div>
-                        ${renderUpcomingMenuItems()}
-                        <div class="menu-divider"></div>
-                        <button class="menu-item" type="button" data-action="import-json">ייבוא JSON</button>
-                        <button class="menu-item" type="button" data-action="export-json">ייצוא JSON</button>
-                        <button class="menu-item" type="button" data-action="toggle-compact">${state.board.ui.compact ? "מצב רגיל" : "מצב קומפקטי"}</button>
-                        <button class="menu-item" type="button" data-action="toggle-open-work">${state.openWorkOnly ? "הצגי הכל" : "עבודה פתוחה בלבד"}</button>
-                        ${isFiltersActive() ? '<button class="menu-item" type="button" data-action="clear-filters">ניקוי פילטרים</button>' : ""}
-                      </div>
-                    ` : ""}
-                  </div>
+                  <button class="icon-btn top-icon-btn settings-trigger" type="button" data-action="open-settings" aria-label="הגדרות">⚙️</button>
                 </div>
               </div>
 
@@ -3698,8 +4023,8 @@
                   <span>מוכנים לעלייה</span>
                 </div>
                 <div class="stat-card">
-                  <strong>${stats.publishedItems}</strong>
-                  <span>כבר עלו</span>
+                  <strong>${stats.openItems}</strong>
+                  <span>עדיין בעבודה</span>
                 </div>
                 <div class="stat-card">
                   <strong>${stats.tasksDone}/${stats.tasksTotal}</strong>
@@ -3747,7 +4072,7 @@
                   <div class="progress-headline">
                     <div>
                       <h2>התקדמות עבודה</h2>
-                      <div class="progress-caption">${stats.remaining}% עבודה נותרה</div>
+                      <div class="progress-caption">${stats.readyItems} מוכנים לעלייה · ${stats.remaining}% עבודה נותרה</div>
                     </div>
                     <strong class="progress-value">${stats.progress}%</strong>
                   </div>
@@ -3760,8 +4085,6 @@
               </div>
             </header>
 
-            ${state.categoryManagerOpen ? renderCategoryManagerPanel() : ""}
-
             <main class="workspace">
               <section class="board-panel">
                 <div class="board-grid">
@@ -3771,9 +4094,11 @@
               </section>
 
               <aside class="sidebar">
-                <section class="panel">
-                  ${renderTasksPanel()}
-                </section>
+                ${tasksPanelVisible ? `
+                  <section class="panel">
+                    ${renderTasksPanel()}
+                  </section>
+                ` : ""}
 
                 <section class="panel">
                   ${renderTagsPanel(allTags)}
@@ -3792,11 +4117,14 @@
         if (refs.dayDialog.open && state.calendarDayDate) {
           renderCalendarDayDialog(state.calendarDayDate);
         }
+        if (refs.settingsDialog.open) {
+          renderSettingsDialog();
+        }
       }
 
       function renderUpcomingMenuItems() {
         return getUpcomingRangeOptions().map((option) => `
-          <button class="menu-item ${state.filters.upcomingRange === option.value ? "active" : ""}" type="button" data-action="set-upcoming-range" data-range="${escapeAttr(option.value)}">${escapeHtml(option.label)}</button>
+          <button class="mini-btn settings-chip ${state.filters.upcomingRange === option.value ? "active" : ""}" type="button" data-action="set-upcoming-range" data-range="${escapeAttr(option.value)}">${escapeHtml(option.label)}</button>
         `).join("");
       }
 
@@ -3810,35 +4138,136 @@
         ];
       }
 
-      function renderCategoryManagerPanel() {
-        return `
-          <section class="panel category-manager-panel">
-            <div class="panel-head">
-              <div>
-                <h2>ניהול קטגוריות</h2>
-                <small>כל פעולות הקטגוריות מרוכזות כאן כדי לשמור על שורות נקיות.</small>
-              </div>
-              <button class="btn ghost slim-btn" type="button" data-action="toggle-category-manager">סגירה</button>
+      function renderCategoryManagerRows() {
+        return state.board.categories.map((category) => `
+          <div class="category-manager-row">
+            <div class="category-manager-meta">
+              <strong>${escapeHtml(category.title)}</strong>
+              <span class="muted">${category.items.length} פריטים</span>
             </div>
-            <div class="category-manager-list">
-              ${state.board.categories.map((category) => `
-                <div class="category-manager-row">
-                  <div class="category-manager-meta">
-                    <strong>${escapeHtml(category.title)}</strong>
-                    <span class="muted">${category.items.length} פריטים</span>
-                  </div>
-                  <div class="category-manager-actions">
-                    <button class="mini-btn" type="button" data-action="open-item-dialog" data-category-id="${escapeAttr(category.id)}">+ סרטון</button>
-                    <button class="mini-btn" type="button" data-action="add-subcategory" data-category-id="${escapeAttr(category.id)}">+ תת</button>
-                    <button class="mini-btn" type="button" data-action="${state.focusCategoryId === category.id ? "clear-focus" : "focus-category"}" data-category-id="${escapeAttr(category.id)}">${state.focusCategoryId === category.id ? "פוקוס פעיל" : "פוקוס"}</button>
-                    <button class="mini-btn" type="button" data-action="open-category-dialog" data-category-id="${escapeAttr(category.id)}">עריכה</button>
-                    <button class="mini-btn danger" type="button" data-action="delete-category" data-category-id="${escapeAttr(category.id)}">מחק</button>
+            <div class="category-manager-actions">
+              <button class="mini-btn" type="button" data-action="open-item-dialog" data-category-id="${escapeAttr(category.id)}">+ סרטון</button>
+              <button class="mini-btn" type="button" data-action="add-subcategory" data-category-id="${escapeAttr(category.id)}">+ תת</button>
+              <button class="mini-btn" type="button" data-action="${state.focusCategoryId === category.id ? "clear-focus" : "focus-category"}" data-category-id="${escapeAttr(category.id)}">${state.focusCategoryId === category.id ? "פוקוס פעיל" : "פוקוס"}</button>
+              <button class="mini-btn" type="button" data-action="open-category-dialog" data-category-id="${escapeAttr(category.id)}">עריכה</button>
+              <button class="mini-btn danger" type="button" data-action="delete-category" data-category-id="${escapeAttr(category.id)}">מחק</button>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      function renderSettingsDialog() {
+        const allTags = getAllTags();
+        const tasks = [...state.board.tasks].sort((a, b) => Number(a.done) - Number(b.done) || compareText(a.text, b.text));
+        const openTasks = tasks.filter((task) => !task.done).length;
+        const colors = [
+          { className: "color-green", title: "ירוק", hint: "מוכן לעלייה" },
+          { className: "color-orange", title: "כתום", hint: "תאריך קרוב, עדיין לא מוכן" },
+          { className: "color-red", title: "אדום", hint: "דחוף מאוד או עוד יומיים ופחות" },
+          { className: "color-yellow", title: "צהוב", hint: "צולם אבל עדיין לא ערוך" },
+          { className: "color-purple", title: "סגול", hint: "עריכה / דיבוב / שלבי עבודה מתקדמים" },
+          { className: "color-lavender", title: "לילך", hint: "מתלבטת / בהמתנה" }
+        ];
+
+        refs.settingsContent.innerHTML = `
+          <div class="settings-shell">
+            <div class="panel-head dialog-head compact-dialog-head">
+              <div>
+                <h2>הגדרות</h2>
+                <small>כלי ניהול, סינון והסבר צבעים במקום אחד.</small>
+              </div>
+              <button type="button" class="icon-btn dialog-close-btn" data-action="close-dialog" data-dialog-id="settingsDialog" aria-label="סגירת ההגדרות">✕</button>
+            </div>
+
+            <div class="settings-sections">
+              <section class="settings-group">
+                <h3>קטגוריות</h3>
+                <div class="settings-actions">
+                  <button class="btn ghost slim-btn" type="button" data-action="open-category-dialog">+ קטגוריה</button>
+                  <button class="btn ghost slim-btn" type="button" data-action="toggle-all-panels">${getCollapseToggleState().labelText}</button>
+                </div>
+                <div class="category-manager-list">
+                  ${renderCategoryManagerRows()}
+                </div>
+              </section>
+
+              <section class="settings-group">
+                <h3>משימות</h3>
+                <form class="inline-form" id="settingsTaskForm">
+                  <input class="input" name="taskText" placeholder="משימה חדשה..." maxlength="140">
+                  <button class="btn ghost slim-btn" type="submit">הוספה</button>
+                </form>
+                <small>${tasks.length ? `סה"כ ${tasks.length} · פתוחות ${openTasks}` : "אין משימות כרגע"}</small>
+              </section>
+
+              <section class="settings-group">
+                <h3>תגיות</h3>
+                <div class="tag-manager">
+                  ${allTags.length ? allTags.map((tag) => `
+                    <div class="tag-manager-row">
+                      <div class="tag-wrap">
+                        ${renderTagChip(tag, false)}
+                      </div>
+                      <div class="tag-actions">
+                        <input type="color" value="${escapeAttr(hexColor(sanitizeColor(state.board.tagColors[tag], colorFromString(tag))))}" data-action="tag-color" data-tag="${escapeAttr(tag)}" aria-label="בחירת צבע לתגית ${escapeAttr(tag)}">
+                        <button class="icon-btn" type="button" data-action="rename-tag" data-tag="${escapeAttr(tag)}" aria-label="שינוי שם לתגית ${escapeAttr(tag)}">שינוי שם</button>
+                        <button class="icon-btn" type="button" data-action="reset-tag-color" data-tag="${escapeAttr(tag)}" aria-label="איפוס צבע תגית ${escapeAttr(tag)}">איפוס</button>
+                      </div>
+                    </div>
+                  `).join("") : renderEmptyState("אין תגיות פעילות", "התגיות יופיעו כאן אחרי שתשתמשי בהן")}
+                </div>
+              </section>
+
+              <section class="settings-group">
+                <h3>פילטרים</h3>
+                <div class="settings-actions wrap-actions">
+                  ${renderUpcomingMenuItems()}
+                  <button class="mini-btn settings-chip ${state.openWorkOnly ? "active" : ""}" type="button" data-action="toggle-open-work">${state.openWorkOnly ? "הצגי הכל" : "עבודה פתוחה בלבד"}</button>
+                  ${isFiltersActive() ? '<button class="mini-btn settings-chip" type="button" data-action="clear-filters">ניקוי פילטרים</button>' : ""}
+                </div>
+                ${renderActiveFilterChips()}
+              </section>
+
+              <section class="settings-group">
+                <h3>ייבוא / ייצוא</h3>
+                <div class="settings-actions">
+                  <button class="btn ghost slim-btn" type="button" data-action="import-json">ייבוא JSON</button>
+                  <button class="btn ghost slim-btn" type="button" data-action="export-json">ייצוא JSON</button>
+                </div>
+              </section>
+
+              <section class="settings-group">
+                <h3>הסבר צבעים</h3>
+                <div class="color-explainer">
+                  ${colors.map((entry) => `
+                    <div class="color-row">
+                      <span class="color-dot ${entry.className}" aria-hidden="true"></span>
+                      <strong>${escapeHtml(entry.title)}</strong>
+                      <span class="muted">${escapeHtml(entry.hint)}</span>
+                    </div>
+                  `).join("")}
+                  <div class="color-row">
+                    <span class="color-dot color-tag" aria-hidden="true"></span>
+                    <strong>צבעי תגיות</strong>
+                    <span class="muted">סיווגים כמו מצחיק, מתכונים, זוגי ודייטים א-ב.</span>
                   </div>
                 </div>
-              `).join("")}
+              </section>
+
+              <section class="settings-group">
+                <h3>תצוגה</h3>
+                <div class="settings-actions">
+                  <button class="btn ghost slim-btn" type="button" data-action="toggle-compact">${state.board.ui.compact ? "מצב רגיל" : "מצב קומפקטי"}</button>
+                  <button class="btn ghost slim-btn" type="button" data-action="toggle-ui-panel" data-panel-key="tagsCollapsed" data-panel-id="tags">${state.board.ui.tagsCollapsed ? "פתיחת תגיות" : "הסתרת תגיות"}</button>
+                </div>
+              </section>
             </div>
-          </section>
+          </div>
         `;
+
+        if (!refs.settingsDialog.open) {
+          refs.settingsDialog.showModal();
+        }
       }
 
       function renderWorkflowSegments(stats) {
@@ -3846,7 +4275,9 @@
           { label: "רעיונות", count: stats.stageCounts.ideas, className: "stage-ideas" },
           { label: "נקבע תאריך", count: stats.stageCounts.scheduled, className: "stage-scheduled" },
           { label: "צילמנו", count: stats.stageCounts.filmed, className: "stage-filmed" },
+          { label: "צריך לדובב", count: stats.stageCounts.dubbing, className: "stage-dubbing" },
           { label: "עריכה", count: stats.stageCounts.editing, className: "stage-editing" },
+          { label: "מתלבטת", count: stats.stageCounts.hold, className: "stage-hold" },
           { label: "מוכן", count: stats.stageCounts.ready, className: "stage-ready" },
           { label: "עלה", count: stats.stageCounts.published, className: "stage-published" }
         ].filter((segment) => segment.count > 0);
@@ -3987,10 +4418,11 @@
       function renderScheduleItem(entry, draggable) {
         const item = entry.item;
         const category = entry.category;
-        const meta = renderDateMeta(item.due);
+        const meta = renderDateMeta(item.due, category);
+        const deadlineClass = getDeadlineToneClass(item, category);
 
         return `
-          <article class="schedule-item priority-${escapeAttr(item.priority)} ${draggable ? "draggable" : ""}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="schedule" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" ${draggable ? 'draggable="true"' : ""} ${draggable ? `data-drag-type="schedule" data-item-id="${escapeAttr(item.id)}"` : ""} ${draggable ? `data-drop-type="schedule-item" data-item-id="${escapeAttr(item.id)}"` : ""}>
+          <article class="schedule-item priority-${escapeAttr(item.priority)} ${deadlineClass} ${draggable ? "draggable" : ""}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="schedule" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" ${draggable ? 'draggable="true"' : ""} ${draggable ? `data-drag-type="schedule" data-item-id="${escapeAttr(item.id)}"` : ""} ${draggable ? `data-drop-type="schedule-item" data-item-id="${escapeAttr(item.id)}"` : ""}>
             <div class="row-main">
               <div class="row-title">
                 <h4>${escapeHtml(item.title)}</h4>
@@ -4003,7 +4435,7 @@
               </div>
             </div>
 
-            ${renderItemActions(item, { allowDelete: false, allowDetails: false, menuKey: `schedule:${item.id}`, allowEdit: true, categoryId: category.id })}
+            ${renderItemActions(item, { allowDelete: true, allowDetails: false, menuKey: `schedule:${item.id}`, allowEdit: true, categoryId: category.id, source: "schedule" })}
           </article>
         `;
       }
@@ -4101,10 +4533,11 @@
       }
 
       function renderBoardItem(item, category) {
-        const meta = renderDateMeta(item.due);
+        const meta = renderDateMeta(item.due, category);
+        const deadlineClass = getDeadlineToneClass(item, category);
 
         return `
-          <article class="item-card priority-${escapeAttr(item.priority)}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="board" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" draggable="true" data-drag-type="item" data-category-id="${escapeAttr(category.id)}" data-subcat-id="${escapeAttr(item.subcat || "")}" data-drop-type="item">
+          <article class="item-card priority-${escapeAttr(item.priority)} ${deadlineClass}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="board" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" draggable="true" data-drag-type="item" data-category-id="${escapeAttr(category.id)}" data-subcat-id="${escapeAttr(item.subcat || "")}" data-drop-type="item">
             <div class="row-main">
               <div class="row-title">
                 <h4>${escapeHtml(item.title)}</h4>
@@ -4114,7 +4547,7 @@
                 ${meta}
               </div>
             </div>
-            ${renderItemActions(item, { allowDelete: true, allowDetails: false, menuKey: `board:${item.id}`, allowEdit: true, categoryId: category.id })}
+            ${renderItemActions(item, { allowDelete: true, allowDetails: false, menuKey: `board:${item.id}`, allowEdit: true, categoryId: category.id, source: "board" })}
           </article>
         `;
       }
@@ -4129,12 +4562,51 @@
         return `<span class="priority-pill ${escapeAttr(priority)}">${escapeHtml(labels[priority] || "צהוב")}</span>`;
       }
 
-      function renderDateMeta(due) {
+      function renderDateMeta(due, category = null) {
         if (!due) {
           return '<span class="tiny-pill">ללא תאריך</span>';
         }
+        const deadlineLabel = getDeadlineLabel(due, category);
+        return `<span class="tiny-pill ${deadlineLabel.className}">${escapeHtml(formatDate(due))} · ${escapeHtml(getWeekday(due))}${deadlineLabel.text ? ` · ${escapeHtml(deadlineLabel.text)}` : ""}</span>`;
+      }
 
-        return `<span class="tiny-pill">${escapeHtml(formatDate(due))} · ${escapeHtml(getWeekday(due))}</span>`;
+      function getDeadlineToneClass(item, category) {
+        if (!item || !item.due || !category || isReadyCategory(category) || isPublishedCategory(category)) {
+          return "";
+        }
+
+        const daysLeft = getDaysUntil(item.due);
+        if (daysLeft <= 2) {
+          return "deadline-urgent";
+        }
+        if (daysLeft <= 7) {
+          return "deadline-soon";
+        }
+        return "";
+      }
+
+      function getDeadlineLabel(due, category) {
+        if (!due || !category || isReadyCategory(category) || isPublishedCategory(category)) {
+          return { className: "", text: "" };
+        }
+
+        const daysLeft = getDaysUntil(due);
+        if (daysLeft <= 2) {
+          return { className: "deadline-urgent-pill", text: "דחוף" };
+        }
+        if (daysLeft <= 7) {
+          return { className: "deadline-soon-pill", text: "קרוב" };
+        }
+        return { className: "", text: "" };
+      }
+
+      function getDaysUntil(value) {
+        const target = parseDate(value);
+        const today = parseDate(getTodayIso());
+        if (!target || !today) {
+          return Number.MAX_SAFE_INTEGER;
+        }
+        return Math.floor((target.getTime() - today.getTime()) / 86400000);
       }
 
       function renderItemHintPills(item) {
@@ -4157,6 +4629,7 @@
         const allowDetails = options.allowDetails !== false;
         const allowEdit = options.allowEdit !== false;
         const categoryId = options.categoryId || "";
+        const source = options.source || "board";
         const menuKey = String(options.menuKey || item.id);
         const menuOpen = state.openItemMenuKey === menuKey;
         const nextStage = categoryId ? getNextStageCategory(categoryId) : null;
@@ -4167,9 +4640,9 @@
               <button class="mini-btn" type="button" data-action="toggle-item-menu" data-menu-key="${escapeAttr(menuKey)}" aria-expanded="${menuOpen ? "true" : "false"}" aria-label="פעולות נוספות עבור ${escapeAttr(item.title)}">⋯</button>
               ${menuOpen ? `
                 <div class="menu-popover row-popover">
-                  ${allowEdit ? `<button class="menu-item" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}">עריכה</button>` : ""}
+                  ${allowEdit ? `<button class="menu-item" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="${escapeAttr(source)}">עריכה</button>` : ""}
                   ${allowDetails ? `<button class="menu-item" type="button" data-action="open-item-details" data-item-id="${escapeAttr(item.id)}">פרטים</button>` : ""}
-                  ${nextStage ? `<button class="menu-item" type="button" data-action="move-to-next-stage" data-item-id="${escapeAttr(item.id)}">העברה ל־${escapeHtml(nextStage.title)}</button>` : ""}
+                  ${nextStage ? `<button class="menu-item" type="button" data-action="move-to-next-stage" data-item-id="${escapeAttr(item.id)}" data-category-id="${escapeAttr(categoryId)}">העבר ל־${escapeHtml(nextStage.title)}</button>` : ""}
                   ${allowDelete ? `<button class="menu-item danger" type="button" data-action="delete-item" data-item-id="${escapeAttr(item.id)}">מחק</button>` : ""}
                 </div>
               ` : ""}
@@ -4309,7 +4782,7 @@
                 <button class="btn ghost slim-btn" type="button" data-action="calendar-next-month" aria-label="${isYearView ? "שנה הבאה" : "חודש הבא"}">${isYearView ? "שנה ›" : "›"}</button>
                 <button class="btn ghost slim-btn" type="button" data-action="calendar-today">היום</button>
                 <button class="btn ghost slim-btn" type="button" data-action="toggle-calendar-view">${isYearView ? "תצוגת חודש" : "תצוגת שנה"}</button>
-                <button class="btn ghost slim-btn" type="button" data-action="close-dialog" data-dialog-id="calendarDialog">סגירה</button>
+                <button class="icon-btn dialog-close-btn" type="button" data-action="close-dialog" data-dialog-id="calendarDialog" aria-label="סגירת לוח השנה">✕</button>
               </div>
             </div>
 
@@ -4318,6 +4791,7 @@
               <span class="legend-pill status-filmed" role="listitem">צהוב · צולם</span>
               <span class="legend-pill status-edit" role="listitem">סגול · בעריכה</span>
               <span class="legend-pill status-early" role="listitem">אדום · טרם צולם</span>
+              <span class="legend-pill status-hold" role="listitem">לילך · מתלבטת</span>
               <span class="legend-pill holiday" role="listitem">חשוב · תאריך מיוחד</span>
               <span class="legend-pill filming-day" role="listitem">יום צילום</span>
             </div>
@@ -4421,8 +4895,7 @@
 
         const status = getCalendarStatusInfo(entry.category);
         return `
-          <div class="calendar-pill ${escapeAttr(status.className)}" aria-label="${escapeAttr(`${entry.item.title} · ${status.label}`)}" title="${escapeAttr(`${entry.item.title} · ${status.label}`)}">
-            <span class="calendar-status-short">${escapeHtml(status.shortLabel)}</span>
+          <div class="calendar-pill ${escapeAttr(status.className)}" aria-label="${escapeAttr(`${entry.item.title} · ${status.label}`)}" title="${escapeAttr(entry.item.title)}">
             <span>${escapeHtml(entry.item.title)}</span>
           </div>
         `;
@@ -4520,13 +4993,19 @@
       }
 
       function getCalendarStatusInfo(category) {
-        if (isReadyCategory(category) || isPublishedCategory(category)) {
+        if (isPublishedCategory(category)) {
+          return { className: "status-published", label: "פורסם", shortLabel: "פורסם" };
+        }
+        if (isReadyCategory(category)) {
           return { className: "status-ready", label: "מוכן לעלייה", shortLabel: "מוכן" };
+        }
+        if (category.title === HOLD_TITLE) {
+          return { className: "status-hold", label: "מתלבטת", shortLabel: "מתלבטת" };
         }
         if (category.title === "צילמנו") {
           return { className: "status-filmed", label: "צולם", shortLabel: "צולם" };
         }
-        if (category.title === "עריכה בסיסית") {
+        if (category.title === DUBBING_TITLE || category.title === "עריכה בסיסית") {
           return { className: "status-edit", label: "בעריכה", shortLabel: "עריכה" };
         }
         return { className: "status-early", label: "טרם צולם", shortLabel: "לפני" };
@@ -4636,6 +5115,7 @@
         const totalItems = categories.reduce((sum, category) => sum + category.items.length, 0);
         const readyItems = categories.filter(isReadyCategory).reduce((sum, category) => sum + category.items.length, 0);
         const publishedItems = categories.filter(isPublishedCategory).reduce((sum, category) => sum + category.items.length, 0);
+        const openItems = totalItems - publishedItems;
         const tasksTotal = state.board.tasks.length;
         const tasksDone = state.board.tasks.filter((task) => task.done).length;
         const workflowCategories = categories.filter((category) => category.title !== VIRTUAL_SCHEDULE_TITLE);
@@ -4654,6 +5134,7 @@
           totalItems,
           readyItems,
           publishedItems,
+          openItems,
           tasksTotal,
           tasksDone,
           progress,
@@ -4669,7 +5150,9 @@
           ideas: 0,
           scheduled: 0,
           filmed: 0,
+          dubbing: 0,
           editing: 0,
+          hold: 0,
           ready: 0,
           published: 0
         };
@@ -4686,8 +5169,12 @@
             counts.scheduled += count;
           } else if (category.title === "צילמנו") {
             counts.filmed += count;
+          } else if (category.title === DUBBING_TITLE) {
+            counts.dubbing += count;
           } else if (category.title === "עריכה בסיסית") {
             counts.editing += count;
+          } else if (category.title === HOLD_TITLE) {
+            counts.hold += count;
           } else if (isReadyCategory(category)) {
             counts.ready += count;
           } else if (isPublishedCategory(category)) {
@@ -4710,8 +5197,14 @@
         if (category.title === "צילמנו") {
           return 0.45;
         }
+        if (category.title === DUBBING_TITLE) {
+          return 0.58;
+        }
         if (category.title === "עריכה בסיסית") {
           return 0.7;
+        }
+        if (category.title === HOLD_TITLE) {
+          return 0.16;
         }
         if (isReadyCategory(category)) {
           return 0.9;
@@ -4729,12 +5222,13 @@
           `רעיונות: ${stageCounts.ideas}`,
           `נקבע תאריך: ${stageCounts.scheduled}`,
           `צילמנו: ${stageCounts.filmed}`,
+          `דיבוב: ${stageCounts.dubbing}`,
           `עריכה: ${stageCounts.editing}`,
           `מוכנים: ${stageCounts.ready}`
         ];
 
-        if (stageCounts.published) {
-          parts.push(`פורסמו: ${stageCounts.published}`);
+        if (stageCounts.hold) {
+          parts.push(`מתלבטת: ${stageCounts.hold}`);
         }
 
         return parts.join(" · ");
@@ -4745,7 +5239,9 @@
           { key: "ideas", count: stageCounts.ideas, message: "רוב העבודה עדיין בשלב הרעיונות" },
           { key: "scheduled", count: stageCounts.scheduled, message: "רוב העבודה כרגע סביב תיאום ותאריכים" },
           { key: "filmed", count: stageCounts.filmed, message: "רוב העבודה עדיין בצילום" },
+          { key: "dubbing", count: stageCounts.dubbing, message: "הרבה סרטונים מחכים עדיין לדיבוב" },
           { key: "editing", count: stageCounts.editing, message: "רוב הסרטונים כבר בשלב עריכה" },
+          { key: "hold", count: stageCounts.hold, message: "יש לא מעט סרטונים במצב מתלבטת" },
           { key: "ready", count: stageCounts.ready, message: "הרבה סרטונים כבר כמעט מוכנים לעלייה" },
           { key: "published", count: stageCounts.published, message: "חלק גדול מהלוח כבר פורסם" }
         ].filter((entry) => entry.count > 0);
@@ -4932,6 +5428,12 @@
             break;
           case "drag-category":
             break;
+          case "open-settings":
+            renderSettingsDialog();
+            break;
+          case "toggle-all-panels":
+            toggleAllPanels();
+            break;
           case "toggle-search":
             state.searchOpen = !state.searchOpen;
             if (!state.searchOpen && !state.filters.search) {
@@ -4994,10 +5496,6 @@
             state.topMenuOpen = !state.topMenuOpen;
             render();
             break;
-          case "toggle-category-manager":
-            state.categoryManagerOpen = !state.categoryManagerOpen;
-            render();
-            break;
           case "toggle-filters-panel":
             state.filtersPanelOpen = !state.filtersPanelOpen;
             render();
@@ -5054,8 +5552,11 @@
           case "delete-item":
             deleteItem(actionTarget.dataset.itemId);
             break;
+          case "delete-current-item":
+            deleteCurrentItem();
+            break;
           case "move-to-next-stage":
-            moveItemToNextStage(actionTarget.dataset.itemId);
+            moveItemToNextStage(actionTarget.dataset.itemId, actionTarget.dataset.categoryId || "");
             break;
           case "clear-filters":
             clearFilters();
@@ -5189,7 +5690,7 @@
           return;
         }
 
-        if (event.target.id === "taskForm") {
+        if (event.target.id === "taskForm" || event.target.id === "settingsTaskForm") {
           event.preventDefault();
           const formData = new FormData(event.target);
           const text = String(formData.get("taskText") || "").trim();
@@ -5399,6 +5900,7 @@
 
       function openItemDialog(itemId, preferredCategoryId, source = "board") {
         closeUiMenus();
+        closeDialog("settingsDialog");
         state.dialogReturn = source === "calendar" ? {
           source,
           dayDate: state.calendarDayDate,
@@ -5417,7 +5919,15 @@
 
         form.elements.itemId.value = state.editingItemId || "";
         document.getElementById("itemDialogTitle").textContent = state.editingItemId ? "עריכת פריט" : "פריט חדש";
+        const deleteButton = document.getElementById("itemDeleteBtn");
+        if (deleteButton) {
+          deleteButton.hidden = !state.editingItemId;
+        }
         populateCategoryOptions(categoryId);
+        form.querySelectorAll('input[name="fixedTags"]').forEach((checkbox) => {
+          checkbox.checked = false;
+        });
+        form.elements.extraTags.value = "";
 
         if (itemLocation) {
           form.elements.title.value = itemLocation.item.title;
@@ -5426,7 +5936,11 @@
           form.elements.subcat.value = itemLocation.item.subcat || "";
           form.elements.priority.value = itemLocation.item.priority;
           form.elements.due.value = itemLocation.item.due || "";
-          form.elements.tags.value = (itemLocation.item.tags || []).join(", ");
+          const itemTags = itemLocation.item.tags || [];
+          form.querySelectorAll('input[name="fixedTags"]').forEach((checkbox) => {
+            checkbox.checked = itemTags.includes(checkbox.value);
+          });
+          form.elements.extraTags.value = itemTags.filter((tag) => !FIXED_TAG_OPTIONS.includes(tag)).join(", ");
           form.elements.outfitRotem.value = itemLocation.item.outfits.rotem || "";
           form.elements.outfitMeir.value = itemLocation.item.outfits.meir || "";
           form.elements.links.value = (itemLocation.item.inspirationLinks || []).join("\n");
@@ -5471,7 +5985,10 @@
           title,
           priority: ["red", "yellow", "green"].includes(formData.get("priority")) ? formData.get("priority") : "yellow",
           due: normalizeDateValue(formData.get("due")),
-          tags: splitList(formData.get("tags"), /[,\n]/g),
+          tags: uniqueStrings([
+            ...formData.getAll("fixedTags").map((tag) => String(tag || "").trim()).filter(Boolean),
+            ...splitList(formData.get("extraTags"), /[,\n]/g)
+          ]),
           inspirationLinks: String(formData.get("links") || "").split("\n").map(normalizeLink).filter(Boolean),
           outfits: {
             rotem: String(formData.get("outfitRotem") || "").trim(),
@@ -5505,6 +6022,7 @@
 
       function openCategoryDialog(categoryId) {
         closeUiMenus();
+        closeDialog("settingsDialog");
         closeDialog("detailDialog");
         closeDialog("dayDialog");
         closeDialog("calendarDialog");
@@ -5593,6 +6111,7 @@
 
       function openCalendarDialog(options = {}) {
         const preserveState = Boolean(options.preserveState);
+        closeDialog("settingsDialog");
         if (!preserveState) {
           jumpCalendarToToday({ skipRender: true });
           state.board.ui.calendarView = "month";
@@ -5811,6 +6330,24 @@
         showUndoToast(snapshot, `הפריט "${location.item.title}" נמחק`);
       }
 
+      function deleteCurrentItem() {
+        if (!state.editingItemId) {
+          return;
+        }
+
+        const location = findItemLocation(state.editingItemId);
+        if (!location) {
+          return;
+        }
+
+        const snapshot = cloneBoard(state.board);
+        location.category.items = location.category.items.filter((item) => item.id !== state.editingItemId);
+        state.editingItemId = null;
+        commit();
+        closeDialog("itemDialog");
+        showUndoToast(snapshot, `הפריט "${location.item.title}" נמחק`);
+      }
+
       function clearFilters() {
         state.filters.search = "";
         state.filters.priority = "all";
@@ -5820,6 +6357,34 @@
         state.searchOpen = false;
         state.filtersPanelOpen = false;
         render();
+      }
+
+      function shouldShowTasksPanel() {
+        return state.board.tasks.some((task) => !task.done);
+      }
+
+      function getCollapseToggleState() {
+        const taskRelevant = shouldShowTasksPanel();
+        const categoryCollapsed = state.board.categories.filter((category) => category.collapsed).length;
+        const extraCollapsed = Number(Boolean(state.board.ui && state.board.ui.scheduleCollapsed)) + Number(taskRelevant && state.board.ui && state.board.ui.tasksCollapsed);
+        const totalPanels = state.board.categories.length + 1 + Number(taskRelevant);
+        const collapsedCount = categoryCollapsed + extraCollapsed;
+        const mostlyClosed = totalPanels ? collapsedCount >= Math.ceil(totalPanels / 2) : false;
+        return {
+          mostlyClosed,
+          symbol: mostlyClosed ? "+" : "-",
+          labelText: mostlyClosed ? "פתיחת כל הקטגוריות" : "סגירת כל הקטגוריות"
+        };
+      }
+
+      function toggleAllPanels() {
+        const nextCollapsed = !getCollapseToggleState().mostlyClosed;
+        state.board.categories.forEach((category) => {
+          category.collapsed = nextCollapsed;
+        });
+        state.board.ui.scheduleCollapsed = nextCollapsed;
+        state.board.ui.tasksCollapsed = nextCollapsed;
+        commit();
       }
 
       function toggleCompactMode() {
@@ -6131,18 +6696,26 @@
         showUndoToast(snapshot, `התאריך "${entry.title}" נמחק`);
       }
 
-      function moveItemToNextStage(itemId) {
+      function moveItemToNextStage(itemId, currentCategoryId = "") {
         const location = findItemLocation(itemId);
         if (!location) {
           return;
         }
-        const nextCategory = getNextStageCategory(location.category.id);
+        const hintedCategory = currentCategoryId ? findCategory(currentCategoryId) : null;
+        const sourceCategory = hintedCategory && hintedCategory.items.some((item) => item.id === itemId)
+          ? hintedCategory
+          : location.category;
+        const nextCategory = getNextStageCategory(sourceCategory.id);
         if (!nextCategory) {
           showNoticeToast("אין שלב הבא עבור הפריט הזה");
           return;
         }
+        if (nextCategory.id === sourceCategory.id) {
+          showNoticeToast("הפריט כבר נמצא בשלב הזה");
+          return;
+        }
 
-        location.category.items = location.category.items.filter((item) => item.id !== itemId);
+        sourceCategory.items = sourceCategory.items.filter((item) => item.id !== itemId);
         location.item.subcat = null;
         nextCategory.items.push(location.item);
         commit();
@@ -6154,11 +6727,38 @@
       }
 
       function getNextStageCategory(categoryId) {
+        const currentCategory = findCategory(categoryId);
+        if (!currentCategory) {
+          return null;
+        }
+
+        if (currentCategory.title === HOLD_TITLE) {
+          return null;
+        }
+
+        const workflowIndex = WORKFLOW_STAGE_TITLES.indexOf(currentCategory.title);
+        if (workflowIndex >= 0) {
+          for (let index = workflowIndex + 1; index < WORKFLOW_STAGE_TITLES.length; index += 1) {
+            const nextWorkflowCategory = state.board.categories.find((category) => category.title === WORKFLOW_STAGE_TITLES[index]);
+            if (nextWorkflowCategory) {
+              return nextWorkflowCategory;
+            }
+          }
+        }
+
         const currentIndex = state.board.categories.findIndex((category) => category.id === categoryId);
         if (currentIndex < 0) {
           return null;
         }
-        return state.board.categories[currentIndex + 1] || null;
+
+        for (let index = currentIndex + 1; index < state.board.categories.length; index += 1) {
+          const nextCategory = state.board.categories[index];
+          if (nextCategory.title !== HOLD_TITLE) {
+            return nextCategory;
+          }
+        }
+
+        return null;
       }
 
       function getCategoryIcon(category) {
@@ -6192,6 +6792,9 @@
         if (category && category.role === "published") {
           return "tone-published";
         }
+        if (title === HOLD_TITLE) {
+          return "tone-hold";
+        }
         if (title === "רעיונות") {
           return "tone-ideas";
         }
@@ -6200,6 +6803,9 @@
         }
         if (title === "צילמנו") {
           return "tone-filmed";
+        }
+        if (title === DUBBING_TITLE) {
+          return "tone-dubbing";
         }
         if (title === "עריכה בסיסית") {
           return "tone-edit";
