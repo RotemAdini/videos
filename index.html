@@ -1194,6 +1194,16 @@
       justify-content: flex-end;
     }
 
+    .row-next-stage-btn {
+      min-width: 52px;
+      padding-inline: 0.65rem;
+      border-color: rgba(15, 118, 110, 0.14);
+      background: rgba(15, 118, 110, 0.08);
+      color: var(--accent-strong);
+      font-size: 0.7rem;
+      font-weight: 800;
+    }
+
     .mini-btn {
       flex: 0 0 auto;
       font-size: 0.78rem;
@@ -1941,6 +1951,11 @@
       border-radius: 14px;
     }
 
+    .row-actions .row-next-stage-btn {
+      min-width: 52px;
+      padding-inline: 0.62rem;
+    }
+
     .row-actions .row-popover {
       min-width: 132px;
     }
@@ -2050,20 +2065,51 @@
       box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.22);
     }
 
+    .items-stack,
+    .schedule-list,
+    [data-item-drop="category"] {
+      position: relative;
+    }
+
     .item-card,
     .schedule-item {
       position: relative;
     }
 
-    .drop-before::before {
+    .drop-before::before,
+    .drop-after::after {
       content: "";
       position: absolute;
-      top: -1px;
       right: 0;
       left: 0;
-      height: 3px;
+      height: 4px;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--accent), var(--warm));
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95);
+    }
+
+    .drop-before::before {
+      top: -2px;
+    }
+
+    .drop-after::after {
+      bottom: -2px;
+    }
+
+    .items-stack.drop-highlight::after,
+    .schedule-list.drop-highlight::after,
+    [data-item-drop="category"].drop-highlight::after {
+      content: "שחרור כאן";
+      display: block;
+      margin-top: 0.35rem;
+      padding: 0.46rem 0.72rem;
+      border-radius: 12px;
+      border: 1px dashed rgba(124, 58, 237, 0.36);
+      background: rgba(124, 58, 237, 0.05);
+      color: var(--accent-strong);
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-align: center;
     }
 
     .dragging {
@@ -2108,6 +2154,23 @@
       background: rgba(36, 24, 63, 0.94);
       color: white;
       box-shadow: 0 18px 38px rgba(19, 12, 34, 0.28);
+    }
+
+    .snackbar.alert {
+      background: rgba(127, 29, 29, 0.96);
+      box-shadow: 0 18px 38px rgba(88, 28, 28, 0.28);
+    }
+
+    .dialog-alert-banner {
+      position: sticky;
+      top: 0;
+      right: auto;
+      left: auto;
+      bottom: auto;
+      margin: 0 0 0.55rem;
+      width: auto;
+      z-index: 2;
+      border-radius: 16px;
     }
 
     .snackbar .btn {
@@ -3731,6 +3794,302 @@
         border-radius: 24px 24px 0 0;
       }
     }
+
+    /* Daily workflow UX refinements */
+    .topbar-flow {
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .workflow-strip,
+    .urgent-focus-card {
+      display: grid;
+      gap: 0.5rem;
+      padding: 0.72rem 0.78rem;
+      border-radius: 18px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .workflow-strip-head,
+    .urgent-focus-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .workflow-strip-head strong,
+    .urgent-focus-head h2 {
+      font-size: 0.94rem;
+      line-height: 1.2;
+    }
+
+    .workflow-strip-head span,
+    .urgent-focus-head small {
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.4;
+    }
+
+    .workflow-step-row,
+    .workflow-breakdown {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.38rem;
+      align-items: center;
+    }
+
+    .workflow-step-row + .workflow-step-row {
+      padding-top: 0.1rem;
+      border-top: 1px dashed rgba(91, 33, 182, 0.08);
+    }
+
+    .workflow-step-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      min-height: 32px;
+      padding: 0.2rem 0.62rem 0.2rem 0.35rem;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(124, 58, 237, 0.08);
+      color: var(--accent-strong);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .workflow-step-chip.optional {
+      background: rgba(167, 139, 250, 0.1);
+      color: var(--muted);
+    }
+
+    .workflow-step-no,
+    .category-step-badge {
+      width: 22px;
+      height: 22px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--accent-strong);
+      font-size: 0.7rem;
+      font-weight: 900;
+      box-shadow: inset 0 0 0 1px rgba(91, 33, 182, 0.08);
+      flex: 0 0 auto;
+    }
+
+    .workflow-step-chip.optional .workflow-step-no {
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .workflow-step-count {
+      min-width: 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 900;
+    }
+
+    .urgent-focus-list {
+      display: grid;
+      gap: 0.38rem;
+    }
+
+    .urgent-focus-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.55rem;
+      align-items: center;
+      padding: 0.62rem 0.68rem;
+      border-radius: 16px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .urgent-focus-item-main {
+      min-width: 0;
+      display: grid;
+      gap: 0.26rem;
+    }
+
+    .urgent-focus-title {
+      min-width: 0;
+      font-size: 0.92rem;
+      font-weight: 800;
+      line-height: 1.32;
+    }
+
+    .urgent-focus-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.28rem;
+      flex-wrap: wrap;
+    }
+
+    .urgent-focus-item .mini-btn {
+      min-height: 32px;
+      min-width: 48px;
+      padding-inline: 0.65rem;
+      border-radius: 12px;
+      font-size: 0.74rem;
+    }
+
+    .category-title-wrap {
+      min-width: 0;
+      display: grid;
+      gap: 0.18rem;
+    }
+
+    .category-step-note {
+      color: var(--muted);
+      font-size: 0.72rem;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .category-side-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      padding: 0.08rem 0.42rem;
+      border-radius: 999px;
+      background: rgba(167, 139, 250, 0.12);
+      color: #6d28d9;
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+
+    .optional-workflow-card .category-top {
+      background: linear-gradient(180deg, rgba(167, 139, 250, 0.12), rgba(255, 255, 255, 0));
+    }
+
+    .row-status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+      background: rgba(124, 58, 237, 0.35);
+    }
+
+    .row-status-dot.status-ready {
+      background: #22c55e;
+    }
+
+    .row-status-dot.status-scheduled {
+      background: #f97316;
+    }
+
+    .row-status-dot.status-filmed {
+      background: #eab308;
+    }
+
+    .row-status-dot.status-edit {
+      background: #7c3aed;
+    }
+
+    .row-status-dot.status-hold {
+      background: #a78bfa;
+    }
+
+    .row-status-dot.status-published {
+      background: #94a3b8;
+    }
+
+    .row-status-dot.status-early {
+      background: #8b5cf6;
+    }
+
+    .workflow-breakdown .legend-pill {
+      min-height: 24px;
+      padding-inline: 0.55rem;
+      font-size: 0.68rem;
+    }
+
+    .row-meta:empty {
+      display: none;
+    }
+
+    .legend-pill.deadline-soon {
+      background: rgba(249, 115, 22, 0.16);
+      color: #c2410c;
+    }
+
+    .legend-pill.deadline-urgent {
+      background: rgba(239, 68, 68, 0.16);
+      color: #b91c1c;
+    }
+
+    .compact-item-actions {
+      position: sticky;
+      bottom: 0;
+      z-index: 1;
+      padding: 0.42rem 0 0;
+      margin-top: 0.08rem;
+      border-top: 1px solid rgba(91, 33, 182, 0.08);
+      background: linear-gradient(180deg, rgba(252, 249, 255, 0), rgba(252, 249, 255, 0.98) 28%);
+    }
+
+    .compact-action-btn {
+      min-height: 32px;
+      padding: 0.3rem 0.66rem;
+      border-radius: 10px;
+      font-size: 0.74rem;
+    }
+
+    #itemDialog {
+      width: min(660px, calc(100% - 0.8rem));
+    }
+
+    .item-form-shell {
+      gap: 0.48rem;
+      max-height: min(88vh, 820px);
+    }
+
+    .settings-group .toggle-row {
+      min-height: 0;
+      padding: 0;
+      color: var(--ink);
+      font-size: 0.8rem;
+    }
+
+    .settings-group .toggle-row .muted {
+      font-size: 0.74rem;
+    }
+
+    .legend-pill.status-early,
+    .calendar-pill.status-early {
+      background: rgba(139, 92, 246, 0.14);
+      color: #6d28d9;
+    }
+
+    .day-video-item.status-early {
+      box-shadow: inset 4px 0 0 rgba(139, 92, 246, 0.5);
+    }
+
+    .fab {
+      display: none;
+    }
+
+    @media (max-width: 620px) {
+      .urgent-focus-item {
+        grid-template-columns: 1fr;
+      }
+
+      .urgent-focus-item .mini-btn {
+        justify-self: flex-start;
+      }
+
+      .header-actions .btn.primary {
+        display: none;
+      }
+
+      .fab {
+        display: inline-grid;
+      }
+    }
   </style>
 </head>
 <body>
@@ -3869,6 +4228,8 @@
       "use strict";
 
       const STORAGE_KEY = "video-board-v6";
+      const SESSION_UI_KEY = "video-board-session-ui-v1";
+      const SEARCH_DEBOUNCE_MS = 150;
       const VIRTUAL_SCHEDULE_TITLE = "סדר עלייה ⏰";
       const READY_TITLE = "מוכן לעלייה";
       const PUBLISHED_TITLE = "עלה";
@@ -3915,23 +4276,24 @@
       };
 
       const initialDate = new Date();
+      const sessionUi = loadSessionUiState();
       const state = {
         board: loadBoard(),
         filters: {
-          search: "",
-          tag: "all",
-          upcomingRange: "all"
+          search: sessionUi.filters.search,
+          tag: sessionUi.filters.tag,
+          upcomingRange: sessionUi.filters.upcomingRange
         },
         drag: null,
         editingItemId: null,
         editingCategoryId: null,
         openItemMenuKey: null,
         topMenuOpen: false,
-        filtersPanelOpen: false,
-        searchOpen: false,
+        filtersPanelOpen: sessionUi.filtersPanelOpen,
+        searchOpen: sessionUi.searchOpen,
         categoryManagerOpen: false,
         focusCategoryId: null,
-        openWorkOnly: false,
+        openWorkOnly: sessionUi.openWorkOnly,
         floatingMenu: null,
         calendarYear: initialDate.getFullYear(),
         calendarMonth: initialDate.getMonth(),
@@ -3942,7 +4304,11 @@
         dialogReturn: null,
         undoToast: null,
         noticeToast: null,
-        dropHint: null
+        dropHint: null,
+        searchDraft: sessionUi.filters.search,
+        searchDebounceTimer: null,
+        dialogFocusReturn: {},
+        menuFocusReturn: null
       };
 
       commit({ saveOnly: true });
@@ -3961,12 +4327,296 @@
         document.addEventListener("touchstart", handleTouchStart, { passive: true });
         document.addEventListener("touchend", handleTouchEnd, { passive: true });
         refs.importInput.addEventListener("change", handleImportFile);
+        [refs.itemDialog, refs.categoryDialog, refs.detailDialog, refs.calendarDialog, refs.dayDialog, refs.settingsDialog].forEach((dialog) => {
+          dialog.addEventListener("cancel", handleDialogCancel);
+        });
       }
 
-      function closeUiMenus() {
+      function closeUiMenus(options = {}) {
         state.openItemMenuKey = null;
         state.topMenuOpen = false;
         state.floatingMenu = null;
+        if (options.restoreFocus) {
+          restoreFocusToken(state.menuFocusReturn);
+        }
+        state.menuFocusReturn = null;
+      }
+
+      function loadSessionUiState() {
+        const fallback = {
+          filters: {
+            search: "",
+            tag: "all",
+            upcomingRange: "all"
+          },
+          searchOpen: false,
+          filtersPanelOpen: false,
+          openWorkOnly: false
+        };
+
+        try {
+          const raw = sessionStorage.getItem(SESSION_UI_KEY);
+          if (!raw) {
+            return fallback;
+          }
+          const parsed = JSON.parse(raw);
+          const upcomingOptions = new Set(getUpcomingRangeOptions().map((option) => option.value));
+          const search = String(parsed && parsed.filters && parsed.filters.search || "").trim();
+          const tag = String(parsed && parsed.filters && parsed.filters.tag || "all").trim() || "all";
+          const upcomingRange = upcomingOptions.has(String(parsed && parsed.filters && parsed.filters.upcomingRange || "all"))
+            ? String(parsed.filters.upcomingRange || "all")
+            : "all";
+          return {
+            filters: {
+              search,
+              tag,
+              upcomingRange
+            },
+            searchOpen: Boolean(parsed && parsed.searchOpen) || Boolean(search),
+            filtersPanelOpen: Boolean(parsed && parsed.filtersPanelOpen) || tag !== "all" || upcomingRange !== "all",
+            openWorkOnly: Boolean(parsed && parsed.openWorkOnly)
+          };
+        } catch (error) {
+          return fallback;
+        }
+      }
+
+      function persistSessionUiState() {
+        try {
+          sessionStorage.setItem(SESSION_UI_KEY, JSON.stringify({
+            filters: {
+              search: getSearchInputValue(),
+              tag: state.filters.tag,
+              upcomingRange: state.filters.upcomingRange
+            },
+            searchOpen: Boolean(state.searchOpen),
+            filtersPanelOpen: Boolean(state.filtersPanelOpen),
+            openWorkOnly: Boolean(state.openWorkOnly)
+          }));
+        } catch (error) {
+          // Ignore sessionStorage failures and keep the UI usable.
+        }
+      }
+
+      function getSearchInputValue() {
+        return typeof state.searchDraft === "string" ? state.searchDraft : state.filters.search;
+      }
+
+      function clearSearchDebounce() {
+        if (state.searchDebounceTimer) {
+          window.clearTimeout(state.searchDebounceTimer);
+          state.searchDebounceTimer = null;
+        }
+      }
+
+      function queueSearchUpdate(value) {
+        state.searchDraft = String(value || "");
+        persistSessionUiState();
+        clearSearchDebounce();
+        state.searchDebounceTimer = window.setTimeout(() => {
+          state.searchDebounceTimer = null;
+          state.filters.search = state.searchDraft;
+          render();
+          focusSearchInput();
+        }, SEARCH_DEBOUNCE_MS);
+      }
+
+      function flushSearchDebounce(options = {}) {
+        clearSearchDebounce();
+        state.filters.search = getSearchInputValue();
+        if (options.render) {
+          render();
+        } else {
+          persistSessionUiState();
+        }
+      }
+
+      function resetSearchState(value = "", options = {}) {
+        clearSearchDebounce();
+        state.searchDraft = String(value || "");
+        state.filters.search = state.searchDraft;
+        if (options.closeSearch) {
+          state.searchOpen = false;
+        }
+        if (!state.searchOpen && !state.filters.search) {
+          state.filtersPanelOpen = false;
+        }
+        if (options.render === false) {
+          persistSessionUiState();
+          return;
+        }
+        render();
+      }
+
+      function focusSearchInput(options = {}) {
+        window.setTimeout(() => {
+          const input = document.getElementById("searchInput");
+          if (!input) {
+            return;
+          }
+          input.focus();
+          if (options.selectAll && input.value) {
+            input.select();
+            return;
+          }
+          const end = input.value.length;
+          input.setSelectionRange(end, end);
+        }, 30);
+      }
+
+      function openSearchAndFocus(options = {}) {
+        flushSearchDebounce({ render: false });
+        state.searchOpen = true;
+        render();
+        focusSearchInput(options);
+      }
+
+      function isTextEntryTarget(target) {
+        const element = target instanceof Element ? target : null;
+        return Boolean(element && element.closest("input, textarea, select, [contenteditable='true'], [contenteditable=''], [role='textbox']"));
+      }
+
+      function isAnyDialogOpen() {
+        return Boolean([refs.itemDialog, refs.categoryDialog, refs.detailDialog, refs.calendarDialog, refs.dayDialog, refs.settingsDialog].some((dialog) => dialog && dialog.open));
+      }
+
+      function getTopOpenDialogId() {
+        const order = ["itemDialog", "categoryDialog", "detailDialog", "settingsDialog", "dayDialog", "calendarDialog"];
+        return order.find((dialogId) => {
+          const dialog = document.getElementById(dialogId);
+          return Boolean(dialog && dialog.open);
+        }) || "";
+      }
+
+      function closeTopLayer() {
+        if (state.openItemMenuKey || state.topMenuOpen) {
+          closeUiMenus({ restoreFocus: true });
+          render();
+          return true;
+        }
+
+        const dialogId = getTopOpenDialogId();
+        if (!dialogId) {
+          return false;
+        }
+
+        closeDialog(dialogId, dialogId === "dayDialog" ? { returnToCalendar: true } : {});
+        return true;
+      }
+
+      function handleDialogCancel(event) {
+        event.preventDefault();
+        const dialogId = event.target && event.target.id;
+        if (!dialogId) {
+          return;
+        }
+        closeDialog(dialogId, dialogId === "dayDialog" ? { returnToCalendar: true } : {});
+      }
+
+      function escapeSelectorValue(value) {
+        return window.CSS && typeof window.CSS.escape === "function"
+          ? window.CSS.escape(String(value))
+          : String(value).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+      }
+
+      function createFocusToken(target) {
+        const element = target instanceof Element
+          ? target.closest("[data-action], button, input, select, textarea, a, [tabindex]")
+          : null;
+        if (!element) {
+          return null;
+        }
+
+        const token = {
+          element,
+          selector: ""
+        };
+
+        if (element.id) {
+          token.selector = `#${escapeSelectorValue(element.id)}`;
+          return token;
+        }
+
+        const attrs = [
+          ["data-action", element.getAttribute("data-action")],
+          ["data-item-id", element.getAttribute("data-item-id")],
+          ["data-category-id", element.getAttribute("data-category-id")],
+          ["data-menu-key", element.getAttribute("data-menu-key")],
+          ["data-dialog-id", element.getAttribute("data-dialog-id")],
+          ["data-date", element.getAttribute("data-date")],
+          ["data-date-id", element.getAttribute("data-date-id")],
+          ["data-range", element.getAttribute("data-range")],
+          ["data-view", element.getAttribute("data-view")],
+          ["data-filter", element.getAttribute("data-filter")]
+        ].filter((entry) => entry[1]);
+
+        if (!attrs.length) {
+          return token;
+        }
+
+        token.selector = `${element.tagName.toLowerCase()}${attrs.map(([name, value]) => `[${name}="${escapeSelectorValue(value)}"]`).join("")}`;
+        return token;
+      }
+
+      function restoreFocusToken(token) {
+        if (!token) {
+          return false;
+        }
+
+        const nextTarget = token.element && document.contains(token.element)
+          ? token.element
+          : token.selector
+            ? document.querySelector(token.selector)
+            : null;
+
+        if (!nextTarget || typeof nextTarget.focus !== "function") {
+          return false;
+        }
+
+        window.requestAnimationFrame(() => {
+          try {
+            nextTarget.focus({ preventScroll: true });
+          } catch (error) {
+            nextTarget.focus();
+          }
+        });
+        return true;
+      }
+
+      function rememberDialogFocus(dialogId, opener) {
+        state.dialogFocusReturn[dialogId] = createFocusToken(opener || document.activeElement);
+      }
+
+      function restoreDialogFocus(dialogId) {
+        const token = state.dialogFocusReturn[dialogId];
+        delete state.dialogFocusReturn[dialogId];
+        restoreFocusToken(token);
+      }
+
+      function getDropPositionClass(node, event) {
+        if (!node || !event || typeof event.clientY !== "number") {
+          return "drop-before";
+        }
+        const rect = node.getBoundingClientRect();
+        return event.clientY >= rect.top + rect.height / 2 ? "drop-after" : "drop-before";
+      }
+
+      function getBeforeItemIdFromDropTarget(target, selector) {
+        if (!target) {
+          return null;
+        }
+        if (!state.dropHint || state.dropHint.node !== target || state.dropHint.className !== "drop-after") {
+          return target.dataset.itemId || null;
+        }
+
+        let sibling = target.nextElementSibling;
+        while (sibling) {
+          if (sibling.matches && sibling.matches(selector)) {
+            return sibling.dataset.itemId || null;
+          }
+          sibling = sibling.nextElementSibling;
+        }
+        return null;
       }
 
       function loadBoard() {
@@ -4002,6 +4652,7 @@
             tasksCollapsed: false,
             tagsCollapsed: true,
             hideCompletedTasks: false,
+            showHoldUrgent: false,
             calendarView: "month"
           }
         };
@@ -4035,6 +4686,7 @@
             tasksCollapsed: Boolean(board.ui && board.ui.tasksCollapsed),
             tagsCollapsed: board.ui && typeof board.ui.tagsCollapsed === "boolean" ? board.ui.tagsCollapsed : true,
             hideCompletedTasks: Boolean(board.ui && board.ui.hideCompletedTasks),
+            showHoldUrgent: Boolean(board.ui && board.ui.showHoldUrgent),
             calendarView: board.ui && ["month", "week", "year"].includes(board.ui.calendarView) ? board.ui.calendarView : "month"
           }
         };
@@ -4393,7 +5045,7 @@
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(state.board));
         } catch (error) {
-          alert("לא הצלחתי לשמור את הלוח ב־localStorage.");
+          showAlertToast("לא הצלחתי לשמור את הלוח ב־localStorage.");
         }
       }
 
@@ -4404,8 +5056,10 @@
         const hasActiveSearchOrFilters = isFiltersActive();
         const showFiltersPanel = state.filtersPanelOpen || state.filters.tag !== "all";
         const showSearchRow = state.searchOpen;
+        const searchValue = getSearchInputValue();
         const tasksPanelVisible = shouldShowTasksPanel();
         const collapseToggle = getCollapseToggleState();
+        const urgentEntries = getUrgentFocusEntries();
 
         if (state.focusCategoryId && !findCategory(state.focusCategoryId)) {
           state.focusCategoryId = null;
@@ -4420,13 +5074,14 @@
               <div class="title-row">
                 <div class="title-block">
                   <h1>לוח ניהול סרטונים</h1>
+                  <p class="subtitle">מה דחוף עכשיו, מה מוכן לעלייה, ומה השלב הבא בכל סרטון.</p>
                 </div>
 
                 <div class="header-actions">
                   <button class="btn primary" type="button" data-action="open-item-dialog">+ סרטון חדש</button>
                   <button class="icon-btn top-icon-btn" type="button" data-action="toggle-all-panels" aria-label="${escapeAttr(collapseToggle.labelText)}">${collapseToggle.symbol}</button>
                   <button class="icon-btn top-icon-btn" type="button" data-action="open-calendar" aria-label="פתיחת לוח שנה">📅</button>
-                  <button class="icon-btn top-icon-btn ${showSearchRow || state.filters.search ? "active" : ""}" type="button" data-action="toggle-search" aria-expanded="${showSearchRow ? "true" : "false"}" aria-label="חיפוש">⌕</button>
+                  <button class="icon-btn top-icon-btn ${showSearchRow || searchValue ? "active" : ""}" type="button" data-action="toggle-search" aria-expanded="${showSearchRow ? "true" : "false"}" aria-label="חיפוש">⌕</button>
                   <button class="icon-btn top-icon-btn settings-trigger" type="button" data-action="open-settings" aria-label="הגדרות">⚙️</button>
                 </div>
               </div>
@@ -4439,6 +5094,11 @@
                   ${state.openWorkOnly ? '<button class="btn ghost slim-btn" type="button" data-action="toggle-open-work">הצגי הכל</button>' : ""}
                 </div>
               ` : ""}
+
+              <div class="topbar-flow">
+                ${renderWorkflowStrip(stats)}
+                ${urgentEntries.length ? renderUrgentFocusSection(urgentEntries) : ""}
+              </div>
 
               <div class="stats-strip">
                 <div class="stat-card">
@@ -4462,8 +5122,8 @@
 
                 ${showSearchRow ? `
                   <div class="search-row compact-search-row">
-                    <input class="input search-input" id="searchInput" type="search" placeholder="חיפוש סרטון..." value="${escapeAttr(state.filters.search)}">
-                    ${state.filters.search ? '<button class="btn ghost filter-clear" type="button" data-action="clear-search">ניקוי</button>' : ""}
+                    <input class="input search-input" id="searchInput" type="search" placeholder="חיפוש סרטון..." value="${escapeAttr(searchValue)}">
+                    ${searchValue ? '<button class="btn ghost filter-clear" type="button" data-action="clear-search">ניקוי</button>' : ""}
                     <button class="btn ghost filter-clear" type="button" data-action="toggle-search">סגירה</button>
                   </div>
                 ` : ""}
@@ -4487,14 +5147,15 @@
                 <div class="progress-box" style="flex: 1 1 100%;">
                   <div class="progress-headline">
                     <div>
-                      <h2>התקדמות עבודה</h2>
-                      <div class="progress-caption">${stats.readyItems} מוכנים לעלייה · ${stats.remaining}% עבודה נותרה</div>
+                      <h2>תמונת עבודה</h2>
+                      <div class="progress-caption">${stats.readyItems} מוכנים לעלייה · ${stats.openItems} עדיין צריכים עבודה</div>
                     </div>
                     <strong class="progress-value">${stats.progress}%</strong>
                   </div>
                   <div class="progress-track stacked-progress" aria-label="התפלגות הסרטונים לפי שלבי העבודה">
                     ${renderWorkflowSegments(stats)}
                   </div>
+                  ${renderWorkflowBreakdownChips(stats)}
                   <div class="progress-mini">${stats.breakdown}</div>
                   ${stats.insight ? `<div class="progress-note">${escapeHtml(stats.insight)}</div>` : ""}
                 </div>
@@ -4528,6 +5189,8 @@
           </div>
         `;
 
+        persistSessionUiState();
+
         if (refs.calendarDialog.open) {
           renderCalendarDialog();
         }
@@ -4535,8 +5198,10 @@
           renderCalendarDayDialog(state.calendarDayDate);
         }
         if (refs.settingsDialog.open) {
-          renderSettingsDialog();
+          renderSettingsDialog({ skipFocusCapture: true });
         }
+
+        syncDialogAlertBanner();
       }
 
       function renderUpcomingMenuItems() {
@@ -4573,17 +5238,17 @@
         `).join("");
       }
 
-      function renderSettingsDialog() {
+      function renderSettingsDialog(options = {}) {
         const allTags = getAllTags();
-        const tasks = [...state.board.tasks].sort((a, b) => Number(a.done) - Number(b.done) || compareText(a.text, b.text));
-        const openTasks = tasks.filter((task) => !task.done).length;
         const colors = [
-          { className: "color-green", title: "מוכן לעלייה", hint: "שלב מוכן ללא אזהרת תאריך." },
-          { className: "color-orange", title: "תאריך קרוב", hint: "עוד עד 7 ימים ועדיין לא מוכן." },
-          { className: "color-red", title: "תאריך דחוף", hint: "עוד עד יומיים ועדיין לא מוכן." },
-          { className: "color-yellow", title: "צולם", hint: "הצילום הושלם והפריט עדיין בעבודה." },
-          { className: "color-purple", title: "עריכה / דיבוב", hint: "שלבי עבודה מתקדמים לפני עלייה." },
-          { className: "color-lavender", title: "מתלבטת", hint: "בהמתנה או לא הוחלט סופית." }
+          { className: "color-green", title: "ירוק", hint: "מוכן לעלייה" },
+          { className: "color-orange", title: "כתום", hint: "תאריך קרוב, עדיין לא מוכן" },
+          { className: "color-red", title: "אדום", hint: "דחוף מאוד, עוד יומיים או פחות" },
+          { className: "color-yellow", title: "צהוב", hint: "צולם" },
+          { className: "color-purple", title: "סגול", hint: "עריכה" },
+          { className: "color-lavender", title: "לילך/אפור", hint: "מתלבטת / בהמתנה" },
+          { className: "color-orange", title: "כתום קטן בלוח שנה", hint: "יום צילום" },
+          { className: "color-tag", title: "תגיות", hint: "מצחיק, מתכון, זוגי, דייטים א-ב" }
         ];
 
         refs.settingsContent.innerHTML = `
@@ -4591,7 +5256,7 @@
             <div class="panel-head dialog-head compact-dialog-head">
               <div>
                 <h2>הגדרות</h2>
-                <small>כלי ניהול, סינון והסבר צבעים במקום אחד.</small>
+                <small>קטגוריות, תגיות, פילטרים, ייבוא וייצוא, והסבר צבעים במקום אחד.</small>
               </div>
               <button type="button" class="icon-btn dialog-close-btn" data-action="close-dialog" data-dialog-id="settingsDialog" aria-label="סגירת ההגדרות">✕</button>
             </div>
@@ -4606,15 +5271,6 @@
                 <div class="category-manager-list">
                   ${renderCategoryManagerRows()}
                 </div>
-              </section>
-
-              <section class="settings-group">
-                <h3>משימות</h3>
-                <form class="inline-form" id="settingsTaskForm">
-                  <input class="input" name="taskText" placeholder="משימה חדשה..." maxlength="140">
-                  <button class="btn ghost slim-btn" type="submit">הוספה</button>
-                </form>
-                <small>${tasks.length ? `סה"כ ${tasks.length} · פתוחות ${openTasks}` : "אין משימות כרגע"}</small>
               </section>
 
               <section class="settings-group">
@@ -4643,6 +5299,13 @@
                   ${isFiltersActive() ? '<button class="mini-btn settings-chip" type="button" data-action="clear-filters">ניקוי פילטרים</button>' : ""}
                 </div>
                 ${renderActiveFilterChips()}
+                <label class="toggle-row">
+                  <input id="showHoldUrgent" type="checkbox" ${state.board.ui.showHoldUrgent ? "checked" : ""}>
+                  <span>
+                    כללי דחוף ל"מתלבטת"
+                    <span class="muted">הציגי פריטי "מתלבטת" בדחופים רק כשנשארו יומיים או פחות.</span>
+                  </span>
+                </label>
               </section>
 
               <section class="settings-group">
@@ -4660,19 +5323,14 @@
                     <div class="color-row">
                       <span class="color-dot ${entry.className}" aria-hidden="true"></span>
                       <strong>${escapeHtml(entry.title)}</strong>
-                      <span class="muted">${escapeHtml(entry.hint)}</span>
+                      <span class="muted">— ${escapeHtml(entry.hint)}</span>
                     </div>
                   `).join("")}
-                  <div class="color-row">
-                    <span class="color-dot color-tag" aria-hidden="true"></span>
-                    <strong>צבעי תגיות</strong>
-                    <span class="muted">סיווגים כמו מצחיק, מתכון, זוגי ודייטים א-ב.</span>
-                  </div>
                 </div>
               </section>
 
               <section class="settings-group">
-                <h3>תצוגה</h3>
+                <h3>הגדרות תצוגה</h3>
                 <div class="settings-actions">
                   <button class="btn ghost slim-btn" type="button" data-action="toggle-compact">${state.board.ui.compact ? "מצב רגיל" : "מצב קומפקטי"}</button>
                   <button class="btn ghost slim-btn" type="button" data-action="toggle-ui-panel" data-panel-key="tagsCollapsed" data-panel-id="tags">${state.board.ui.tagsCollapsed ? "פתיחת תגיות" : "הסתרת תגיות"}</button>
@@ -4683,6 +5341,9 @@
         `;
 
         if (!refs.settingsDialog.open) {
+          if (!options.skipFocusCapture) {
+            rememberDialogFocus("settingsDialog", options.opener || document.activeElement);
+          }
           refs.settingsDialog.showModal();
         }
       }
@@ -4695,16 +5356,16 @@
           { label: "צריך לדובב", count: stats.stageCounts.dubbing, className: "stage-dubbing" },
           { label: "עריכה", count: stats.stageCounts.editing, className: "stage-editing" },
           { label: "מתלבטת", count: stats.stageCounts.hold, className: "stage-hold" },
-          { label: "מוכן", count: stats.stageCounts.ready, className: "stage-ready" },
-          { label: "עלה", count: stats.stageCounts.published, className: "stage-published" }
+          { label: "מוכן", count: stats.stageCounts.ready, className: "stage-ready" }
         ].filter((segment) => segment.count > 0);
+        const activeTotal = stats.totalItems - stats.stageCounts.published;
 
-        if (!stats.totalItems) {
+        if (!stats.totalItems || activeTotal <= 0) {
           return '<span class="progress-segment stage-empty" style="width:100%"></span>';
         }
 
         return segments.map((segment) => `
-          <span class="progress-segment ${segment.className}" style="width:${(segment.count / stats.totalItems) * 100}%" title="${escapeAttr(`${segment.label}: ${segment.count}`)}" aria-label="${escapeAttr(`${segment.label}: ${segment.count}`)}"></span>
+          <span class="progress-segment ${segment.className}" style="width:${(segment.count / activeTotal) * 100}%" title="${escapeAttr(`${segment.label}: ${segment.count}`)}" aria-label="${escapeAttr(`${segment.label}: ${segment.count}`)}"></span>
         `).join("");
       }
 
@@ -4749,6 +5410,17 @@
       }
 
       function renderSnackbar() {
+        if (state.noticeToast && state.noticeToast.variant === "alert") {
+          if (getTopOpenDialogId()) {
+            return "";
+          }
+          return `
+            <div class="snackbar notice alert" role="alert" aria-live="assertive">
+              <span>${escapeHtml(state.noticeToast.message)}</span>
+            </div>
+          `;
+        }
+
         if (state.undoToast) {
           return `
             <div class="snackbar" role="status" aria-live="polite">
@@ -4767,6 +5439,38 @@
         }
 
         return "";
+      }
+
+      function syncDialogAlertBanner() {
+        document.querySelectorAll(".dialog-alert-banner").forEach((node) => node.remove());
+
+        if (!state.noticeToast || state.noticeToast.variant !== "alert") {
+          return;
+        }
+
+        const dialogId = getTopOpenDialogId();
+        if (!dialogId) {
+          return;
+        }
+
+        const hostMap = {
+          itemDialog: refs.itemForm,
+          categoryDialog: refs.categoryForm,
+          detailDialog: refs.detailContent,
+          settingsDialog: refs.settingsContent,
+          dayDialog: refs.dayContent,
+          calendarDialog: refs.calendarContent
+        };
+        const host = hostMap[dialogId];
+        if (!host) {
+          return;
+        }
+
+        host.insertAdjacentHTML("afterbegin", `
+          <div class="snackbar alert dialog-alert-banner" role="alert" aria-live="assertive">
+            <span>${escapeHtml(state.noticeToast.message)}</span>
+          </div>
+        `);
       }
 
       function getRenderableCategories() {
@@ -4816,25 +5520,51 @@
       function renderScheduleItem(entry, draggable) {
         const item = entry.item;
         const category = entry.category;
-        const meta = renderDateMeta(item.due, category);
+        const meta = item.due ? renderDateMeta(item.due, category) : "";
         const deadlineClass = getDeadlineToneClass(item, category);
+        const status = getCalendarStatusInfo(category);
 
         return `
           <article class="schedule-item ${deadlineClass} ${draggable ? "draggable" : ""}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="schedule" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" ${draggable ? 'draggable="true"' : ""} ${draggable ? `data-drag-type="schedule" data-item-id="${escapeAttr(item.id)}"` : ""} ${draggable ? `data-drop-type="schedule-item" data-item-id="${escapeAttr(item.id)}"` : ""}>
             <div class="row-main">
               <div class="row-title">
+                <span class="row-status-dot ${escapeAttr(status.className)}" aria-hidden="true"></span>
                 <h4>${escapeHtml(item.title)}</h4>
               </div>
               <div class="row-meta">
                 ${meta}
                 <span class="source-pill">${escapeHtml(category.title)}</span>
-                ${draggable ? '<span class="count-hint">ידני</span>' : ""}
               </div>
             </div>
 
             ${renderItemActions(item, { allowDelete: true, allowDetails: false, menuKey: `schedule:${item.id}`, allowEdit: true, categoryId: category.id, source: "schedule" })}
           </article>
         `;
+      }
+
+      function getCategoryWorkflowMeta(category) {
+        if (!category) {
+          return { step: null, note: "", optional: false };
+        }
+
+        const stepIndex = WORKFLOW_STAGE_TITLES.indexOf(category.title);
+        if (stepIndex >= 0) {
+          return {
+            step: stepIndex + 1,
+            note: `שלב ${stepIndex + 1}`,
+            optional: false
+          };
+        }
+
+        if (category.title === DUBBING_TITLE) {
+          return { step: null, note: "מסלול צד", optional: true };
+        }
+
+        if (category.title === HOLD_TITLE) {
+          return { step: null, note: "בהמתנה", optional: true };
+        }
+
+        return { step: null, note: "", optional: false };
       }
 
       function renderCategoryCard(category) {
@@ -4844,15 +5574,21 @@
         const countLabel = isFiltersActive() && filteredCount !== totalCount ? `${filteredCount} / ${totalCount}` : `${totalCount}`;
         const roleClass = category.role === "ready" ? "ready-card" : category.role === "published" ? "published-card" : "";
         const toneClass = getCategoryToneClass(category);
+        const workflowMeta = getCategoryWorkflowMeta(category);
 
         return `
-          <section class="category-card ${roleClass} ${toneClass} ${category.collapsed ? "is-collapsed" : ""}" data-drop-type="category" data-category-id="${escapeAttr(category.id)}" data-item-drop="category">
+          <section class="category-card ${roleClass} ${toneClass} ${workflowMeta.optional ? "optional-workflow-card" : ""} ${category.collapsed ? "is-collapsed" : ""}" data-drop-type="category" data-category-id="${escapeAttr(category.id)}" data-item-drop="category">
             <div class="category-top" data-action="toggle-category" data-category-id="${escapeAttr(category.id)}" data-drag-type="category" draggable="true" role="button" tabindex="0" aria-expanded="${category.collapsed ? "false" : "true"}">
               <div class="category-toggle">
-                <div class="category-title compact-title">
-                  <h2>${escapeHtml(category.title)}</h2>
-                  <span class="count-badge">${escapeHtml(countLabel)}</span>
-                  ${renderRoleBadge(category)}
+                <div class="category-title-wrap">
+                  <div class="category-title compact-title">
+                    ${workflowMeta.step ? `<span class="category-step-badge">${workflowMeta.step}</span>` : ""}
+                    <h2>${escapeHtml(category.title)}</h2>
+                    <span class="count-badge">${escapeHtml(countLabel)}</span>
+                    ${renderRoleBadge(category)}
+                    ${workflowMeta.optional ? '<span class="category-side-badge">אופציונלי</span>' : ""}
+                  </div>
+                  ${workflowMeta.note ? `<span class="category-step-note">${escapeHtml(workflowMeta.note)}</span>` : ""}
                 </div>
                 <span class="accordion-arrow" aria-hidden="true">▾</span>
               </div>
@@ -4930,13 +5666,15 @@
       }
 
       function renderBoardItem(item, category) {
-        const meta = renderDateMeta(item.due, category);
+        const meta = item.due ? renderDateMeta(item.due, category) : "";
         const deadlineClass = getDeadlineToneClass(item, category);
+        const status = getCalendarStatusInfo(category);
 
         return `
           <article class="item-card ${deadlineClass}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="board" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" draggable="true" data-drag-type="item" data-category-id="${escapeAttr(category.id)}" data-subcat-id="${escapeAttr(item.subcat || "")}" data-drop-type="item">
             <div class="row-main">
               <div class="row-title">
+                <span class="row-status-dot ${escapeAttr(status.className)}" aria-hidden="true"></span>
                 <h4>${escapeHtml(item.title)}</h4>
               </div>
               <div class="row-meta">
@@ -4962,6 +5700,9 @@
         }
 
         const daysLeft = getDaysUntil(item.due);
+        if (isHoldCategory(category)) {
+          return state.board.ui && state.board.ui.showHoldUrgent && daysLeft <= 2 ? "urgent" : "";
+        }
         if (daysLeft <= 2) {
           return "urgent";
         }
@@ -5029,9 +5770,11 @@
         const source = options.source || "board";
         const menuKey = String(options.menuKey || item.id);
         const menuOpen = state.openItemMenuKey === menuKey && state.floatingMenu && state.floatingMenu.key === menuKey;
+        const nextStage = categoryId ? getNextStageCategory(categoryId) : null;
 
         return `
           <div class="row-actions" data-action="noop">
+            ${nextStage ? `<button class="mini-btn row-next-stage-btn" type="button" data-action="move-to-next-stage" data-item-id="${escapeAttr(item.id)}" data-category-id="${escapeAttr(categoryId)}" aria-label="העברת ${escapeAttr(item.title)} לשלב הבא: ${escapeAttr(nextStage.title)}" title="העבר ל־${escapeAttr(nextStage.title)}">הבא</button>` : ""}
             <div class="row-menu">
               <button class="mini-btn" type="button" data-action="toggle-item-menu" data-menu-type="item" data-menu-key="${escapeAttr(menuKey)}" data-item-id="${escapeAttr(item.id)}" data-category-id="${escapeAttr(categoryId)}" data-source="${escapeAttr(source)}" data-allow-edit="${allowEdit ? "1" : "0"}" data-allow-details="${allowDetails ? "1" : "0"}" data-allow-delete="${allowDelete ? "1" : "0"}" aria-expanded="${menuOpen ? "true" : "false"}" aria-label="פעולות נוספות עבור ${escapeAttr(item.title)}">⋯</button>
             </div>
@@ -5045,14 +5788,12 @@
           return "";
         }
 
-        const nextStage = menu.categoryId ? getNextStageCategory(menu.categoryId) : null;
         return `
           <button class="menu-sheet-backdrop" type="button" data-action="close-item-menu" aria-label="סגירת תפריט פעולות"></button>
           <div class="menu-sheet floating-item-menu" data-action="noop" role="dialog" aria-modal="true" aria-label="פעולות על פריט">
             <div class="menu-sheet-handle" aria-hidden="true"></div>
             <div class="menu-sheet-actions">
               ${menu.allowEdit ? `<button class="menu-sheet-btn" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(menu.itemId)}" data-source="${escapeAttr(menu.source)}">עריכה</button>` : ""}
-              ${nextStage ? `<button class="menu-sheet-btn" type="button" data-action="move-to-next-stage" data-item-id="${escapeAttr(menu.itemId)}" data-category-id="${escapeAttr(menu.categoryId)}">העבר ל־${escapeHtml(nextStage.title)}</button>` : ""}
               ${menu.allowDelete ? `<button class="menu-sheet-btn danger" type="button" data-action="delete-item" data-item-id="${escapeAttr(menu.itemId)}">מחק</button>` : ""}
             </div>
           </div>
@@ -5480,15 +6221,14 @@
             </div>
 
             <div class="calendar-legend" role="list" aria-label="מקרא צבעים בלוח השנה">
-              <span class="legend-pill status-early" role="listitem">טרם צולם</span>
+              <span class="legend-pill deadline-soon" role="listitem">תאריך קרוב</span>
+              <span class="legend-pill deadline-urgent" role="listitem">דחוף מאוד</span>
               <span class="legend-pill status-scheduled" role="listitem">נקבע תאריך צילום</span>
               <span class="legend-pill status-filmed" role="listitem">צולם</span>
-              <span class="legend-pill status-edit" role="listitem">דיבוב / עריכה</span>
+              <span class="legend-pill status-edit" role="listitem">עריכה</span>
               <span class="legend-pill status-ready" role="listitem">מוכן לעלייה</span>
-              <span class="legend-pill status-published" role="listitem">עלה</span>
-              <span class="legend-pill status-hold" role="listitem">מתלבטת</span>
-              <span class="legend-pill holiday" role="listitem">חשוב / חג</span>
-              <span class="legend-pill filming-day" role="listitem">סימון יום צילום</span>
+              <span class="legend-pill status-hold" role="listitem">מתלבטת / בהמתנה</span>
+              <span class="legend-pill filming-day" role="listitem">יום צילום</span>
             </div>
 
             <div class="calendar-grid ${escapeAttr(`${calendarView}-mode`)}">
@@ -5864,9 +6604,12 @@
         showNoticeToast(`התאריך של "${location.item.title}" עודכן`);
       }
 
-      function openCalendarQuickAdd(date) {
-        const defaultCategory = state.board.categories.find((category) => category.title === "רעיונות") || state.board.categories[0] || null;
-        openItemDialog(null, defaultCategory ? defaultCategory.id : null, "calendar", { prefillDue: date });
+      function openCalendarQuickAdd(date, opener = null) {
+        const defaultCategory = state.board.categories.find((category) => category.title === "נקבע תאריך")
+          || state.board.categories.find((category) => category.title === "רעיונות")
+          || state.board.categories[0]
+          || null;
+        openItemDialog(null, defaultCategory ? defaultCategory.id : null, "calendar", { prefillDue: date, opener });
       }
 
       function renderTasksPanel() {
@@ -5973,10 +6716,10 @@
         const totalItems = categories.reduce((sum, category) => sum + category.items.length, 0);
         const readyItems = categories.filter(isReadyCategory).reduce((sum, category) => sum + category.items.length, 0);
         const publishedItems = categories.filter(isPublishedCategory).reduce((sum, category) => sum + category.items.length, 0);
-        const openItems = totalItems - publishedItems;
+        const openItems = Math.max(0, totalItems - readyItems - publishedItems);
         const tasksTotal = state.board.tasks.length;
         const tasksDone = state.board.tasks.filter((task) => task.done).length;
-        const workflowCategories = categories.filter((category) => category.title !== VIRTUAL_SCHEDULE_TITLE);
+        const workflowCategories = categories.filter((category) => category.title !== VIRTUAL_SCHEDULE_TITLE && !isPublishedCategory(category));
         const stageCounts = getWorkflowStageCounts(categories);
         let progressSum = 0;
 
@@ -5985,8 +6728,9 @@
           progressSum += category.items.length * stageProgress;
         });
 
-        const progress = totalItems ? Math.round((progressSum / totalItems) * 100) : 0;
-        const remaining = totalItems ? Math.max(0, 100 - progress) : 0;
+        const activeWorkflowItems = Math.max(0, totalItems - publishedItems);
+        const progress = activeWorkflowItems ? Math.round((progressSum / activeWorkflowItems) * 100) : 0;
+        const remaining = activeWorkflowItems ? Math.max(0, 100 - progress) : 0;
 
         return {
           totalItems,
@@ -6080,8 +6824,7 @@
           `רעיונות: ${stageCounts.ideas}`,
           `נקבע תאריך: ${stageCounts.scheduled}`,
           `צילמנו: ${stageCounts.filmed}`,
-          `דיבוב: ${stageCounts.dubbing}`,
-          `עריכה: ${stageCounts.editing}`,
+          `עריכה: ${stageCounts.editing + stageCounts.dubbing}`,
           `מוכנים: ${stageCounts.ready}`
         ];
 
@@ -6094,22 +6837,149 @@
 
       function getWorkflowInsight(stageCounts) {
         const entries = [
-          { key: "ideas", count: stageCounts.ideas, message: "רוב העבודה עדיין בשלב הרעיונות" },
-          { key: "scheduled", count: stageCounts.scheduled, message: "רוב העבודה כרגע סביב תיאום ותאריכים" },
-          { key: "filmed", count: stageCounts.filmed, message: "רוב העבודה עדיין בצילום" },
-          { key: "dubbing", count: stageCounts.dubbing, message: "הרבה סרטונים מחכים עדיין לדיבוב" },
-          { key: "editing", count: stageCounts.editing, message: "רוב הסרטונים כבר בשלב עריכה" },
-          { key: "hold", count: stageCounts.hold, message: "יש לא מעט סרטונים במצב מתלבטת" },
-          { key: "ready", count: stageCounts.ready, message: "הרבה סרטונים כבר כמעט מוכנים לעלייה" },
-          { key: "published", count: stageCounts.published, message: "חלק גדול מהלוח כבר פורסם" }
+          { key: "ideas", label: "רעיונות", count: stageCounts.ideas },
+          { key: "scheduled", label: "נקבע תאריך", count: stageCounts.scheduled },
+          { key: "filmed", label: "צילמנו", count: stageCounts.filmed },
+          { key: "dubbing", label: "צריך לדובב", count: stageCounts.dubbing },
+          { key: "editing", label: "עריכה בסיסית", count: stageCounts.editing },
+          { key: "hold", label: "מתלבטת", count: stageCounts.hold }
         ].filter((entry) => entry.count > 0);
 
         if (!entries.length) {
-          return "עדיין אין סרטונים בלוח";
+          return stageCounts.ready ? "יש כבר סרטונים שמוכנים לעלייה עכשיו" : "עדיין אין סרטונים בלוח";
         }
 
         entries.sort((a, b) => b.count - a.count);
-        return entries[0].message;
+        return `העומס כרגע ב־${entries[0].label} (${entries[0].count})`;
+      }
+
+      function getWorkflowStripEntries(stageCounts) {
+        return [
+          { title: "רעיונות", count: stageCounts.ideas, step: 1 },
+          { title: "נקבע תאריך", count: stageCounts.scheduled, step: 2 },
+          { title: "צילמנו", count: stageCounts.filmed, step: 3 },
+          { title: "עריכה בסיסית", count: stageCounts.editing, step: 4 },
+          { title: READY_TITLE, count: stageCounts.ready, step: 5 },
+          { title: PUBLISHED_TITLE, count: stageCounts.published, step: 6 }
+        ];
+      }
+
+      function renderWorkflowStrip(stats) {
+        const primary = getWorkflowStripEntries(stats.stageCounts).map((entry) => `
+          <span class="workflow-step-chip">
+            <span class="workflow-step-no">${entry.step}</span>
+            <span>${escapeHtml(entry.title)}</span>
+            <span class="workflow-step-count">${entry.count}</span>
+          </span>
+        `).join("");
+        const optional = [
+          { title: DUBBING_TITLE, count: stats.stageCounts.dubbing },
+          { title: HOLD_TITLE, count: stats.stageCounts.hold }
+        ].filter((entry) => state.board.categories.some((category) => category.title === entry.title)).map((entry) => `
+          <span class="workflow-step-chip optional">
+            <span class="workflow-step-no">+</span>
+            <span>${escapeHtml(entry.title)}</span>
+            <span class="workflow-step-count">${entry.count}</span>
+          </span>
+        `).join("");
+
+        return `
+          <section class="workflow-strip" aria-label="זרימת העבודה">
+            <div class="workflow-strip-head">
+              <strong>זרימת העבודה</strong>
+              <span>רעיון → צילום → עריכה → מוכן → עלה</span>
+            </div>
+            <div class="workflow-step-row">${primary}</div>
+            ${optional ? `<div class="workflow-step-row">${optional}</div>` : ""}
+          </section>
+        `;
+      }
+
+      function renderWorkflowBreakdownChips(stats) {
+        const chips = [
+          { count: stats.stageCounts.ideas, className: "status-early", label: "רעיונות" },
+          { count: stats.stageCounts.scheduled, className: "status-scheduled", label: "נקבע תאריך" },
+          { count: stats.stageCounts.filmed, className: "status-filmed", label: "צילמנו" },
+          { count: stats.stageCounts.editing + stats.stageCounts.dubbing, className: "status-edit", label: "בעריכה" },
+          { count: stats.stageCounts.hold, className: "status-hold", label: "מתלבטת" },
+          { count: stats.stageCounts.ready, className: "status-ready", label: "מוכן" }
+        ].filter((entry) => entry.count > 0);
+
+        if (!chips.length) {
+          return "";
+        }
+
+        return `
+          <div class="workflow-breakdown" aria-label="פירוק שלבי העבודה">
+            ${chips.map((entry) => `<span class="legend-pill ${escapeAttr(entry.className)}">${escapeHtml(entry.label)} · ${entry.count}</span>`).join("")}
+          </div>
+        `;
+      }
+
+      function getUrgentFocusEntries() {
+        const entries = [];
+
+        state.board.categories.forEach((category) => {
+          if (state.focusCategoryId && category.id !== state.focusCategoryId) {
+            return;
+          }
+          if (isReadyCategory(category) || isPublishedCategory(category)) {
+            return;
+          }
+
+          category.items.forEach((item) => {
+            if (!item.due || !matchesFilters(item, category)) {
+              return;
+            }
+
+            const daysLeft = getDaysUntil(item.due);
+            if (daysLeft > 7) {
+              return;
+            }
+
+            if (isHoldCategory(category) && !(Boolean(state.board.ui && state.board.ui.showHoldUrgent) && daysLeft <= 2)) {
+              return;
+            }
+
+            entries.push({ item, category, daysLeft });
+          });
+        });
+
+        return entries.sort((a, b) => a.daysLeft - b.daysLeft || compareDates(a.item.due, b.item.due) || compareText(a.item.title, b.item.title));
+      }
+
+      function renderUrgentFocusSection(entries) {
+        return `
+          <section class="urgent-focus-card">
+            <div class="urgent-focus-head">
+              <h2>מה דחוף עכשיו</h2>
+              <small>רק סרטונים עם תאריך קרוב בשבוע הקרוב</small>
+            </div>
+            <div class="urgent-focus-list">
+              ${entries.map((entry) => renderUrgentFocusItem(entry)).join("")}
+            </div>
+          </section>
+        `;
+      }
+
+      function renderUrgentFocusItem(entry) {
+        const status = getCalendarStatusInfo(entry.category);
+        const nextStage = getNextStageCategory(entry.category.id);
+
+        return `
+          <article class="urgent-focus-item ${getDeadlineToneClass(entry.item, entry.category)}">
+            <div class="urgent-focus-item-main">
+              <div class="urgent-focus-title">${escapeHtml(entry.item.title)}</div>
+              <div class="urgent-focus-meta">
+                ${entry.item.due ? `<span class="tiny-pill ${escapeAttr(getDeadlineLabel(entry.item.due, entry.category).className)}">${escapeHtml(formatDate(entry.item.due))}</span>` : ""}
+                <span class="legend-pill ${escapeAttr(status.className)}">${escapeHtml(entry.category.title)}</span>
+              </div>
+            </div>
+            ${nextStage
+              ? `<button class="mini-btn row-next-stage-btn" type="button" data-action="move-to-next-stage" data-item-id="${escapeAttr(entry.item.id)}" data-category-id="${escapeAttr(entry.category.id)}">הבא</button>`
+              : `<button class="mini-btn" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(entry.item.id)}" data-category-id="${escapeAttr(entry.category.id)}">פתח</button>`}
+          </article>
+        `;
       }
 
       function getAllTags() {
@@ -6290,43 +7160,38 @@
           case "drag-category":
             break;
           case "open-settings":
-            renderSettingsDialog();
+            renderSettingsDialog({ opener: actionTarget });
             break;
           case "toggle-all-panels":
             toggleAllPanels();
             break;
           case "toggle-search":
-            state.searchOpen = !state.searchOpen;
-            if (!state.searchOpen && !state.filters.search) {
-              state.filtersPanelOpen = false;
-            }
-            render();
             if (state.searchOpen) {
-              window.setTimeout(() => {
-                const input = document.getElementById("searchInput");
-                if (input) {
-                  input.focus();
-                }
-              }, 30);
+              flushSearchDebounce({ render: false });
+              state.searchOpen = false;
+              if (!state.filters.search) {
+                state.filtersPanelOpen = false;
+              }
+              render();
+            } else {
+              openSearchAndFocus({ selectAll: Boolean(getSearchInputValue()) });
             }
             break;
           case "clear-search":
-            state.filters.search = "";
-            state.searchOpen = false;
-            render();
+            resetSearchState("", { closeSearch: true });
             break;
           case "open-calendar":
-            openCalendarDialog();
+            openCalendarDialog({ opener: actionTarget });
             break;
           case "close-item-menu":
             closeUiMenus();
             render();
             break;
           case "open-calendar-day":
-            openCalendarDayDialog(actionTarget.dataset.date || "");
+            openCalendarDayDialog(actionTarget.dataset.date || "", { opener: actionTarget });
             break;
           case "open-calendar-item":
-            openItemDialog(actionTarget.dataset.itemId || null, null, "calendar");
+            openItemDialog(actionTarget.dataset.itemId || null, null, "calendar", { opener: actionTarget });
             break;
           case "calendar-prev-month":
             shiftCalendarPeriod(-1);
@@ -6352,13 +7217,13 @@
             renderCalendarDialog();
             break;
           case "quick-add-calendar-item":
-            openCalendarQuickAdd(actionTarget.dataset.date || state.calendarDayDate || state.calendarFocusDate || getTodayIso());
+            openCalendarQuickAdd(actionTarget.dataset.date || state.calendarDayDate || state.calendarFocusDate || getTodayIso(), actionTarget);
             break;
           case "open-item-dialog":
-            openItemDialog(actionTarget.dataset.itemId || null, actionTarget.dataset.categoryId || null, actionTarget.dataset.source || "board");
+            openItemDialog(actionTarget.dataset.itemId || null, actionTarget.dataset.categoryId || null, actionTarget.dataset.source || "board", { opener: actionTarget });
             break;
           case "open-item-details":
-            openItemDetails(actionTarget.dataset.itemId || null);
+            openItemDetails(actionTarget.dataset.itemId || null, { opener: actionTarget });
             break;
           case "toggle-item-menu":
             state.topMenuOpen = false;
@@ -6367,9 +7232,11 @@
               if (state.openItemMenuKey === menuKey && state.floatingMenu && state.floatingMenu.key === menuKey) {
                 state.openItemMenuKey = null;
                 state.floatingMenu = null;
+                state.menuFocusReturn = null;
               } else {
                 const rect = actionTarget.getBoundingClientRect();
                 state.openItemMenuKey = menuKey;
+                state.menuFocusReturn = createFocusToken(actionTarget);
                 state.floatingMenu = {
                   type: "item",
                   key: menuKey,
@@ -6410,7 +7277,7 @@
             toggleStoredPanel(actionTarget.dataset.panelKey, actionTarget.dataset.panelId);
             break;
           case "open-category-dialog":
-            openCategoryDialog(actionTarget.dataset.categoryId || null);
+            openCategoryDialog(actionTarget.dataset.categoryId || null, actionTarget);
             break;
           case "focus-category":
             state.focusCategoryId = actionTarget.dataset.categoryId || null;
@@ -6503,13 +7370,31 @@
       }
 
       function handleKeydown(event) {
-        if (event.key === "Escape" && (state.openItemMenuKey || state.topMenuOpen)) {
-          closeUiMenus();
-          render();
+        const key = String(event.key || "");
+        const lowerKey = key.toLocaleLowerCase("he");
+
+        if ((event.metaKey || event.ctrlKey) && lowerKey === "f") {
+          if (!isAnyDialogOpen()) {
+            event.preventDefault();
+            openSearchAndFocus({ selectAll: true });
+          }
           return;
         }
 
-        if (event.key !== "Enter" && event.key !== " ") {
+        if (key === "Escape") {
+          if (closeTopLayer()) {
+            event.preventDefault();
+          }
+          return;
+        }
+
+        if (!event.metaKey && !event.ctrlKey && !event.altKey && lowerKey === "n" && !event.repeat && !isTextEntryTarget(event.target) && !isAnyDialogOpen()) {
+          event.preventDefault();
+          openItemDialog(null, null, "board", { opener: document.activeElement });
+          return;
+        }
+
+        if (key !== "Enter" && key !== " ") {
           return;
         }
 
@@ -6528,14 +7413,7 @@
 
       function handleInput(event) {
         if (event.target.id === "searchInput") {
-          const nextValue = event.target.value || "";
-          state.filters.search = nextValue;
-          render();
-          const nextInput = document.getElementById("searchInput");
-          if (nextInput) {
-            nextInput.focus();
-            nextInput.setSelectionRange(nextValue.length, nextValue.length);
-          }
+          queueSearchUpdate(event.target.value || "");
         }
       }
 
@@ -6554,6 +7432,12 @@
 
         if (event.target.id === "hideCompletedTasks") {
           state.board.ui.hideCompletedTasks = event.target.checked;
+          commit();
+          return;
+        }
+
+        if (event.target.id === "showHoldUrgent") {
+          state.board.ui.showHoldUrgent = event.target.checked;
           commit();
           return;
         }
@@ -6673,7 +7557,7 @@
           if (itemTarget || stackTarget || categoryTarget) {
             event.preventDefault();
             if (itemTarget) {
-              setDropHint(itemTarget, "drop-before");
+              setDropHint(itemTarget, getDropPositionClass(itemTarget, event));
             } else if (stackTarget) {
               setDropHint(stackTarget, "drop-highlight");
             } else if (categoryTarget) {
@@ -6689,7 +7573,7 @@
           if (scheduleItem || scheduleList) {
             event.preventDefault();
             if (scheduleItem) {
-              setDropHint(scheduleItem, "drop-before");
+              setDropHint(scheduleItem, getDropPositionClass(scheduleItem, event));
             } else {
               setDropHint(scheduleList, "drop-highlight");
             }
@@ -6730,20 +7614,22 @@
           event.preventDefault();
 
           if (itemTarget) {
-            moveBoardItem({
+            const moved = moveBoardItem({
               itemId: state.drag.itemId,
               fromCategoryId: state.drag.fromCategoryId,
               toCategoryId: itemTarget.dataset.categoryId,
-              beforeItemId: itemTarget.dataset.itemId,
+              beforeItemId: getBeforeItemIdFromDropTarget(itemTarget, '[data-drop-type="item"]'),
               targetSubcat: itemTarget.dataset.subcatId || null
             });
             clearDragState();
-            commit();
+            if (moved) {
+              commit();
+            }
             return;
           }
 
           if (stackTarget) {
-            moveBoardItem({
+            const moved = moveBoardItem({
               itemId: state.drag.itemId,
               fromCategoryId: state.drag.fromCategoryId,
               toCategoryId: stackTarget.dataset.categoryId,
@@ -6751,12 +7637,14 @@
               targetSubcat: stackTarget.dataset.subcatId || null
             });
             clearDragState();
-            commit();
+            if (moved) {
+              commit();
+            }
             return;
           }
 
           if (categoryTarget) {
-            moveBoardItem({
+            const moved = moveBoardItem({
               itemId: state.drag.itemId,
               fromCategoryId: state.drag.fromCategoryId,
               toCategoryId: categoryTarget.dataset.categoryId,
@@ -6764,7 +7652,9 @@
               targetSubcat: null
             });
             clearDragState();
-            commit();
+            if (moved) {
+              commit();
+            }
           }
           return;
         }
@@ -6776,7 +7666,7 @@
             return;
           }
           event.preventDefault();
-          reorderSchedule(state.drag.itemId, scheduleItem ? scheduleItem.dataset.itemId : null);
+          reorderSchedule(state.drag.itemId, scheduleItem ? getBeforeItemIdFromDropTarget(scheduleItem, '[data-drop-type="schedule-item"]') : null);
           clearDragState();
           commit();
           return;
@@ -6858,7 +7748,7 @@
 
       function openItemDialog(itemId, preferredCategoryId, source = "board", options = {}) {
         closeUiMenus();
-        closeDialog("settingsDialog");
+        closeDialog("settingsDialog", { skipFocusRestore: true });
         state.dialogReturn = source === "calendar" ? {
           source,
           dayDate: state.calendarDayDate,
@@ -6868,14 +7758,16 @@
           calendarFocusDate: state.calendarFocusDate,
           calendarFilter: state.calendarFilter
         } : null;
-        closeDialog("detailDialog");
-        closeDialog("dayDialog", { preserveState: Boolean(state.dialogReturn) });
-        closeDialog("calendarDialog", { preserveState: Boolean(state.dialogReturn) });
+        closeDialog("detailDialog", { skipFocusRestore: true });
+        closeDialog("dayDialog", { preserveState: Boolean(state.dialogReturn), skipFocusRestore: true });
+        closeDialog("calendarDialog", { preserveState: Boolean(state.dialogReturn), skipFocusRestore: true });
         const form = refs.itemForm;
         form.reset();
         const itemLocation = itemId ? findItemLocation(itemId) : null;
-        const categoryId = itemLocation ? itemLocation.category.id : preferredCategoryId || (state.board.categories[0] && state.board.categories[0].id) || "";
+        const overrideCategoryId = options.overrideCategoryId || "";
+        const categoryId = overrideCategoryId || (itemLocation ? itemLocation.category.id : preferredCategoryId || (state.board.categories[0] && state.board.categories[0].id) || "");
         state.editingItemId = itemLocation ? itemLocation.item.id : null;
+        rememberDialogFocus("itemDialog", options.opener || document.activeElement);
 
         form.elements.itemId.value = state.editingItemId || "";
         document.getElementById("itemDialogTitle").textContent = state.editingItemId ? "עריכת פריט" : "פריט חדש";
@@ -6890,11 +7782,12 @@
         form.dataset.preservedTags = "[]";
 
         if (itemLocation) {
+          const isSameCategory = itemLocation.category.id === categoryId;
           form.elements.title.value = itemLocation.item.title;
-          form.elements.categoryId.value = itemLocation.category.id;
-          populateSubcategoryOptions(itemLocation.category.id, itemLocation.item.subcat || "");
-          form.elements.subcat.value = itemLocation.item.subcat || "";
-          form.elements.due.value = itemLocation.item.due || "";
+          form.elements.categoryId.value = categoryId;
+          populateSubcategoryOptions(categoryId, isSameCategory ? itemLocation.item.subcat || "" : "");
+          form.elements.subcat.value = isSameCategory ? itemLocation.item.subcat || "" : "";
+          form.elements.due.value = normalizeDateValue(options.prefillDue) || itemLocation.item.due || "";
           const itemTags = itemLocation.item.tags || [];
           form.querySelectorAll('input[name="fixedTags"]').forEach((checkbox) => {
             checkbox.checked = itemTags.includes(checkbox.value);
@@ -6910,7 +7803,12 @@
 
         syncItemFormDueRequirement(form.elements.categoryId.value);
         refs.itemDialog.showModal();
-        window.setTimeout(() => form.elements.title.focus(), 30);
+        window.setTimeout(() => {
+          const focusTarget = options.focusField === "due" ? form.elements.due : form.elements.title;
+          if (focusTarget && typeof focusTarget.focus === "function") {
+            focusTarget.focus();
+          }
+        }, 30);
       }
 
       function populateCategoryOptions(selectedId) {
@@ -6952,6 +7850,15 @@
           dueHint.hidden = !required;
           dueHint.textContent = required ? 'בקטגוריה "נקבע תאריך" התאריך נשמר כיום צילום שנקבע ומופיע כך גם בלוח השנה.' : "";
         }
+      }
+
+      function promptScheduledDateBeforeMove(itemId, targetCategoryId, options = {}) {
+        openItemDialog(itemId, targetCategoryId, options.source || "board", {
+          opener: options.opener || document.activeElement,
+          overrideCategoryId: targetCategoryId,
+          focusField: "due"
+        });
+        showAlertToast('לפני שמעבירים ל"נקבע תאריך" צריך לבחור תאריך צילום / תאריך שנקבע.');
       }
 
       function getPreservedItemTags() {
@@ -7012,7 +7919,8 @@
         const categoryId = String(formData.get("categoryId") || "");
         const category = findCategory(categoryId);
         if (!title || !category) {
-          alert("יש להזין כותרת ולבחור קטגוריה.");
+          showAlertToast("יש להזין כותרת ולבחור קטגוריה.");
+          refs.itemForm.elements.title.focus();
           return;
         }
 
@@ -7024,7 +7932,7 @@
           return;
         }
         if (category.title === "נקבע תאריך" && !due) {
-          alert('בקטגוריה "נקבע תאריך" צריך לבחור תאריך צילום / תאריך שנקבע.');
+          showAlertToast('בקטגוריה "נקבע תאריך" צריך לבחור תאריך צילום / תאריך שנקבע.');
           const dueInput = refs.itemForm.elements.due;
           if (dueInput) {
             dueInput.focus();
@@ -7074,12 +7982,12 @@
         showNoticeToast("הפריט נשמר");
       }
 
-      function openCategoryDialog(categoryId) {
+      function openCategoryDialog(categoryId, opener = null) {
         closeUiMenus();
-        closeDialog("settingsDialog");
-        closeDialog("detailDialog");
-        closeDialog("dayDialog");
-        closeDialog("calendarDialog");
+        closeDialog("settingsDialog", { skipFocusRestore: true });
+        closeDialog("detailDialog", { skipFocusRestore: true });
+        closeDialog("dayDialog", { skipFocusRestore: true });
+        closeDialog("calendarDialog", { skipFocusRestore: true });
         const form = refs.categoryForm;
         form.reset();
         const category = categoryId ? findCategory(categoryId) : null;
@@ -7091,6 +7999,7 @@
         form.elements.role.value = category ? category.role : "";
         form.elements.collapsed.checked = category ? category.collapsed : false;
 
+        rememberDialogFocus("categoryDialog", opener || document.activeElement);
         refs.categoryDialog.showModal();
         window.setTimeout(() => form.elements.title.focus(), 30);
       }
@@ -7099,12 +8008,14 @@
         const formData = new FormData(refs.categoryForm);
         const title = String(formData.get("title") || "").trim();
         if (!title) {
-          alert("יש להזין שם לקטגוריה.");
+          showAlertToast("יש להזין שם לקטגוריה.");
+          refs.categoryForm.elements.title.focus();
           return;
         }
 
         if (title === VIRTUAL_SCHEDULE_TITLE) {
-          alert(`השם "${VIRTUAL_SCHEDULE_TITLE}" שמור לתצוגה וירטואלית.`);
+          showAlertToast(`השם "${VIRTUAL_SCHEDULE_TITLE}" שמור לתצוגה וירטואלית.`);
+          refs.categoryForm.elements.title.focus();
           return;
         }
 
@@ -7130,9 +8041,9 @@
           });
         }
 
-        refs.categoryDialog.close();
         state.editingCategoryId = null;
         commit();
+        closeDialog("categoryDialog");
       }
 
       function closeDialog(dialogId, options = {}) {
@@ -7145,21 +8056,25 @@
           const shouldReturnToCalendar = wasOpen && options.returnToCalendar && !refs.calendarDialog.open;
           state.calendarDayDate = "";
           if (shouldReturnToCalendar) {
-            renderCalendarDialog();
-            if (!refs.calendarDialog.open) {
-              refs.calendarDialog.showModal();
+            openCalendarDialog({ preserveState: true, skipFocusCapture: true });
+            if (!options.skipFocusRestore) {
+              restoreDialogFocus("dayDialog");
             }
+            return;
           }
         }
         if (dialogId === "itemDialog") {
           restoreDialogContext();
         }
+        if (!options.skipFocusRestore) {
+          restoreDialogFocus(dialogId);
+        }
       }
 
-      function openItemDetails(itemId) {
+      function openItemDetails(itemId, options = {}) {
         closeUiMenus();
-        closeDialog("dayDialog");
-        closeDialog("calendarDialog");
+        closeDialog("dayDialog", { skipFocusRestore: true });
+        closeDialog("calendarDialog", { skipFocusRestore: true });
         const location = itemId ? findItemLocation(itemId) : null;
         if (!location) {
           return;
@@ -7167,37 +8082,44 @@
 
         refs.detailContent.innerHTML = renderItemDetail(location);
         if (!refs.detailDialog.open) {
+          rememberDialogFocus("detailDialog", options.opener || document.activeElement);
           refs.detailDialog.showModal();
         }
       }
 
       function openCalendarDialog(options = {}) {
         const preserveState = Boolean(options.preserveState);
-        closeDialog("settingsDialog");
+        closeDialog("settingsDialog", { skipFocusRestore: true });
         if (!preserveState) {
           jumpCalendarToToday({ skipRender: true });
           state.board.ui.calendarView = "month";
           state.calendarFilter = "all";
           saveBoard();
         }
-        closeDialog("dayDialog", { preserveState });
+        closeDialog("dayDialog", { preserveState, skipFocusRestore: true });
         state.calendarDayDate = "";
         renderCalendarDialog();
         if (!refs.calendarDialog.open) {
+          if (!options.skipFocusCapture) {
+            rememberDialogFocus("calendarDialog", options.opener || document.activeElement);
+          }
           refs.calendarDialog.showModal();
         }
       }
 
-      function openCalendarDayDialog(isoDate) {
+      function openCalendarDayDialog(isoDate, options = {}) {
         if (!normalizeDateValue(isoDate)) {
           return;
         }
-        closeDialog("calendarDialog", { preserveState: true });
+        closeDialog("calendarDialog", { preserveState: true, skipFocusRestore: true });
         state.calendarDayDate = isoDate;
         state.calendarFocusDate = isoDate;
         syncCalendarFromFocusDate();
         renderCalendarDayDialog(isoDate);
         if (!refs.dayDialog.open) {
+          if (!options.skipFocusCapture) {
+            rememberDialogFocus("dayDialog", options.opener || document.activeElement);
+          }
           refs.dayDialog.showModal();
         }
       }
@@ -7440,6 +8362,8 @@
       }
 
       function clearFilters() {
+        clearSearchDebounce();
+        state.searchDraft = "";
         state.filters.search = "";
         state.filters.tag = "all";
         state.filters.upcomingRange = "all";
@@ -7505,7 +8429,7 @@
           state.board = normalizeBoard(parsed);
           commit();
         } catch (error) {
-          alert("קובץ ה־JSON לא תקין.");
+          showAlertToast("קובץ ה־JSON לא תקין.");
         } finally {
           event.target.value = "";
         }
@@ -7584,25 +8508,31 @@
 
       function moveBoardItem({ itemId, fromCategoryId, toCategoryId, beforeItemId, targetSubcat }) {
         if (!itemId || !fromCategoryId || !toCategoryId) {
-          return;
+          return false;
         }
 
         if (beforeItemId === itemId && fromCategoryId === toCategoryId) {
-          return;
+          return false;
         }
 
         const fromCategory = findCategory(fromCategoryId);
         const toCategory = findCategory(toCategoryId);
         if (!fromCategory || !toCategory) {
-          return;
+          return false;
         }
 
         const itemIndex = fromCategory.items.findIndex((item) => item.id === itemId);
         if (itemIndex < 0) {
-          return;
+          return false;
         }
 
-        const [item] = fromCategory.items.splice(itemIndex, 1);
+        const item = fromCategory.items[itemIndex];
+        if (fromCategoryId !== toCategoryId && isScheduledCategory(toCategory) && !item.due) {
+          promptScheduledDateBeforeMove(itemId, toCategory.id, { source: "board" });
+          return false;
+        }
+
+        fromCategory.items.splice(itemIndex, 1);
         item.subcat = toCategory.subcategories.some((subcat) => subcat.id === targetSubcat) ? targetSubcat : null;
         item.tags = mergeItemTagsForCategory(item.tags || [], toCategory, item.subcat, fromCategory);
 
@@ -7615,6 +8545,7 @@
         }
 
         toCategory.items.splice(insertAt, 0, item);
+        return true;
       }
 
       function reorderSchedule(itemId, beforeItemId) {
@@ -7638,14 +8569,26 @@
         state.board.scheduleManual = order;
       }
 
-      function showNoticeToast(message) {
+      function showNoticeToast(message, options = {}) {
         window.clearTimeout(showNoticeToast._timer);
-        state.noticeToast = { message };
-        render();
+        state.noticeToast = {
+          message,
+          variant: options.variant || "notice"
+        };
+        if (!options.skipRender) {
+          render();
+        }
         showNoticeToast._timer = window.setTimeout(() => {
           state.noticeToast = null;
           render();
-        }, 2200);
+        }, options.duration || (options.variant === "alert" ? 3600 : 2200));
+      }
+
+      function showAlertToast(message, options = {}) {
+        showNoticeToast(message, {
+          ...options,
+          variant: "alert"
+        });
       }
 
       function showUndoToast(boardSnapshot, message) {
@@ -7675,8 +8618,7 @@
 
       function clearFilterChip(filterKey) {
         if (filterKey === "search") {
-          state.filters.search = "";
-          state.searchOpen = false;
+          resetSearchState("", { closeSearch: true, render: false });
         } else if (filterKey === "tag") {
           state.filters.tag = "all";
         } else if (filterKey === "upcoming") {
@@ -7809,6 +8751,11 @@
           return;
         }
 
+        if (isScheduledCategory(nextCategory) && !location.item.due) {
+          promptScheduledDateBeforeMove(itemId, nextCategory.id, { source: "board" });
+          return;
+        }
+
         sourceCategory.items = sourceCategory.items.filter((item) => item.id !== itemId);
         location.item.subcat = null;
         location.item.tags = mergeItemTagsForCategory(location.item.tags || [], nextCategory, null, sourceCategory);
@@ -7819,6 +8766,10 @@
 
       function findCategory(categoryId) {
         return state.board.categories.find((category) => category.id === categoryId) || null;
+      }
+
+      function isHoldCategory(category) {
+        return Boolean(category && category.title === HOLD_TITLE);
       }
 
       function getNextStageCategory(categoryId) {
