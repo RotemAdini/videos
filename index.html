@@ -1414,6 +1414,84 @@
       min-width: 138px;
     }
 
+    .floating-item-menu {
+      z-index: 200;
+    }
+
+    .menu-sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 199;
+      border: 0;
+      background: rgba(24, 15, 43, 0.24);
+      backdrop-filter: blur(4px);
+    }
+
+    .menu-sheet {
+      position: fixed;
+      right: 0.75rem;
+      left: 0.75rem;
+      bottom: 0.75rem;
+      display: grid;
+      gap: 0.55rem;
+      padding: 0.72rem;
+      border-radius: 24px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(255, 251, 255, 0.98);
+      box-shadow: 0 26px 44px rgba(40, 24, 71, 0.18);
+    }
+
+    .menu-sheet-handle {
+      width: 52px;
+      height: 5px;
+      margin: 0 auto;
+      border-radius: 999px;
+      background: rgba(124, 58, 237, 0.18);
+    }
+
+    .menu-sheet-actions {
+      display: grid;
+      gap: 0.42rem;
+    }
+
+    .menu-sheet-btn {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border-radius: 16px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(124, 58, 237, 0.05);
+      color: var(--ink);
+      font-size: 0.94rem;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .menu-sheet-btn.danger {
+      background: rgba(244, 114, 182, 0.08);
+      color: #9f1239;
+    }
+
+    .btn,
+    .icon-btn,
+    .mini-btn,
+    .top-icon-btn,
+    .dialog-close-btn,
+    .calendar-nav-btn,
+    .task-actions .icon-btn {
+      min-height: 44px;
+    }
+
+    .icon-btn,
+    .top-icon-btn,
+    .dialog-close-btn,
+    .calendar-nav-btn {
+      min-width: 44px;
+    }
+
     .menu-item {
       min-height: 44px;
       display: flex;
@@ -1968,18 +2046,6 @@
       background: rgba(124, 58, 237, 0.08);
     }
 
-    .quick-add-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 0.45rem;
-      align-items: center;
-    }
-
-    .quick-add-input {
-      min-height: 42px;
-    }
-
-    .quick-add-btn,
     .slim-btn {
       min-height: 42px;
       width: auto;
@@ -2252,10 +2318,6 @@
     }
 
     @media (max-width: 560px) {
-      .quick-add-row {
-        grid-template-columns: 1fr;
-      }
-
       .calendar-cell {
         min-height: 66px;
       }
@@ -2451,18 +2513,6 @@
         font-size: 0.76rem;
       }
 
-      .quick-add-row {
-        gap: 0.4rem;
-      }
-    }
-
-    /* Additional mobile UX refinements */
-    .quick-add-row {
-      grid-template-columns: minmax(122px, 34%) minmax(0, 1fr) auto;
-    }
-
-    .quick-add-select {
-      min-height: 42px;
     }
 
     .filter-chip-row {
@@ -2681,21 +2731,10 @@
       box-shadow: inset 4px 0 0 rgba(239, 68, 68, 0.45);
     }
 
-    .day-video-status {
-      color: var(--accent-strong);
-      font-size: 0.74rem;
-      font-weight: 800;
-    }
-
     .day-video-title {
       font-size: 0.92rem;
       font-weight: 800;
       color: var(--ink);
-    }
-
-    .day-video-meta {
-      color: var(--muted);
-      font-size: 0.76rem;
     }
 
     .day-form {
@@ -2709,7 +2748,6 @@
     }
 
     @media (max-width: 560px) {
-      .quick-add-row,
       .day-form {
         grid-template-columns: 1fr;
       }
@@ -3056,35 +3094,97 @@
     }
 
     .dialog-close-btn {
-      width: 40px;
-      min-width: 40px;
-      min-height: 40px;
+      width: 44px;
+      min-width: 44px;
+      min-height: 44px;
       padding: 0;
       border-radius: 12px;
       font-size: 1rem;
       background: rgba(124, 58, 237, 0.08);
     }
 
+    #itemDialog {
+      width: min(720px, calc(100% - 0.8rem));
+      max-height: min(92vh, 860px);
+    }
+
+    .item-form-shell {
+      position: relative;
+      gap: 0.55rem;
+      padding: 0.72rem 0.78rem 0.78rem;
+      max-height: min(92vh, 860px);
+      overflow: auto;
+    }
+
+    .dialog-corner-btn {
+      position: absolute;
+      top: 0.55rem;
+      left: 0.55rem;
+      width: 44px;
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      z-index: 2;
+    }
+
     .compact-item-grid {
-      gap: 0.65rem;
+      gap: 0.52rem;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 0.1rem;
     }
 
     .compact-item-grid .field {
-      gap: 0.28rem;
+      gap: 0.22rem;
+    }
+
+    .item-form-shell .field label {
+      font-size: 0.76rem;
+      line-height: 1.25;
+    }
+
+    .item-form-shell .input,
+    .item-form-shell .select,
+    .item-form-shell .textarea {
+      min-height: 38px;
+      padding-block: 0.45rem;
+      border-radius: 12px;
     }
 
     .compact-input,
     .compact-textarea {
-      min-height: 40px;
+      min-height: 38px;
     }
 
     .compact-textarea {
-      min-height: 88px;
+      min-height: 72px;
     }
 
-    .dialog-actions-spacer {
-      flex: 1 1 auto;
+    .item-form-shell .tag-choice-grid {
+      gap: 0.32rem;
+    }
+
+    .item-form-shell .tag-choice {
+      min-height: 34px;
+      padding: 0.28rem 0.55rem;
+      font-size: 0.76rem;
+    }
+
+    .compact-item-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.42rem;
+      flex-wrap: nowrap;
+      padding-top: 0.12rem;
+    }
+
+    .compact-action-btn {
+      min-height: 44px;
+      padding-inline: 0.82rem;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      white-space: nowrap;
     }
 
     .danger-btn {
@@ -3339,19 +3439,521 @@
         grid-template-columns: minmax(0, 1fr) auto auto auto auto;
       }
     }
+
+    /* Calendar planning upgrade */
+    dialog.calendar-dialog {
+      width: min(100%, 1120px);
+      max-width: 1120px;
+      min-height: 100vh;
+      max-height: 100vh;
+      margin: 0 auto;
+      border-radius: 0;
+      background:
+        radial-gradient(circle at top right, rgba(167, 139, 250, 0.18), transparent 32%),
+        linear-gradient(180deg, rgba(253, 249, 255, 0.99), rgba(244, 237, 255, 0.99));
+    }
+
+    .calendar-shell {
+      display: grid;
+      gap: 0.85rem;
+      min-height: calc(100vh - 2rem);
+    }
+
+    .calendar-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      display: grid;
+      gap: 0.7rem;
+      padding-bottom: 0.1rem;
+      background: linear-gradient(180deg, rgba(252, 248, 255, 0.98), rgba(252, 248, 255, 0.88));
+      backdrop-filter: blur(10px);
+    }
+
+    .calendar-nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .calendar-nav {
+      flex: 1 1 320px;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.35rem;
+      border-radius: 22px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .calendar-nav-title {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .calendar-nav-title h2 {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.15;
+    }
+
+    .calendar-nav-title small {
+      display: block;
+      margin-top: 0.15rem;
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.35;
+    }
+
+    .calendar-nav-btn {
+      width: 48px;
+      min-width: 48px;
+      min-height: 48px;
+      border: 0;
+      border-radius: 16px;
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--accent-strong);
+      font-size: 1.35rem;
+      font-weight: 900;
+      box-shadow: inset 0 0 0 1px rgba(91, 33, 182, 0.07);
+      transition: transform 0.16s ease, background 0.16s ease;
+    }
+
+    .calendar-nav-btn:hover,
+    .calendar-nav-btn:focus-visible,
+    .calendar-chip:hover,
+    .calendar-chip:focus-visible,
+    .calendar-video-pill:hover,
+    .calendar-video-pill:focus-visible {
+      background: rgba(124, 58, 237, 0.16);
+      outline: none;
+    }
+
+    .calendar-nav-btn:active,
+    .calendar-chip:active,
+    .calendar-video-pill:active,
+    .calendar-cell:active {
+      transform: scale(0.98);
+    }
+
+    .calendar-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .calendar-today-btn {
+      min-height: 44px;
+      border-radius: 16px;
+      padding-inline: 0.95rem;
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    .calendar-toolbar {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .calendar-view-switch,
+    .calendar-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .calendar-chip {
+      min-height: 36px;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--accent-strong);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .calendar-chip.active {
+      background: rgba(124, 58, 237, 0.14);
+      border-color: rgba(124, 58, 237, 0.16);
+    }
+
+    .calendar-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.42rem;
+    }
+
+    .calendar-grid.month-mode,
+    .calendar-grid.week-mode {
+      grid-template-columns: 1fr;
+    }
+
+    .calendar-grid.year-mode {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .calendar-month,
+    .calendar-week-board {
+      border-radius: 24px;
+      border: 1px solid rgba(91, 33, 182, 0.08);
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: none;
+    }
+
+    .calendar-month {
+      padding: 0.8rem;
+    }
+
+    .calendar-week-board {
+      padding: 0.7rem;
+    }
+
+    .calendar-month-head {
+      margin-bottom: 0.5rem;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--accent-strong);
+    }
+
+    .calendar-weekdays,
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 0.38rem;
+    }
+
+    .calendar-weekdays {
+      margin-bottom: 0.42rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-align: center;
+    }
+
+    .calendar-week-list {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .calendar-cell {
+      position: relative;
+      display: grid;
+      align-content: start;
+      gap: 0.35rem;
+      min-height: 108px;
+      padding: 0.5rem;
+      border-radius: 18px;
+      border: 1px solid rgba(91, 33, 182, 0.07);
+      background: rgba(124, 58, 237, 0.035);
+      text-align: right;
+      cursor: pointer;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .calendar-cell.empty {
+      min-height: 0;
+      border: 0;
+      background: transparent;
+      cursor: default;
+    }
+
+    .calendar-cell.today {
+      border-color: rgba(124, 58, 237, 0.34);
+      background: linear-gradient(180deg, rgba(124, 58, 237, 0.14), rgba(255, 255, 255, 0.9));
+      box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.12);
+    }
+
+    .calendar-cell.week-cell {
+      min-height: 128px;
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .calendar-cell.calendar-day-busy {
+      border-color: rgba(249, 115, 22, 0.18);
+    }
+
+    .calendar-cell.calendar-day-urgent {
+      border-color: rgba(239, 68, 68, 0.2);
+      background: linear-gradient(180deg, rgba(254, 242, 242, 0.88), rgba(255, 255, 255, 0.92));
+    }
+
+    .calendar-cell.calendar-day-filming {
+      box-shadow: inset 0 0 0 1px rgba(249, 115, 22, 0.12);
+    }
+
+    .calendar-cell-top,
+    .calendar-day-heading,
+    .calendar-day-flags,
+    .calendar-summary,
+    .day-sheet-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .calendar-day-heading {
+      justify-content: flex-start;
+    }
+
+    .calendar-weekday-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .calendar-date {
+      margin: 0;
+      font-size: 0.82rem;
+      font-weight: 900;
+      color: var(--accent-strong);
+    }
+
+    .calendar-summary {
+      justify-content: flex-start;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .calendar-flag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.66rem;
+      font-weight: 800;
+    }
+
+    .calendar-flag.urgent {
+      background: rgba(239, 68, 68, 0.12);
+      color: #b91c1c;
+    }
+
+    .calendar-flag.busy {
+      background: rgba(249, 115, 22, 0.12);
+      color: #c2410c;
+    }
+
+    .calendar-events {
+      display: grid;
+      gap: 0.18rem;
+      align-content: start;
+    }
+
+    .calendar-pill {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.32rem;
+      width: 100%;
+      min-height: 24px;
+      padding: 0.18rem 0.4rem;
+      border-radius: 10px;
+      border: 0;
+      overflow: hidden;
+      text-align: right;
+      box-shadow: none;
+    }
+
+    .calendar-pill-text {
+      min-width: 0;
+      display: -webkit-box;
+      overflow: hidden;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-height: 1.18;
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+
+    .calendar-marker {
+      flex: 0 0 auto;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+      opacity: 0.7;
+    }
+
+    .calendar-video-pill {
+      cursor: grab;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .calendar-video-pill:active {
+      cursor: grabbing;
+    }
+
+    .calendar-more {
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+
+    .legend-pill.status-scheduled,
+    .calendar-pill.status-scheduled {
+      background: rgba(249, 115, 22, 0.16);
+      color: #c2410c;
+    }
+
+    .legend-pill.status-edit,
+    .calendar-pill.status-edit {
+      background: rgba(99, 102, 241, 0.16);
+      color: #4338ca;
+    }
+
+    .legend-pill.status-hold,
+    .calendar-pill.status-hold {
+      background: rgba(167, 139, 250, 0.18);
+      color: #6d28d9;
+    }
+
+    .legend-pill.status-published,
+    .calendar-pill.status-published {
+      background: rgba(148, 163, 184, 0.16);
+      color: #475569;
+    }
+
+    .legend-pill.status-ready,
+    .calendar-pill.status-ready {
+      background: rgba(34, 197, 94, 0.16);
+      color: #166534;
+    }
+
+    .legend-pill.status-filmed,
+    .calendar-pill.status-filmed {
+      background: rgba(234, 179, 8, 0.18);
+      color: #854d0e;
+    }
+
+    .legend-pill.status-early,
+    .calendar-pill.status-early {
+      background: rgba(244, 114, 182, 0.16);
+      color: #be185d;
+    }
+
+    .legend-pill.holiday,
+    .calendar-pill.holiday,
+    .calendar-pill.note {
+      background: rgba(124, 58, 237, 0.12);
+      color: var(--accent-strong);
+    }
+
+    .calendar-pill.filming-day,
+    .legend-pill.filming-day {
+      background: rgba(249, 115, 22, 0.12);
+      color: #c2410c;
+    }
+
+    .calendar-pill.filming-day .calendar-marker {
+      background: #f97316;
+    }
+
+    .calendar-pill.holiday .calendar-marker,
+    .calendar-pill.note .calendar-marker {
+      background: #7c3aed;
+    }
+
+    .calendar-drop-target {
+      border-color: rgba(124, 58, 237, 0.34) !important;
+      background: rgba(124, 58, 237, 0.09) !important;
+      box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.12);
+    }
+
+    dialog.day-dialog {
+      width: min(720px, calc(100% - 1rem));
+      max-height: min(88vh, 860px);
+      border-radius: 28px;
+      background: rgba(252, 249, 255, 0.99);
+    }
+
+    .day-shell {
+      position: relative;
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .day-sheet-handle {
+      width: 54px;
+      height: 5px;
+      margin: 0 auto;
+      border-radius: 999px;
+      background: rgba(124, 58, 237, 0.18);
+    }
+
+    .day-sheet-head {
+      align-items: start;
+      padding-left: 3rem;
+    }
+
+    .day-sheet-toolbar {
+      justify-content: flex-start;
+    }
+
+    @media (max-width: 860px) {
+      .calendar-grid.year-mode {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .calendar-nav-row {
+        align-items: stretch;
+      }
+
+      .calendar-nav,
+      .calendar-top-actions {
+        width: 100%;
+      }
+
+      .calendar-top-actions {
+        justify-content: space-between;
+      }
+
+      .calendar-cell {
+        min-height: 90px;
+        padding: 0.45rem;
+      }
+
+      .calendar-cell.week-cell {
+        min-height: 116px;
+      }
+
+      .calendar-days {
+        gap: 0.3rem;
+      }
+
+      .calendar-pill-text {
+        font-size: 0.64rem;
+      }
+
+      dialog.day-dialog {
+        width: 100%;
+        max-width: 100%;
+        max-height: 88vh;
+        margin: auto auto 0 auto;
+        border-radius: 24px 24px 0 0;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="app"></div>
 
   <dialog id="itemDialog">
-    <form id="itemForm" class="dialog-shell">
-      <div class="panel-head dialog-head compact-dialog-head">
-        <div>
-          <h2 id="itemDialogTitle">פריט וידאו</h2>
-        </div>
-        <button type="button" class="icon-btn dialog-close-btn" data-action="close-dialog" data-dialog-id="itemDialog" aria-label="סגירת עריכת הפריט">✕</button>
-      </div>
+    <form id="itemForm" class="dialog-shell item-form-shell">
+      <h2 id="itemDialogTitle" class="visually-hidden">פריט וידאו</h2>
+      <button type="button" class="icon-btn dialog-close-btn dialog-corner-btn" data-action="close-dialog" data-dialog-id="itemDialog" aria-label="סגירת עריכת הפריט">✕</button>
 
       <input type="hidden" name="itemId">
 
@@ -3412,23 +4014,22 @@
         </div>
       </div>
 
-      <div class="dialog-actions">
-        <button type="button" class="btn ghost danger-btn" id="itemDeleteBtn" data-action="delete-current-item" hidden>מחק</button>
-        <span class="dialog-actions-spacer"></span>
-        <button type="submit" class="btn primary">שמירה</button>
-        <button type="button" class="btn ghost" data-action="close-dialog" data-dialog-id="itemDialog">ביטול</button>
+      <div class="dialog-actions compact-item-actions">
+        <button type="button" class="btn ghost danger-btn compact-action-btn" id="itemDeleteBtn" data-action="delete-current-item" hidden>מחק</button>
+        <button type="submit" class="btn primary compact-action-btn">שמירה</button>
+        <button type="button" class="btn ghost compact-action-btn" data-action="close-dialog" data-dialog-id="itemDialog">ביטול</button>
       </div>
     </form>
   </dialog>
 
   <dialog id="categoryDialog">
     <form id="categoryForm" class="dialog-shell">
-      <div class="panel-head">
+      <div class="panel-head dialog-head compact-dialog-head">
         <div>
           <h2 id="categoryDialogTitle">קטגוריה</h2>
           <p class="muted">שם, תפקיד מיוחד, ומצב פתוח או סגור.</p>
         </div>
-        <button type="button" class="btn ghost" data-action="close-dialog" data-dialog-id="categoryDialog">סגירה</button>
+        <button type="button" class="icon-btn dialog-close-btn" data-action="close-dialog" data-dialog-id="categoryDialog" aria-label="סגירת עריכת הקטגוריה">✕</button>
       </div>
 
       <input type="hidden" name="categoryId">
@@ -3505,6 +4106,13 @@
       ];
       const MONTH_NAMES = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
       const WEEKDAY_SHORT = ["א", "ב", "ג", "ד", "ה", "ו", "ש"];
+      const CALENDAR_FILTER_OPTIONS = [
+        { value: "all", label: "הכל" },
+        { value: "ready", label: "מוכן" },
+        { value: "urgent", label: "דחוף" },
+        { value: "filming", label: "ימי צילום" },
+        { value: "important", label: "חשוב" }
+      ];
       const DAY_FORMATTER = new Intl.DateTimeFormat("he-IL", { weekday: "long" });
       const DATE_FORMATTER = new Intl.DateTimeFormat("he-IL", {
         year: "numeric",
@@ -3548,9 +4156,13 @@
         categoryManagerOpen: false,
         focusCategoryId: null,
         openWorkOnly: false,
+        floatingMenu: null,
         calendarYear: initialDate.getFullYear(),
         calendarMonth: initialDate.getMonth(),
+        calendarFocusDate: `${initialDate.getFullYear()}-${String(initialDate.getMonth() + 1).padStart(2, "0")}-${String(initialDate.getDate()).padStart(2, "0")}`,
         calendarDayDate: "",
+        calendarFilter: "all",
+        touchGesture: null,
         dialogReturn: null,
         undoToast: null,
         noticeToast: null,
@@ -3570,12 +4182,15 @@
         document.addEventListener("dragover", handleDragOver);
         document.addEventListener("drop", handleDrop);
         document.addEventListener("dragend", clearDragState);
+        document.addEventListener("touchstart", handleTouchStart, { passive: true });
+        document.addEventListener("touchend", handleTouchEnd, { passive: true });
         refs.importInput.addEventListener("change", handleImportFile);
       }
 
       function closeUiMenus() {
         state.openItemMenuKey = null;
         state.topMenuOpen = false;
+        state.floatingMenu = null;
       }
 
       function loadBoard() {
@@ -3645,7 +4260,7 @@
             tasksCollapsed: Boolean(board.ui && board.ui.tasksCollapsed),
             tagsCollapsed: board.ui && typeof board.ui.tagsCollapsed === "boolean" ? board.ui.tagsCollapsed : true,
             hideCompletedTasks: Boolean(board.ui && board.ui.hideCompletedTasks),
-            calendarView: board.ui && board.ui.calendarView === "year" ? "year" : "month"
+            calendarView: board.ui && ["month", "week", "year"].includes(board.ui.calendarView) ? board.ui.calendarView : "month"
           }
         };
 
@@ -4026,10 +4641,12 @@
                   <strong>${stats.openItems}</strong>
                   <span>עדיין בעבודה</span>
                 </div>
-                <div class="stat-card">
-                  <strong>${stats.tasksDone}/${stats.tasksTotal}</strong>
-                  <span>משימות שהושלמו</span>
-                </div>
+                ${tasksPanelVisible ? `
+                  <div class="stat-card">
+                    <strong>${stats.tasksDone}/${stats.tasksTotal}</strong>
+                    <span>משימות שהושלמו</span>
+                  </div>
+                ` : ""}
               </div>
 
               <div class="filters-row">
@@ -4108,6 +4725,7 @@
 
             <button class="fab" type="button" data-action="open-item-dialog" aria-label="הוספת סרטון">+</button>
             ${renderSnackbar()}
+            ${renderFloatingMenu()}
           </div>
         `;
 
@@ -4631,21 +5249,32 @@
         const categoryId = options.categoryId || "";
         const source = options.source || "board";
         const menuKey = String(options.menuKey || item.id);
-        const menuOpen = state.openItemMenuKey === menuKey;
-        const nextStage = categoryId ? getNextStageCategory(categoryId) : null;
+        const menuOpen = state.openItemMenuKey === menuKey && state.floatingMenu && state.floatingMenu.key === menuKey;
 
         return `
           <div class="row-actions" data-action="noop">
             <div class="row-menu">
-              <button class="mini-btn" type="button" data-action="toggle-item-menu" data-menu-key="${escapeAttr(menuKey)}" aria-expanded="${menuOpen ? "true" : "false"}" aria-label="פעולות נוספות עבור ${escapeAttr(item.title)}">⋯</button>
-              ${menuOpen ? `
-                <div class="menu-popover row-popover">
-                  ${allowEdit ? `<button class="menu-item" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="${escapeAttr(source)}">עריכה</button>` : ""}
-                  ${allowDetails ? `<button class="menu-item" type="button" data-action="open-item-details" data-item-id="${escapeAttr(item.id)}">פרטים</button>` : ""}
-                  ${nextStage ? `<button class="menu-item" type="button" data-action="move-to-next-stage" data-item-id="${escapeAttr(item.id)}" data-category-id="${escapeAttr(categoryId)}">העבר ל־${escapeHtml(nextStage.title)}</button>` : ""}
-                  ${allowDelete ? `<button class="menu-item danger" type="button" data-action="delete-item" data-item-id="${escapeAttr(item.id)}">מחק</button>` : ""}
-                </div>
-              ` : ""}
+              <button class="mini-btn" type="button" data-action="toggle-item-menu" data-menu-type="item" data-menu-key="${escapeAttr(menuKey)}" data-item-id="${escapeAttr(item.id)}" data-category-id="${escapeAttr(categoryId)}" data-source="${escapeAttr(source)}" data-allow-edit="${allowEdit ? "1" : "0"}" data-allow-details="${allowDetails ? "1" : "0"}" data-allow-delete="${allowDelete ? "1" : "0"}" aria-expanded="${menuOpen ? "true" : "false"}" aria-label="פעולות נוספות עבור ${escapeAttr(item.title)}">⋯</button>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderFloatingMenu() {
+        const menu = state.floatingMenu;
+        if (!menu || menu.type !== "item") {
+          return "";
+        }
+
+        const nextStage = menu.categoryId ? getNextStageCategory(menu.categoryId) : null;
+        return `
+          <button class="menu-sheet-backdrop" type="button" data-action="close-item-menu" aria-label="סגירת תפריט פעולות"></button>
+          <div class="menu-sheet floating-item-menu" data-action="noop" role="dialog" aria-modal="true" aria-label="פעולות על פריט">
+            <div class="menu-sheet-handle" aria-hidden="true"></div>
+            <div class="menu-sheet-actions">
+              ${menu.allowEdit ? `<button class="menu-sheet-btn" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(menu.itemId)}" data-source="${escapeAttr(menu.source)}">עריכה</button>` : ""}
+              ${nextStage ? `<button class="menu-sheet-btn" type="button" data-action="move-to-next-stage" data-item-id="${escapeAttr(menu.itemId)}" data-category-id="${escapeAttr(menu.categoryId)}">העבר ל־${escapeHtml(nextStage.title)}</button>` : ""}
+              ${menu.allowDelete ? `<button class="menu-sheet-btn danger" type="button" data-action="delete-item" data-item-id="${escapeAttr(menu.itemId)}">מחק</button>` : ""}
             </div>
           </div>
         `;
@@ -4907,14 +5536,11 @@
 
         refs.dayContent.innerHTML = `
           <div class="day-shell">
+            <button type="button" class="icon-btn dialog-close-btn dialog-corner-btn" data-action="close-dialog" data-dialog-id="dayDialog" aria-label="סגירת פרטי היום">✕</button>
             <div class="panel-head">
               <div>
                 <h2>${escapeHtml(formatDate(isoDate))}</h2>
                 <small>${escapeHtml(getWeekday(isoDate))}</small>
-              </div>
-              <div class="task-actions">
-                <button type="button" class="btn ghost slim-btn" data-action="return-calendar">ליומן</button>
-                <button type="button" class="btn ghost slim-btn" data-action="close-dialog" data-dialog-id="dayDialog">סגירה</button>
               </div>
             </div>
 
@@ -4956,9 +5582,7 @@
         const status = getCalendarStatusInfo(entry.category);
         return `
           <button class="day-video-item ${escapeAttr(status.className)}" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(entry.item.id)}" data-source="calendar" aria-label="פתיחת עריכת ${escapeAttr(entry.item.title)}">
-            <span class="day-video-status">${escapeHtml(status.label)}</span>
             <span class="day-video-title">${escapeHtml(entry.item.title)}</span>
-            <span class="day-video-meta">${escapeHtml(entry.category.title)}</span>
           </button>
         `;
       }
@@ -5009,6 +5633,470 @@
           return { className: "status-edit", label: "בעריכה", shortLabel: "עריכה" };
         }
         return { className: "status-early", label: "טרם צולם", shortLabel: "לפני" };
+      }
+
+      function getCalendarStatusInfo(category) {
+        if (isPublishedCategory(category)) {
+          return { className: "status-published", label: "פורסם", shortLabel: "פורסם" };
+        }
+        if (isReadyCategory(category)) {
+          return { className: "status-ready", label: "מוכן לעלייה", shortLabel: "מוכן" };
+        }
+        if (category.title === HOLD_TITLE) {
+          return { className: "status-hold", label: "מתלבטת", shortLabel: "מתלבטת" };
+        }
+        if (category.title === "נקבע תאריך") {
+          return { className: "status-scheduled", label: "נקבע תאריך", shortLabel: "תאריך" };
+        }
+        if (category.title === "צילמנו") {
+          return { className: "status-filmed", label: "צולם", shortLabel: "צולם" };
+        }
+        if (category.title === DUBBING_TITLE || category.title === "עריכה בסיסית") {
+          return { className: "status-edit", label: "בעריכה", shortLabel: "עריכה" };
+        }
+        return { className: "status-early", label: "טרם צולם", shortLabel: "מוקדם" };
+      }
+
+      function renderCalendarDialog() {
+        const calendarView = getCalendarView();
+        syncCalendarFromFocusDate();
+        const headerTitle = getCalendarHeaderTitle(calendarView);
+        const headerHint = calendarView === "week"
+          ? "תכנון שבועי נוח לנייד עם תאים גדולים יותר"
+          : calendarView === "year"
+            ? "מבט שנתי מהיר על כל החודשים"
+            : "תכנון חודשי עם עומס יומי, דחופים וימי צילום";
+
+        refs.calendarContent.innerHTML = `
+          <div class="calendar-shell" data-calendar-shell="true">
+            <div class="calendar-topbar">
+              <div class="calendar-nav-row">
+                <div class="calendar-nav">
+                  <button class="calendar-nav-btn" type="button" data-action="calendar-prev-month" aria-label="${escapeAttr(getCalendarPrevLabel(calendarView))}">›</button>
+                  <div class="calendar-nav-title">
+                    <h2>${escapeHtml(headerTitle)}</h2>
+                    <small>${escapeHtml(headerHint)}</small>
+                  </div>
+                  <button class="calendar-nav-btn" type="button" data-action="calendar-next-month" aria-label="${escapeAttr(getCalendarNextLabel(calendarView))}">‹</button>
+                </div>
+
+                <div class="calendar-top-actions">
+                  <button class="btn ghost slim-btn calendar-today-btn" type="button" data-action="calendar-today" aria-label="חזרה להיום" title="חזרה להיום">היום</button>
+                  <button class="icon-btn dialog-close-btn" type="button" data-action="close-dialog" data-dialog-id="calendarDialog" aria-label="סגירת לוח השנה">✕</button>
+                </div>
+              </div>
+
+              <div class="calendar-toolbar">
+                <div class="calendar-view-switch" role="tablist" aria-label="תצוגת לוח שנה">
+                  ${["month", "week", "year"].map((view) => `
+                    <button class="calendar-chip ${calendarView === view ? "active" : ""}" type="button" role="tab" aria-selected="${calendarView === view ? "true" : "false"}" data-action="set-calendar-view" data-view="${escapeAttr(view)}">${escapeHtml(getCalendarViewLabel(view))}</button>
+                  `).join("")}
+                </div>
+
+                <div class="calendar-filter-bar" role="list" aria-label="סינון בלוח השנה">
+                  ${CALENDAR_FILTER_OPTIONS.map((option) => `
+                    <button class="calendar-chip ${state.calendarFilter === option.value ? "active" : ""}" type="button" role="listitem" data-action="set-calendar-filter" data-filter="${escapeAttr(option.value)}">${escapeHtml(option.label)}</button>
+                  `).join("")}
+                </div>
+              </div>
+            </div>
+
+            <div class="calendar-legend" role="list" aria-label="מקרא צבעים בלוח השנה">
+              <span class="legend-pill status-early" role="listitem">ורוד · התחלה / לא צולם</span>
+              <span class="legend-pill status-scheduled" role="listitem">כתום · נקבע תאריך</span>
+              <span class="legend-pill status-filmed" role="listitem">צהוב · צולם</span>
+              <span class="legend-pill status-edit" role="listitem">סגול · דיבוב / עריכה</span>
+              <span class="legend-pill status-ready" role="listitem">ירוק · מוכן לעלייה</span>
+              <span class="legend-pill status-published" role="listitem">אפור · עלה</span>
+              <span class="legend-pill status-hold" role="listitem">לילך · מתלבטת</span>
+              <span class="legend-pill holiday" role="listitem">חשוב / חג</span>
+              <span class="legend-pill filming-day" role="listitem">יום צילום</span>
+            </div>
+
+            <div class="calendar-grid ${escapeAttr(`${calendarView}-mode`)}">
+              ${calendarView === "year"
+                ? getCalendarYearRangeMonths(state.calendarFocusDate).map((entry) => renderCalendarMonth(entry.year, entry.monthIndex, entry.monthName, { compact: true })).join("")
+                : calendarView === "week"
+                  ? renderCalendarWeek(state.calendarFocusDate)
+                  : renderCalendarMonth(state.calendarYear, state.calendarMonth, MONTH_NAMES[state.calendarMonth] || MONTH_NAMES[0], { compact: false })}
+            </div>
+          </div>
+        `;
+      }
+
+      function getCalendarView() {
+        return state.board.ui && ["month", "week", "year"].includes(state.board.ui.calendarView) ? state.board.ui.calendarView : "month";
+      }
+
+      function getCalendarViewLabel(view) {
+        if (view === "week") {
+          return "שבוע";
+        }
+        if (view === "year") {
+          return "שנה";
+        }
+        return "חודש";
+      }
+
+      function getCalendarHeaderTitle(view) {
+        if (view === "year") {
+          const months = getCalendarYearRangeMonths(state.calendarFocusDate);
+          const first = months[0];
+          const last = months[months.length - 1];
+          return `${first.monthName} ${first.year} — ${last.monthName} ${last.year}`;
+        }
+        if (view === "week") {
+          const start = getWeekStartIso(state.calendarFocusDate || getTodayIso());
+          return `${formatDate(start)} — ${formatDate(addDaysIso(start, 6))}`;
+        }
+        return `${MONTH_NAMES[state.calendarMonth] || MONTH_NAMES[0]} ${state.calendarYear}`;
+      }
+
+      function getCalendarPrevLabel(view) {
+        if (view === "year") {
+          return "שנה קודמת";
+        }
+        if (view === "week") {
+          return "שבוע קודם";
+        }
+        return "חודש קודם";
+      }
+
+      function getCalendarNextLabel(view) {
+        if (view === "year") {
+          return "טווח חודשים הבא";
+        }
+        if (view === "week") {
+          return "שבוע הבא";
+        }
+        return "חודש הבא";
+      }
+
+      function getCalendarYearRangeMonths(anchorIsoDate) {
+        const anchor = normalizeDateValue(anchorIsoDate) || getTodayIso();
+        const start = addMonthsIso(anchor, -1);
+        const months = [];
+
+        for (let index = 0; index < 13; index += 1) {
+          const current = parseDate(addMonthsIso(start, index));
+          months.push({
+            year: current.getFullYear(),
+            monthIndex: current.getMonth(),
+            monthName: MONTH_NAMES[current.getMonth()] || ""
+          });
+        }
+
+        return months;
+      }
+
+      function renderCalendarMonth(year, monthIndex, monthName, options = {}) {
+        const firstDay = new Date(year, monthIndex, 1);
+        const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+        const leadingEmpty = firstDay.getDay();
+        const compact = Boolean(options.compact);
+        const cells = [];
+
+        for (let i = 0; i < leadingEmpty; i += 1) {
+          cells.push('<div class="calendar-cell empty" aria-hidden="true"></div>');
+        }
+
+        for (let day = 1; day <= daysInMonth; day += 1) {
+          const iso = `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          cells.push(renderCalendarDayCell(iso, day, { compact }));
+        }
+
+        return `
+          <section class="calendar-month ${compact ? "compact" : ""}">
+            ${compact ? `<div class="calendar-month-head">${escapeHtml(monthName)}</div>` : ""}
+            <div class="calendar-weekdays">
+              ${WEEKDAY_SHORT.map((day) => `<span>${escapeHtml(day)}</span>`).join("")}
+            </div>
+            <div class="calendar-days">
+              ${cells.join("")}
+            </div>
+          </section>
+        `;
+      }
+
+      function renderCalendarWeek(anchorIsoDate) {
+        const weekStart = getWeekStartIso(anchorIsoDate || getTodayIso());
+        const cells = [];
+
+        for (let index = 0; index < 7; index += 1) {
+          const iso = addDaysIso(weekStart, index);
+          const date = parseDate(iso);
+          cells.push(renderCalendarDayCell(iso, date ? date.getDate() : index + 1, { week: true }));
+        }
+
+        return `
+          <section class="calendar-week-board">
+            <div class="calendar-week-list">
+              ${cells.join("")}
+            </div>
+          </section>
+        `;
+      }
+
+      function renderCalendarDayCell(isoDate, dayNumber, options = {}) {
+        const compact = Boolean(options.compact);
+        const week = Boolean(options.week);
+        const rawEntries = getCalendarRawVideoEntriesForDate(isoDate);
+        const entries = filterCalendarVideoEntries(rawEntries);
+        const importantDates = getCalendarImportantDatesForDate(isoDate);
+        const isToday = isoDate === getTodayIso();
+        const previewLimit = week ? 4 : compact ? 2 : 3;
+        const previewEntries = [...importantDates, ...entries].slice(0, previewLimit);
+        const hiddenCount = Math.max(0, importantDates.length + entries.length - previewEntries.length);
+        const meta = getCalendarDayMeta(rawEntries, importantDates);
+        const classes = [
+          isToday ? "today" : "",
+          week ? "week-cell" : "",
+          meta.urgentCount ? "calendar-day-urgent" : "",
+          meta.busy ? "calendar-day-busy" : "",
+          meta.hasFilmingDay ? "calendar-day-filming" : ""
+        ].filter(Boolean).join(" ");
+
+        return `
+          <div class="calendar-cell ${classes}" role="button" tabindex="0" data-action="open-calendar-day" data-date="${escapeAttr(isoDate)}" data-drop-type="calendar-day" aria-label="פתיחת פרטי היום ${escapeAttr(formatDate(isoDate) || isoDate)}">
+            <div class="calendar-cell-top">
+              <div class="calendar-day-heading">
+                ${week ? `<span class="calendar-weekday-label">${escapeHtml(getWeekdayShortLabel(isoDate))}</span>` : ""}
+                <span class="calendar-date">${dayNumber}</span>
+              </div>
+              <div class="calendar-day-flags">
+                ${meta.urgentCount ? `<span class="calendar-flag urgent">${meta.urgentCount} דחוף</span>` : ""}
+                ${meta.busy ? '<span class="calendar-flag busy">עמוס</span>' : ""}
+              </div>
+            </div>
+
+            ${renderCalendarDaySummary(meta, entries, importantDates, compact)}
+
+            <div class="calendar-events">
+              ${previewEntries.map((entry) => renderCalendarPreviewPill(entry)).join("")}
+              ${hiddenCount ? `<div class="calendar-more">+ ${hiddenCount} עוד</div>` : ""}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderCalendarDaySummary(meta, entries, importantDates, compact) {
+        if (compact) {
+          return "";
+        }
+
+        const parts = [];
+        const visibleUrgentCount = entries.filter((entry) => isCalendarUrgentEntry(entry)).length;
+        if (entries.length) {
+          parts.push(`${entries.length} סרטונים`);
+        }
+        if (visibleUrgentCount) {
+          parts.push(`${visibleUrgentCount} דחוף`);
+        } else if (!entries.length && importantDates.length) {
+          parts.push(`${importantDates.length} מועדים`);
+        }
+
+        if (!parts.length) {
+          return "";
+        }
+
+        return `<div class="calendar-summary">${parts.map((part) => `<span>${escapeHtml(part)}</span>`).join("")}</div>`;
+      }
+
+      function getCalendarRawVideoEntriesForDate(isoDate) {
+        const entries = [];
+        state.board.categories.forEach((category) => {
+          category.items.forEach((item) => {
+            if (item.due === isoDate && matchesFilters(item, category)) {
+              entries.push({ category, item });
+            }
+          });
+        });
+
+        return entries.sort((a, b) => compareText(a.item.title, b.item.title));
+      }
+
+      function filterCalendarVideoEntries(entries) {
+        if (state.calendarFilter === "ready") {
+          return entries.filter((entry) => isReadyCategory(entry.category));
+        }
+        if (state.calendarFilter === "urgent") {
+          return entries.filter((entry) => isCalendarUrgentEntry(entry));
+        }
+        if (state.calendarFilter === "filming" || state.calendarFilter === "important") {
+          return [];
+        }
+        return entries;
+      }
+
+      function getCalendarEntriesForDate(isoDate) {
+        return filterCalendarVideoEntries(getCalendarRawVideoEntriesForDate(isoDate));
+      }
+
+      function getCalendarImportantDatesForDate(isoDate) {
+        const staticDates = HOLIDAYS.filter((entry) => entry.date === isoDate).map((entry) => ({
+          type: "holiday",
+          title: entry.title,
+          date: entry.date
+        }));
+        const customDates = (state.board.calendarDates || []).filter((entry) => entry.date === isoDate).map((entry) => ({
+          type: entry.type || "note",
+          id: entry.id,
+          title: entry.title,
+          date: entry.date
+        }));
+        const entries = [...staticDates, ...customDates];
+
+        if (state.calendarFilter === "filming") {
+          return entries.filter((entry) => entry.type === "filming-day");
+        }
+        if (state.calendarFilter === "important") {
+          return entries.filter((entry) => entry.type !== "filming-day");
+        }
+        if (state.calendarFilter === "ready" || state.calendarFilter === "urgent") {
+          return [];
+        }
+
+        return entries;
+      }
+
+      function getCalendarDayMeta(rawEntries, importantDates) {
+        return {
+          videoCount: rawEntries.length,
+          urgentCount: rawEntries.filter((entry) => isCalendarUrgentEntry(entry)).length,
+          busy: rawEntries.length >= 4,
+          hasFilmingDay: importantDates.some((entry) => entry.type === "filming-day")
+        };
+      }
+
+      function renderCalendarPreviewPill(entry) {
+        if (entry.type === "holiday" || entry.type === "note" || entry.type === "filming-day") {
+          const calendarType = getCalendarDateTypeMeta(entry.type);
+          return `
+            <div class="calendar-pill ${escapeAttr(calendarType.className)}" title="${escapeAttr(entry.title)}">
+              <span class="calendar-marker" aria-hidden="true"></span>
+              <span class="calendar-pill-text">${escapeHtml(entry.title)}</span>
+            </div>
+          `;
+        }
+
+        const status = getCalendarStatusInfo(entry.category);
+        return `
+          <button class="calendar-pill calendar-video-pill ${escapeAttr(status.className)}" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(entry.item.id)}" data-source="calendar" draggable="true" data-drag-type="calendar-video" aria-label="${escapeAttr(`${entry.item.title} · ${status.label}`)}" title="${escapeAttr(entry.item.title)}">
+            <span class="calendar-pill-text">${escapeHtml(entry.item.title)}</span>
+          </button>
+        `;
+      }
+
+      function renderCalendarDayDialog(isoDate) {
+        const entries = getCalendarEntriesForDate(isoDate);
+        const importantDates = getCalendarImportantDatesForDate(isoDate);
+
+        refs.dayContent.innerHTML = `
+          <div class="day-shell">
+            <button type="button" class="icon-btn dialog-close-btn dialog-corner-btn" data-action="close-dialog" data-dialog-id="dayDialog" aria-label="סגירת פרטי היום">✕</button>
+            <div class="day-sheet-handle" aria-hidden="true"></div>
+
+            <div class="panel-head day-sheet-head">
+              <div>
+                <h2>${escapeHtml(formatDate(isoDate))}</h2>
+                <small>${escapeHtml(getWeekday(isoDate))}</small>
+              </div>
+            </div>
+
+            <div class="day-sheet-toolbar">
+              <button type="button" class="btn primary slim-btn" data-action="quick-add-calendar-item" data-date="${escapeAttr(isoDate)}">+ סרטון לתאריך הזה</button>
+            </div>
+
+            ${importantDates.length ? `
+              <section class="detail-card">
+                <h3>תאריכים חשובים</h3>
+                <div class="day-date-list">
+                  ${importantDates.map((entry) => renderImportantDateRow(entry)).join("")}
+                </div>
+              </section>
+            ` : ""}
+
+            <section class="detail-card">
+              <h3>סרטונים ביום הזה</h3>
+              <div class="day-video-list">
+                ${entries.length ? entries.map((entry) => renderCalendarDayItem(entry)).join("") : renderEmptyState("אין סרטונים מתוזמנים ליום הזה", "", `<button class="btn ghost slim-btn empty-cta" type="button" data-action="quick-add-calendar-item" data-date="${escapeAttr(isoDate)}">+ הוספת סרטון</button>`)}
+              </div>
+            </section>
+
+            <section class="detail-card">
+              <h3>הוספת אירוע ליום הזה</h3>
+              <form class="inline-form day-form" id="calendarDateForm">
+                <input type="hidden" name="date" value="${escapeAttr(isoDate)}">
+                <input class="input" name="title" maxlength="120" placeholder="למשל: צילום מתכון פסטה">
+                <select class="select" name="type" aria-label="סוג האירוע">
+                  <option value="note">אירוע / הערה</option>
+                  <option value="filming-day">סימון כיום צילום</option>
+                </select>
+                <button class="btn primary" type="submit">הוספה</button>
+              </form>
+            </section>
+          </div>
+        `;
+      }
+
+      function isCalendarUrgentEntry(entry) {
+        return Boolean(entry && entry.item && entry.item.due && !isReadyCategory(entry.category) && !isPublishedCategory(entry.category) && getDaysUntil(entry.item.due) <= 7);
+      }
+
+      function syncCalendarFromFocusDate() {
+        const focusDate = parseDate(state.calendarFocusDate || getTodayIso());
+        if (!focusDate) {
+          return;
+        }
+        state.calendarYear = focusDate.getFullYear();
+        state.calendarMonth = focusDate.getMonth();
+      }
+
+      function getWeekStartIso(value) {
+        const date = parseDate(value) || parseDate(getTodayIso());
+        date.setDate(date.getDate() - date.getDay());
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+      }
+
+      function addDaysIso(value, amount) {
+        const date = parseDate(value) || parseDate(getTodayIso());
+        date.setDate(date.getDate() + amount);
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+      }
+
+      function addMonthsIso(value, amount) {
+        const date = parseDate(value) || parseDate(getTodayIso());
+        const currentDay = date.getDate();
+        date.setDate(1);
+        date.setMonth(date.getMonth() + amount);
+        const maxDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+        date.setDate(Math.min(currentDay, maxDay));
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+      }
+
+      function getWeekdayShortLabel(value) {
+        const date = parseDate(value);
+        return date ? WEEKDAY_SHORT[date.getDay()] : "";
+      }
+
+      function updateCalendarItemDate(itemId, nextDate) {
+        const location = findItemLocation(itemId);
+        const normalizedDate = normalizeDateValue(nextDate);
+        if (!location || !normalizedDate) {
+          return;
+        }
+        if (location.item.due === normalizedDate) {
+          return;
+        }
+        location.item.due = normalizedDate;
+        state.calendarFocusDate = normalizedDate;
+        commit();
+        showNoticeToast(`התאריך של "${location.item.title}" עודכן`);
+      }
+
+      function openCalendarQuickAdd(date) {
+        const defaultCategory = state.board.categories.find((category) => category.title === "רעיונות") || state.board.categories[0] || null;
+        openItemDialog(null, defaultCategory ? defaultCategory.id : null, "calendar", { prefillDue: date });
       }
 
       function renderTasksPanel() {
@@ -5457,8 +6545,9 @@
           case "open-calendar":
             openCalendarDialog();
             break;
-          case "return-calendar":
-            openCalendarDialog({ preserveState: true });
+          case "close-item-menu":
+            closeUiMenus();
+            render();
             break;
           case "open-calendar-day":
             openCalendarDayDialog(actionTarget.dataset.date || "");
@@ -5475,10 +6564,22 @@
           case "calendar-today":
             jumpCalendarToToday();
             break;
-          case "toggle-calendar-view":
-            state.board.ui.calendarView = state.board.ui.calendarView === "year" ? "month" : "year";
+          case "set-calendar-view":
+            state.board.ui.calendarView = ["month", "week", "year"].includes(actionTarget.dataset.view) ? actionTarget.dataset.view : "month";
             saveBoard();
             renderCalendarDialog();
+            break;
+          case "set-calendar-filter":
+            state.calendarFilter = CALENDAR_FILTER_OPTIONS.some((option) => option.value === actionTarget.dataset.filter) ? actionTarget.dataset.filter : "all";
+            renderCalendarDialog();
+            break;
+          case "toggle-calendar-view":
+            state.board.ui.calendarView = getCalendarView() === "month" ? "week" : getCalendarView() === "week" ? "year" : "month";
+            saveBoard();
+            renderCalendarDialog();
+            break;
+          case "quick-add-calendar-item":
+            openCalendarQuickAdd(actionTarget.dataset.date || state.calendarDayDate || state.calendarFocusDate || getTodayIso());
             break;
           case "open-item-dialog":
             openItemDialog(actionTarget.dataset.itemId || null, actionTarget.dataset.categoryId || null, actionTarget.dataset.source || "board");
@@ -5488,7 +6589,35 @@
             break;
           case "toggle-item-menu":
             state.topMenuOpen = false;
-            state.openItemMenuKey = state.openItemMenuKey === actionTarget.dataset.menuKey ? null : actionTarget.dataset.menuKey;
+            if (actionTarget.dataset.menuType === "item") {
+              const menuKey = actionTarget.dataset.menuKey || "";
+              if (state.openItemMenuKey === menuKey && state.floatingMenu && state.floatingMenu.key === menuKey) {
+                state.openItemMenuKey = null;
+                state.floatingMenu = null;
+              } else {
+                const rect = actionTarget.getBoundingClientRect();
+                state.openItemMenuKey = menuKey;
+                state.floatingMenu = {
+                  type: "item",
+                  key: menuKey,
+                  itemId: actionTarget.dataset.itemId || "",
+                  categoryId: actionTarget.dataset.categoryId || "",
+                  source: actionTarget.dataset.source || "board",
+                  allowEdit: actionTarget.dataset.allowEdit === "1",
+                  allowDetails: actionTarget.dataset.allowDetails === "1",
+                  allowDelete: actionTarget.dataset.allowDelete === "1",
+                  rect: {
+                    top: rect.top,
+                    right: rect.right,
+                    bottom: rect.bottom,
+                    left: rect.left
+                  }
+                };
+              }
+            } else {
+              state.floatingMenu = null;
+              state.openItemMenuKey = state.openItemMenuKey === actionTarget.dataset.menuKey ? null : actionTarget.dataset.menuKey;
+            }
             render();
             break;
           case "toggle-top-menu":
@@ -5532,7 +6661,7 @@
             clearFilterChip(actionTarget.dataset.filterKey || "");
             break;
           case "close-dialog":
-            closeDialog(actionTarget.dataset.dialogId);
+            closeDialog(actionTarget.dataset.dialogId, actionTarget.dataset.dialogId === "dayDialog" ? { returnToCalendar: true } : {});
             break;
           case "toggle-category":
             toggleCategory(actionTarget.dataset.categoryId);
@@ -5738,6 +6867,11 @@
             type: "schedule",
             itemId: draggable.dataset.itemId
           };
+        } else if (dragType === "calendar-video") {
+          state.drag = {
+            type: "calendar-video",
+            itemId: draggable.dataset.itemId
+          };
         } else {
           return;
         }
@@ -5791,6 +6925,15 @@
             } else {
               setDropHint(scheduleList, "drop-highlight");
             }
+          }
+          return;
+        }
+
+        if (state.drag.type === "calendar-video") {
+          const dayTarget = event.target.closest('[data-drop-type="calendar-day"]');
+          if (dayTarget) {
+            event.preventDefault();
+            setDropHint(dayTarget, "calendar-drop-target");
           }
         }
       }
@@ -5868,7 +7011,54 @@
           reorderSchedule(state.drag.itemId, scheduleItem ? scheduleItem.dataset.itemId : null);
           clearDragState();
           commit();
+          return;
         }
+
+        if (state.drag.type === "calendar-video") {
+          const dayTarget = event.target.closest('[data-drop-type="calendar-day"]');
+          if (!dayTarget || !dayTarget.dataset.date) {
+            return;
+          }
+          event.preventDefault();
+          updateCalendarItemDate(state.drag.itemId, dayTarget.dataset.date);
+          clearDragState();
+        }
+      }
+
+      function handleTouchStart(event) {
+        if (!refs.calendarDialog.open || refs.dayDialog.open) {
+          state.touchGesture = null;
+          return;
+        }
+
+        const shell = event.target.closest("[data-calendar-shell='true']");
+        const interactive = event.target.closest("button, input, select, textarea, a");
+        if (!shell || interactive || !event.changedTouches || !event.changedTouches[0]) {
+          state.touchGesture = null;
+          return;
+        }
+
+        state.touchGesture = {
+          x: event.changedTouches[0].clientX,
+          y: event.changedTouches[0].clientY
+        };
+      }
+
+      function handleTouchEnd(event) {
+        if (!state.touchGesture || !refs.calendarDialog.open || refs.dayDialog.open || !event.changedTouches || !event.changedTouches[0]) {
+          state.touchGesture = null;
+          return;
+        }
+
+        const deltaX = event.changedTouches[0].clientX - state.touchGesture.x;
+        const deltaY = event.changedTouches[0].clientY - state.touchGesture.y;
+        state.touchGesture = null;
+
+        if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY)) {
+          return;
+        }
+
+        shiftCalendarPeriod(deltaX > 0 ? -1 : 1);
       }
 
       function clearDragState() {
@@ -5898,7 +7088,7 @@
         state.dropHint = null;
       }
 
-      function openItemDialog(itemId, preferredCategoryId, source = "board") {
+      function openItemDialog(itemId, preferredCategoryId, source = "board", options = {}) {
         closeUiMenus();
         closeDialog("settingsDialog");
         state.dialogReturn = source === "calendar" ? {
@@ -5906,7 +7096,9 @@
           dayDate: state.calendarDayDate,
           calendarYear: state.calendarYear,
           calendarMonth: state.calendarMonth,
-          calendarView: state.board.ui.calendarView
+          calendarView: state.board.ui.calendarView,
+          calendarFocusDate: state.calendarFocusDate,
+          calendarFilter: state.calendarFilter
         } : null;
         closeDialog("detailDialog");
         closeDialog("dayDialog", { preserveState: Boolean(state.dialogReturn) });
@@ -5947,6 +7139,7 @@
         } else {
           populateSubcategoryOptions(categoryId, "");
           form.elements.priority.value = "yellow";
+          form.elements.due.value = normalizeDateValue(options.prefillDue);
         }
 
         refs.itemDialog.showModal();
@@ -6018,6 +7211,7 @@
         state.editingItemId = null;
         commit();
         closeDialog("itemDialog");
+        showNoticeToast("הפריט נשמר");
       }
 
       function openCategoryDialog(categoryId) {
@@ -6083,11 +7277,19 @@
 
       function closeDialog(dialogId, options = {}) {
         const dialog = document.getElementById(dialogId);
+        const wasOpen = Boolean(dialog && dialog.open);
         if (dialog && dialog.open) {
           dialog.close();
         }
         if (dialogId === "dayDialog" && !options.preserveState) {
+          const shouldReturnToCalendar = wasOpen && options.returnToCalendar && !refs.calendarDialog.open;
           state.calendarDayDate = "";
+          if (shouldReturnToCalendar) {
+            renderCalendarDialog();
+            if (!refs.calendarDialog.open) {
+              refs.calendarDialog.showModal();
+            }
+          }
         }
         if (dialogId === "itemDialog") {
           restoreDialogContext();
@@ -6115,9 +7317,11 @@
         if (!preserveState) {
           jumpCalendarToToday({ skipRender: true });
           state.board.ui.calendarView = "month";
+          state.calendarFilter = "all";
           saveBoard();
         }
         closeDialog("dayDialog", { preserveState });
+        state.calendarDayDate = "";
         renderCalendarDialog();
         if (!refs.calendarDialog.open) {
           refs.calendarDialog.showModal();
@@ -6130,6 +7334,8 @@
         }
         closeDialog("calendarDialog", { preserveState: true });
         state.calendarDayDate = isoDate;
+        state.calendarFocusDate = isoDate;
+        syncCalendarFromFocusDate();
         renderCalendarDayDialog(isoDate);
         if (!refs.dayDialog.open) {
           refs.dayDialog.showModal();
@@ -6137,8 +7343,13 @@
       }
 
       function shiftCalendarPeriod(direction) {
-        if (state.board.ui.calendarView === "year") {
-          state.calendarYear += direction;
+        const calendarView = getCalendarView();
+        if (calendarView === "year") {
+          state.calendarFocusDate = addMonthsIso(state.calendarFocusDate || getTodayIso(), direction);
+          syncCalendarFromFocusDate();
+        } else if (calendarView === "week") {
+          state.calendarFocusDate = addDaysIso(state.calendarFocusDate || getTodayIso(), direction * 7);
+          syncCalendarFromFocusDate();
         } else {
           state.calendarMonth += direction;
           if (state.calendarMonth < 0) {
@@ -6148,14 +7359,19 @@
             state.calendarMonth = 0;
             state.calendarYear += 1;
           }
+          const focusDate = parseDate(state.calendarFocusDate || getTodayIso()) || parseDate(getTodayIso());
+          const nextDay = Math.min(focusDate.getDate(), new Date(state.calendarYear, state.calendarMonth + 1, 0).getDate());
+          state.calendarFocusDate = `${state.calendarYear}-${String(state.calendarMonth + 1).padStart(2, "0")}-${String(nextDay).padStart(2, "0")}`;
         }
         renderCalendarDialog();
       }
 
       function jumpCalendarToToday(options = {}) {
-        const today = new Date();
+        const todayIso = getTodayIso();
+        const today = parseDate(todayIso);
         state.calendarYear = today.getFullYear();
         state.calendarMonth = today.getMonth();
+        state.calendarFocusDate = todayIso;
         if (!options.skipRender) {
           renderCalendarDialog();
         }
@@ -6170,7 +7386,9 @@
         state.dialogReturn = null;
         state.calendarYear = context.calendarYear;
         state.calendarMonth = context.calendarMonth;
-        state.board.ui.calendarView = context.calendarView === "year" ? "year" : "month";
+        state.board.ui.calendarView = ["month", "week", "year"].includes(context.calendarView) ? context.calendarView : "month";
+        state.calendarFocusDate = normalizeDateValue(context.calendarFocusDate) || state.calendarFocusDate || getTodayIso();
+        state.calendarFilter = CALENDAR_FILTER_OPTIONS.some((option) => option.value === context.calendarFilter) ? context.calendarFilter : "all";
 
         if (context.dayDate) {
           state.calendarDayDate = context.dayDate;
@@ -6653,6 +7871,7 @@
           title,
           type
         });
+        state.calendarFocusDate = date;
         commit();
         showNoticeToast(type === "filming-day" ? `סומן יום צילום ב־${formatDate(date)}` : `נוסף אירוע ל־${formatDate(date)}`);
         renderCalendarDayDialog(date);
@@ -6681,7 +7900,11 @@
           return;
         }
         entry.title = cleanTitle;
+        state.calendarFocusDate = entry.date;
         commit();
+        if (state.calendarDayDate === entry.date) {
+          renderCalendarDayDialog(entry.date);
+        }
         showNoticeToast("התאריך החשוב עודכן");
       }
 
