@@ -90,13 +90,13 @@
 
     .topbar {
       display: grid;
-      gap: 1rem;
-      padding: 1.25rem;
+      gap: 0.55rem;
+      padding: 0.72rem;
       margin-bottom: 1rem;
       border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: calc(var(--radius-xl) + 8px);
-      background: linear-gradient(160deg, rgba(255, 252, 246, 0.94), rgba(251, 243, 228, 0.88));
-      box-shadow: var(--shadow);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 244, 255, 0.94));
+      box-shadow: none;
       backdrop-filter: blur(18px);
     }
 
@@ -312,15 +312,17 @@
     }
 
     .category-card {
+      --tone: rgba(124, 58, 237, 0.06);
       display: grid;
-      gap: 0.85rem;
-      min-height: 180px;
-      padding: 0.95rem;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--line);
-      background: var(--card);
-      box-shadow: 0 12px 25px rgba(31, 42, 55, 0.06);
-      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+      gap: 0;
+      min-height: 0;
+      padding: 0;
+      overflow: hidden;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 244, 255, 0.94));
+      box-shadow: none;
+      transition: none;
     }
 
     .category-card:hover {
@@ -685,9 +687,9 @@
     }
 
     .dialog-shell {
-      padding: 1.15rem;
       display: grid;
-      gap: 1rem;
+      gap: 0.9rem;
+      padding: 0.7rem;
     }
 
     .dialog-grid {
@@ -794,7 +796,7 @@
         flex-direction: column;
       }
     }
-    /* Mobile-first purple UI refactor */
+    /* Surface tone updates */
     :root {
       --bg: #f6f0ff;
       --bg-2: #fcf9ff;
@@ -826,18 +828,10 @@
       padding: 0.75rem 0.75rem 2rem;
     }
 
-    .topbar,
-    .sidebar .panel,
-    .category-card {
+    .sidebar .panel {
       border-color: rgba(255, 255, 255, 0.48);
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 244, 255, 0.92));
       box-shadow: var(--shadow);
-    }
-
-    .topbar {
-      gap: 0.8rem;
-      padding: 1rem;
-      border-radius: 26px;
     }
 
     .title-row,
@@ -863,10 +857,6 @@
       max-width: none;
       font-size: 0.93rem;
       line-height: 1.5;
-    }
-
-    .header-actions {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .btn,
@@ -983,14 +973,6 @@
 
     .board-grid {
       gap: 0.75rem;
-    }
-
-    .category-card {
-      min-height: 0;
-      padding: 0;
-      overflow: hidden;
-      border-radius: 24px;
-      transition: none;
     }
 
     .category-card:hover {
@@ -1255,11 +1237,6 @@
       backdrop-filter: blur(10px);
     }
 
-    .dialog-shell {
-      gap: 0.9rem;
-      padding: 1rem;
-    }
-
     .dialog-grid,
     .detail-grid {
       display: grid;
@@ -1343,19 +1320,7 @@
       }
     }
 
-    /* UX refinement pass */
-    .topbar,
-    .sidebar .panel,
-    .category-card {
-      box-shadow: 0 10px 24px rgba(77, 45, 130, 0.1);
-      border-color: rgba(255, 255, 255, 0.36);
-    }
-
-    .topbar {
-      gap: 0.95rem;
-      padding: 0.9rem;
-    }
-
+    /* Menus & tap targets */
     .workspace,
     .board-grid,
     .sidebar {
@@ -1373,11 +1338,6 @@
     .footnote,
     .progress-caption {
       font-size: 0.81rem;
-    }
-
-    .header-actions {
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: start;
     }
 
     .menu-wrap,
@@ -1402,10 +1362,6 @@
       border: 1px solid rgba(91, 33, 182, 0.11);
       background: rgba(255, 255, 255, 0.98);
       box-shadow: 0 20px 34px rgba(61, 29, 110, 0.16);
-    }
-
-    .header-popover {
-      min-width: 210px;
     }
 
     .row-popover {
@@ -1535,10 +1491,6 @@
       color: var(--muted);
     }
 
-    .category-card {
-      --tone: rgba(124, 58, 237, 0.06);
-    }
-
     .tone-ideas {
       --tone: rgba(168, 85, 247, 0.1);
     }
@@ -1626,8 +1578,7 @@
 
     .category-body,
     .schedule-columns,
-    .sidebar .panel,
-    .dialog-shell {
+    .sidebar .panel {
       padding: 0.7rem;
     }
 
@@ -1795,17 +1746,10 @@
       }
     }
 
-    /* Compact product polish */
-    .topbar,
-    .sidebar .panel,
-    .category-card {
+    /* Compact board layout */
+    .sidebar .panel {
       box-shadow: 0 8px 20px rgba(77, 45, 130, 0.08);
       border-color: rgba(255, 255, 255, 0.26);
-    }
-
-    .topbar {
-      gap: 0.75rem;
-      padding: 0.8rem;
     }
 
     .title-row {
@@ -1815,11 +1759,6 @@
     .title-block h1 {
       font-size: clamp(1.35rem, 5vw, 1.85rem);
       line-height: 1.1;
-    }
-
-    .header-actions {
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 0.55rem;
     }
 
     .header-actions .btn.primary {
@@ -1895,10 +1834,6 @@
       padding: 0.7rem 0.8rem;
       border-color: rgba(91, 33, 182, 0.08);
       box-shadow: none;
-    }
-
-    .category-card {
-      gap: 0;
     }
 
     .category-top {
@@ -2242,24 +2177,6 @@
       text-align: center;
     }
 
-    .calendar-cell {
-      min-height: 76px;
-      padding: 0.28rem;
-      border-radius: 12px;
-      background: rgba(124, 58, 237, 0.03);
-      box-shadow: inset 0 0 0 1px rgba(91, 33, 182, 0.05);
-    }
-
-    .calendar-cell.empty {
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .calendar-cell.today {
-      background: rgba(124, 58, 237, 0.12);
-      box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.2);
-    }
-
     .calendar-date {
       margin-bottom: 0.2rem;
       font-size: 0.74rem;
@@ -2267,76 +2184,13 @@
       color: var(--accent-strong);
     }
 
-    .calendar-events {
-      display: grid;
-      gap: 0.18rem;
-    }
-
-    .calendar-pill {
-      width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      min-height: 22px;
-      padding: 0.14rem 0.36rem;
-      border-radius: 8px;
-      font-size: 0.66rem;
-      font-weight: 700;
-      text-align: right;
-      border: 0;
-    }
-
-    .calendar-pill.holiday {
-      background: rgba(91, 33, 182, 0.12);
-      color: var(--accent-strong);
-    }
-
-    .calendar-pill.status-ready {
-      background: rgba(34, 197, 94, 0.18);
-      color: #166534;
-    }
-
-    .calendar-pill.status-filmed {
-      background: rgba(234, 179, 8, 0.2);
-      color: #854d0e;
-    }
-
-    .calendar-pill.status-early {
-      background: rgba(239, 68, 68, 0.18);
-      color: #991b1b;
-    }
-
-    .calendar-pill.status-edit {
-      background: rgba(124, 58, 237, 0.18);
-      color: #5b21b6;
-    }
-
-    @media (max-width: 860px) {
-      .calendar-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .calendar-cell {
-        min-height: 66px;
-      }
-
-      .calendar-pill {
-        font-size: 0.62rem;
-      }
-    }
-
-    /* Final mobile polish */
+    /* Mobile surface polish */
     :root {
       --shadow: 0 10px 28px rgba(76, 39, 143, 0.08);
       --line: rgba(91, 33, 182, 0.11);
       --card: rgba(255, 255, 255, 0.94);
     }
 
-    .topbar,
-    .sidebar .panel,
-    .category-card,
     .task-row,
     .tag-manager-row,
     .schedule-panel,
@@ -2347,21 +2201,9 @@
       box-shadow: none;
     }
 
-    .topbar,
-    .sidebar .panel,
-    .category-card {
+    .sidebar .panel {
+      box-shadow: none;
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 244, 255, 0.94));
-    }
-
-    .topbar {
-      padding: 0.85rem;
-      gap: 0.65rem;
-    }
-
-    .header-actions {
-      grid-template-columns: minmax(0, 1fr) auto auto;
-      align-items: center;
-      gap: 0.5rem;
     }
 
     .header-actions .btn.primary {
@@ -2374,14 +2216,23 @@
     }
 
     .stats-strip {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0.55rem;
     }
 
     .stat-card {
       min-width: 0;
-      padding: 0.72rem 0.8rem;
+      padding: 0.62rem 0.68rem;
       background: rgba(255, 255, 255, 0.8);
+    }
+
+    .stat-card strong {
+      font-size: 1rem;
+    }
+
+    .stat-card span {
+      font-size: 0.74rem;
+      line-height: 1.25;
     }
 
     .filters-row {
@@ -2394,10 +2245,6 @@
       grid-template-columns: minmax(0, 1fr) auto auto;
       gap: 0.45rem;
       align-items: center;
-    }
-
-    .category-card {
-      border-radius: 20px;
     }
 
     .category-top,
@@ -2501,14 +2348,6 @@
     }
 
     @media (max-width: 560px) {
-      .header-actions {
-        grid-template-columns: minmax(0, 1fr) auto auto;
-      }
-
-      .stats-strip {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
       .stat-card span {
         font-size: 0.76rem;
       }
@@ -2596,91 +2435,6 @@
       font-weight: 700;
     }
 
-    .calendar-grid.month-mode {
-      grid-template-columns: 1fr;
-    }
-
-    .calendar-grid.year-mode {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .calendar-month.compact .calendar-cell {
-      min-height: 66px;
-    }
-
-    .calendar-cell {
-      width: 100%;
-      min-height: 64px;
-      border: 0;
-      text-align: right;
-      cursor: pointer;
-    }
-
-    .calendar-cell:focus-visible {
-      outline: 2px solid rgba(124, 58, 237, 0.45);
-      outline-offset: 2px;
-    }
-
-    .calendar-events {
-      gap: 0.14rem;
-    }
-
-    .calendar-pill {
-      display: flex;
-      align-items: center;
-      gap: 0.24rem;
-      min-height: 20px;
-      padding: 0.12rem 0.32rem;
-    }
-
-    .calendar-status-short {
-      flex: 0 0 auto;
-      font-weight: 800;
-      opacity: 0.85;
-    }
-
-    .calendar-more {
-      color: var(--muted);
-      font-size: 0.68rem;
-      font-weight: 700;
-    }
-
-    .legend-pill.holiday,
-    .calendar-pill.holiday {
-      background: rgba(91, 33, 182, 0.12);
-      color: var(--accent-strong);
-    }
-
-    .legend-pill.status-ready,
-    .calendar-pill.status-ready {
-      background: rgba(34, 197, 94, 0.18);
-      color: #166534;
-    }
-
-    .legend-pill.status-published,
-    .calendar-pill.status-published {
-      background: rgba(148, 163, 184, 0.18);
-      color: #475569;
-    }
-
-    .legend-pill.status-filmed,
-    .calendar-pill.status-filmed {
-      background: rgba(234, 179, 8, 0.2);
-      color: #854d0e;
-    }
-
-    .legend-pill.status-early,
-    .calendar-pill.status-early {
-      background: rgba(239, 68, 68, 0.18);
-      color: #991b1b;
-    }
-
-    .legend-pill.status-edit,
-    .calendar-pill.status-edit {
-      background: rgba(124, 58, 237, 0.18);
-      color: #5b21b6;
-    }
-
     .day-shell {
       display: grid;
       gap: 0.85rem;
@@ -2719,6 +2473,10 @@
       box-shadow: inset 4px 0 0 rgba(34, 197, 94, 0.45);
     }
 
+    .day-video-item.status-scheduled {
+      box-shadow: inset 4px 0 0 rgba(249, 115, 22, 0.45);
+    }
+
     .day-video-item.status-filmed {
       box-shadow: inset 4px 0 0 rgba(234, 179, 8, 0.45);
     }
@@ -2729,6 +2487,16 @@
 
     .day-video-item.status-early {
       box-shadow: inset 4px 0 0 rgba(239, 68, 68, 0.45);
+    }
+
+    .day-video-item.calendar-deadline-soon {
+      border-color: rgba(249, 115, 22, 0.28);
+      background: rgba(255, 247, 237, 0.96);
+    }
+
+    .day-video-item.calendar-deadline-urgent {
+      border-color: rgba(239, 68, 68, 0.32);
+      background: rgba(254, 242, 242, 0.96);
     }
 
     .day-video-title {
@@ -2764,8 +2532,7 @@
         grid-column: 1 / -1;
       }
 
-      .calendar-cell,
-      .calendar-month.compact .calendar-cell {
+      .calendar-cell {
         min-height: 56px;
       }
 
@@ -2779,12 +2546,7 @@
       }
     }
 
-    /* Current UX refinement pass */
-    .topbar {
-      padding: 0.72rem;
-      gap: 0.55rem;
-      border-radius: 20px;
-    }
+    /* Header, filters and panels */
 
     .title-row {
       align-items: center;
@@ -2792,13 +2554,6 @@
 
     .title-block h1 {
       font-size: clamp(1.28rem, 5vw, 1.7rem);
-    }
-
-    .header-actions {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto auto auto;
-      gap: 0.4rem;
-      align-items: center;
     }
 
     .header-actions .btn.primary {
@@ -2848,7 +2603,7 @@
     }
 
     .filters-panel {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       gap: 0.5rem;
       padding: 0.58rem 0.65rem;
       border-radius: 16px;
@@ -3064,10 +2819,6 @@
     }
 
     @media (max-width: 560px) {
-      .header-actions {
-        grid-template-columns: minmax(0, 1fr) auto auto auto;
-      }
-
       .compact-search-row,
       .day-form,
       .filters-panel {
@@ -3080,13 +2831,16 @@
       }
     }
 
-    /* UX fixes and color cleanup */
+    /* Compact dialogs and workflow colors */
     .dialog-head {
       align-items: center;
     }
 
     .header-actions {
+      display: grid;
       grid-template-columns: minmax(0, 1fr) auto auto auto auto;
+      gap: 0.4rem;
+      align-items: center;
     }
 
     .compact-dialog-head {
@@ -3434,13 +3188,9 @@
       .settings-sections {
         grid-template-columns: 1fr;
       }
-
-      .header-actions {
-        grid-template-columns: minmax(0, 1fr) auto auto auto auto;
-      }
     }
 
-    /* Calendar planning upgrade */
+    /* Calendar */
     dialog.calendar-dialog {
       width: min(100%, 1120px);
       max-width: 1120px;
@@ -3510,17 +3260,17 @@
     }
 
     .calendar-nav-btn {
-      width: 48px;
-      min-width: 48px;
-      min-height: 48px;
+      width: 50px;
+      min-width: 50px;
+      min-height: 50px;
       border: 0;
       border-radius: 16px;
-      background: rgba(124, 58, 237, 0.1);
+      background: rgba(124, 58, 237, 0.12);
       color: var(--accent-strong);
-      font-size: 1.35rem;
+      font-size: 1.5rem;
       font-weight: 900;
-      box-shadow: inset 0 0 0 1px rgba(91, 33, 182, 0.07);
-      transition: transform 0.16s ease, background 0.16s ease;
+      box-shadow: inset 0 0 0 1px rgba(91, 33, 182, 0.08);
+      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
     }
 
     .calendar-nav-btn:hover,
@@ -3645,6 +3395,7 @@
       display: grid;
       align-content: start;
       gap: 0.35rem;
+      width: 100%;
       min-height: 108px;
       padding: 0.5rem;
       border-radius: 18px;
@@ -3653,6 +3404,11 @@
       text-align: right;
       cursor: pointer;
       transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .calendar-cell:focus-visible {
+      outline: 2px solid rgba(124, 58, 237, 0.45);
+      outline-offset: 2px;
     }
 
     .calendar-cell.empty {
@@ -3792,6 +3548,16 @@
 
     .calendar-video-pill:active {
       cursor: grabbing;
+    }
+
+    .calendar-video-pill.calendar-deadline-soon {
+      box-shadow: inset 0 0 0 1px rgba(249, 115, 22, 0.28);
+      background: rgba(255, 247, 237, 0.98);
+    }
+
+    .calendar-video-pill.calendar-deadline-urgent {
+      box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.32);
+      background: rgba(254, 242, 242, 0.98);
     }
 
     .calendar-more {
@@ -3974,15 +3740,6 @@
         </div>
 
         <div class="field">
-          <label for="itemPriority">עדיפות</label>
-          <select id="itemPriority" class="select" name="priority">
-            <option value="red">אדום</option>
-            <option value="yellow">צהוב</option>
-            <option value="green">ירוק</option>
-          </select>
-        </div>
-
-        <div class="field">
           <label for="itemDue">תאריך יעד</label>
           <input id="itemDue" class="input" type="date" name="due">
         </div>
@@ -3991,11 +3748,10 @@
           <label>תגיות</label>
           <div class="tag-choice-grid" id="fixedTagOptions">
             <label class="tag-choice"><input type="checkbox" name="fixedTags" value="מצחיק"><span>מצחיק</span></label>
-            <label class="tag-choice"><input type="checkbox" name="fixedTags" value="מתכונים"><span>מתכונים</span></label>
+            <label class="tag-choice"><input type="checkbox" name="fixedTags" value="מתכון"><span>מתכון</span></label>
             <label class="tag-choice"><input type="checkbox" name="fixedTags" value="זוגי"><span>זוגי</span></label>
             <label class="tag-choice"><input type="checkbox" name="fixedTags" value="דייטים א-ב"><span>דייטים א-ב</span></label>
           </div>
-          <input id="itemExtraTags" class="input compact-input" name="extraTags" placeholder="תגיות נוספות קיימות, אם צריך">
         </div>
 
         <div class="field">
@@ -4097,8 +3853,8 @@
       const PUBLISHED_TITLE = "עלה";
       const HOLD_TITLE = "מתלבטת";
       const DUBBING_TITLE = "צריך לדובב";
-      const FIXED_TAG_OPTIONS = ["מצחיק", "מתכונים", "זוגי", "דייטים א-ב"];
-      const WORKFLOW_STAGE_TITLES = ["רעיונות", "נקבע תאריך", "צילמנו", DUBBING_TITLE, "עריכה בסיסית", READY_TITLE, PUBLISHED_TITLE];
+      const FIXED_TAG_OPTIONS = ["מצחיק", "מתכון", "זוגי", "דייטים א-ב"];
+      const WORKFLOW_STAGE_TITLES = ["רעיונות", "נקבע תאריך", "צילמנו", "עריכה בסיסית", READY_TITLE, PUBLISHED_TITLE];
       const HOLIDAYS = [
         { date: "2026-04-22", title: "יום העצמאות" },
         { date: "2026-09-11", title: "ראש השנה" },
@@ -4142,7 +3898,6 @@
         board: loadBoard(),
         filters: {
           search: "",
-          priority: "all",
           tag: "all",
           upcomingRange: "all"
         },
@@ -4215,7 +3970,6 @@
             makeCategory("רעיונות"),
             makeCategory("נקבע תאריך"),
             makeCategory("צילמנו"),
-            makeCategory(DUBBING_TITLE),
             makeCategory("עריכה בסיסית"),
             makeCategory(HOLD_TITLE),
             makeCategory(READY_TITLE, "ready"),
@@ -4264,7 +4018,6 @@
           }
         };
 
-        ensureCategoryExists(normalized.categories, DUBBING_TITLE, "עריכה בסיסית");
         ensureCategoryExists(normalized.categories, HOLD_TITLE, PUBLISHED_TITLE);
 
         if (!normalized.categories.length) {
@@ -4352,11 +4105,13 @@
         }
 
         Object.entries(tagColors).forEach(([tag, color]) => {
-          const cleanTag = String(tag || "").trim();
+          const cleanTag = normalizeTagName(tag);
           if (!cleanTag) {
             return;
           }
-          safe[cleanTag] = sanitizeColor(color, colorFromString(cleanTag));
+          if (!safe[cleanTag]) {
+            safe[cleanTag] = sanitizeColor(color, colorFromString(cleanTag));
+          }
         });
 
         return safe;
@@ -4435,7 +4190,7 @@
 
         const priority = ["red", "yellow", "green"].includes(item.priority) ? item.priority : "yellow";
         const due = normalizeDateValue(item.due);
-        const tags = splitList(item.tags, /[,\n]/g);
+        const tags = normalizeTagList(item.tags);
         const inspirationLinks = normalizeLinks(item.inspirationLinks);
 
         return {
@@ -4512,6 +4267,36 @@
         return uniqueStrings(text.split(separatorRegex));
       }
 
+      function normalizeTagName(value) {
+        const clean = String(value || "").trim();
+        if (!clean) {
+          return "";
+        }
+
+        if (clean === "מתכונים") {
+          return "מתכון";
+        }
+
+        return clean;
+      }
+
+      function normalizeTagList(values) {
+        const source = Array.isArray(values) ? values : splitList(values, /[,\n]/g);
+        const seen = new Set();
+        const result = [];
+
+        source.forEach((value) => {
+          const clean = normalizeTagName(value);
+          if (!clean || seen.has(clean)) {
+            return;
+          }
+          seen.add(clean);
+          result.push(clean);
+        });
+
+        return result;
+      }
+
       function uniqueStrings(values) {
         const seen = new Set();
         const result = [];
@@ -4565,7 +4350,7 @@
             }
             item.priority = ["red", "yellow", "green"].includes(item.priority) ? item.priority : "yellow";
             item.due = normalizeDateValue(item.due);
-            item.tags = uniqueStrings(item.tags || []);
+            item.tags = normalizeTagList(item.tags || []);
             item.inspirationLinks = normalizeLinks(item.inspirationLinks || []);
             item.outfits = item.outfits || { rotem: "", meir: "" };
             item.outfits.rotem = String(item.outfits.rotem || "").trim();
@@ -4590,7 +4375,7 @@
         const allTags = getAllTags();
         const activeFilterCount = getActiveFilterCount();
         const hasActiveSearchOrFilters = isFiltersActive();
-        const showFiltersPanel = state.filtersPanelOpen || state.filters.priority !== "all" || state.filters.tag !== "all";
+        const showFiltersPanel = state.filtersPanelOpen || state.filters.tag !== "all";
         const showSearchRow = state.searchOpen;
         const tasksPanelVisible = shouldShowTasksPanel();
         const collapseToggle = getCollapseToggleState();
@@ -4641,12 +4426,6 @@
                   <strong>${stats.openItems}</strong>
                   <span>עדיין בעבודה</span>
                 </div>
-                ${tasksPanelVisible ? `
-                  <div class="stat-card">
-                    <strong>${stats.tasksDone}/${stats.tasksTotal}</strong>
-                    <span>משימות שהושלמו</span>
-                  </div>
-                ` : ""}
               </div>
 
               <div class="filters-row">
@@ -4664,13 +4443,6 @@
 
                 ${showFiltersPanel ? `
                   <div class="filters-panel">
-                    <div class="field small">
-                      <span>עדיפות</span>
-                      <select class="select" id="priorityFilter">
-                        ${renderPriorityFilterOptions()}
-                      </select>
-                    </div>
-
                     <div class="field small">
                       <span>תגית</span>
                       <select class="select" id="tagFilter">
@@ -4867,7 +4639,7 @@
                   <div class="color-row">
                     <span class="color-dot color-tag" aria-hidden="true"></span>
                     <strong>צבעי תגיות</strong>
-                    <span class="muted">סיווגים כמו מצחיק, מתכונים, זוגי ודייטים א-ב.</span>
+                    <span class="muted">סיווגים כמו מצחיק, מתכון, זוגי ודייטים א-ב.</span>
                   </div>
                 </div>
               </section>
@@ -4909,29 +4681,10 @@
         `).join("");
       }
 
-      function renderPriorityFilterOptions() {
-        const options = [
-          { value: "all", label: "כל העדיפויות" },
-          { value: "red", label: "אדום" },
-          { value: "yellow", label: "צהוב" },
-          { value: "green", label: "ירוק" }
-        ];
-
-        return options.map((option) => `<option value="${option.value}" ${state.filters.priority === option.value ? "selected" : ""}>${escapeHtml(option.label)}</option>`).join("");
-      }
-
       function renderActiveFilterChips() {
         const chips = [];
         if (state.filters.search) {
           chips.push(renderFilterChip(`חיפוש: ${state.filters.search}`, "search"));
-        }
-        if (state.filters.priority !== "all") {
-          const labels = {
-            red: "אדום",
-            yellow: "צהוב",
-            green: "ירוק"
-          };
-          chips.push(renderFilterChip(`עדיפות: ${labels[state.filters.priority] || state.filters.priority}`, "priority"));
         }
         if (state.filters.tag !== "all") {
           chips.push(renderFilterChip(`תגית: ${state.filters.tag}`, "tag"));
@@ -5040,13 +4793,12 @@
         const deadlineClass = getDeadlineToneClass(item, category);
 
         return `
-          <article class="schedule-item priority-${escapeAttr(item.priority)} ${deadlineClass} ${draggable ? "draggable" : ""}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="schedule" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" ${draggable ? 'draggable="true"' : ""} ${draggable ? `data-drag-type="schedule" data-item-id="${escapeAttr(item.id)}"` : ""} ${draggable ? `data-drop-type="schedule-item" data-item-id="${escapeAttr(item.id)}"` : ""}>
+          <article class="schedule-item ${deadlineClass} ${draggable ? "draggable" : ""}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="schedule" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" ${draggable ? 'draggable="true"' : ""} ${draggable ? `data-drag-type="schedule" data-item-id="${escapeAttr(item.id)}"` : ""} ${draggable ? `data-drop-type="schedule-item" data-item-id="${escapeAttr(item.id)}"` : ""}>
             <div class="row-main">
               <div class="row-title">
                 <h4>${escapeHtml(item.title)}</h4>
               </div>
               <div class="row-meta">
-                ${renderPriorityPill(item.priority)}
                 ${meta}
                 <span class="source-pill">${escapeHtml(category.title)}</span>
                 ${draggable ? '<span class="count-hint">ידני</span>' : ""}
@@ -5155,29 +4907,18 @@
         const deadlineClass = getDeadlineToneClass(item, category);
 
         return `
-          <article class="item-card priority-${escapeAttr(item.priority)} ${deadlineClass}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="board" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" draggable="true" data-drag-type="item" data-category-id="${escapeAttr(category.id)}" data-subcat-id="${escapeAttr(item.subcat || "")}" data-drop-type="item">
+          <article class="item-card ${deadlineClass}" data-action="open-item-dialog" data-item-id="${escapeAttr(item.id)}" data-source="board" role="button" tabindex="0" aria-label="פתיחת עריכת הסרטון ${escapeAttr(item.title)}" draggable="true" data-drag-type="item" data-category-id="${escapeAttr(category.id)}" data-subcat-id="${escapeAttr(item.subcat || "")}" data-drop-type="item">
             <div class="row-main">
               <div class="row-title">
                 <h4>${escapeHtml(item.title)}</h4>
               </div>
               <div class="row-meta">
-                ${renderPriorityPill(item.priority)}
                 ${meta}
               </div>
             </div>
             ${renderItemActions(item, { allowDelete: true, allowDetails: false, menuKey: `board:${item.id}`, allowEdit: true, categoryId: category.id, source: "board" })}
           </article>
         `;
-      }
-
-      function renderPriorityPill(priority) {
-        const labels = {
-          red: "אדום",
-          yellow: "צהוב",
-          green: "ירוק"
-        };
-
-        return `<span class="priority-pill ${escapeAttr(priority)}">${escapeHtml(labels[priority] || "צהוב")}</span>`;
       }
 
       function renderDateMeta(due, category = null) {
@@ -5188,31 +4929,42 @@
         return `<span class="tiny-pill ${deadlineLabel.className}">${escapeHtml(formatDate(due))} · ${escapeHtml(getWeekday(due))}${deadlineLabel.text ? ` · ${escapeHtml(deadlineLabel.text)}` : ""}</span>`;
       }
 
-      function getDeadlineToneClass(item, category) {
+      function getItemUrgencyState(item, category) {
         if (!item || !item.due || !category || isReadyCategory(category) || isPublishedCategory(category)) {
           return "";
         }
 
         const daysLeft = getDaysUntil(item.due);
         if (daysLeft <= 2) {
-          return "deadline-urgent";
+          return "urgent";
         }
         if (daysLeft <= 7) {
+          return "soon";
+        }
+        return "";
+      }
+
+      function getDeadlineToneClass(item, category) {
+        const urgency = getItemUrgencyState(item, category);
+        if (urgency === "urgent") {
+          return "deadline-urgent";
+        }
+        if (urgency === "soon") {
           return "deadline-soon";
         }
         return "";
       }
 
       function getDeadlineLabel(due, category) {
-        if (!due || !category || isReadyCategory(category) || isPublishedCategory(category)) {
+        const urgency = getItemUrgencyState({ due }, category);
+        if (!urgency) {
           return { className: "", text: "" };
         }
 
-        const daysLeft = getDaysUntil(due);
-        if (daysLeft <= 2) {
+        if (urgency === "urgent") {
           return { className: "deadline-urgent-pill", text: "דחוף" };
         }
-        if (daysLeft <= 7) {
+        if (urgency === "soon") {
           return { className: "deadline-soon-pill", text: "קרוב" };
         }
         return { className: "", text: "" };
@@ -5360,7 +5112,6 @@
             <section class="detail-card">
               <h3>סקירה</h3>
               <div class="row-meta">
-                ${renderPriorityPill(item.priority)}
                 ${renderDateMeta(item.due)}
                 <span class="source-pill">${escapeHtml(category.title)}</span>
                 ${subcategoryTitle ? `<span class="source-pill">${escapeHtml(subcategoryTitle)}</span>` : ""}
@@ -5468,7 +5219,7 @@
         const importantDates = getCalendarImportantDatesForDate(isoDate);
         const isToday = isoDate === getTodayIso();
         const previewLimit = compact ? 2 : 3;
-        const previewEntries = [...importantDates, ...entries].slice(0, previewLimit);
+        const previewEntries = [...entries, ...importantDates].slice(0, previewLimit);
         const hiddenCount = Math.max(0, importantDates.length + entries.length - previewEntries.length);
 
         return `
@@ -5580,16 +5331,18 @@
 
       function renderCalendarDayItem(entry) {
         const status = getCalendarStatusInfo(entry.category);
+        const urgencyClass = getCalendarUrgencyClass(entry);
         return `
-          <button class="day-video-item ${escapeAttr(status.className)}" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(entry.item.id)}" data-source="calendar" aria-label="פתיחת עריכת ${escapeAttr(entry.item.title)}">
+          <button class="day-video-item ${escapeAttr(status.className)} ${escapeAttr(urgencyClass)}" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(entry.item.id)}" data-source="calendar" aria-label="פתיחת עריכת ${escapeAttr(entry.item.title)}">
             <span class="day-video-title">${escapeHtml(entry.item.title)}</span>
           </button>
         `;
       }
 
       function renderImportantDateRow(entry) {
-        const isCustom = entry.type !== "holiday";
+        const isCustom = entry.type !== "holiday" && !entry.derived;
         const calendarType = getCalendarDateTypeMeta(entry.type);
+        const readonlyLabel = entry.type === "holiday" ? "חג מובנה" : entry.derived ? "נגזר מהסרטונים" : "";
         return `
           <div class="important-date-row">
             <div class="important-date-meta">
@@ -5601,7 +5354,7 @@
                 <button class="icon-btn" type="button" data-action="edit-calendar-date" data-date-id="${escapeAttr(entry.id)}" aria-label="עריכת תאריך חשוב ${escapeAttr(entry.title)}">עריכה</button>
                 <button class="icon-btn danger" type="button" data-action="delete-calendar-date" data-date-id="${escapeAttr(entry.id)}" aria-label="מחיקת תאריך חשוב ${escapeAttr(entry.title)}">מחק</button>
               </div>
-            ` : '<span class="tiny-pill">חג מובנה</span>'}
+            ` : `<span class="tiny-pill">${escapeHtml(readonlyLabel)}</span>`}
           </div>
         `;
       }
@@ -5869,37 +5622,12 @@
               </div>
             </div>
 
-            ${renderCalendarDaySummary(meta, entries, importantDates, compact)}
-
             <div class="calendar-events">
               ${previewEntries.map((entry) => renderCalendarPreviewPill(entry)).join("")}
               ${hiddenCount ? `<div class="calendar-more">+ ${hiddenCount} עוד</div>` : ""}
             </div>
           </div>
         `;
-      }
-
-      function renderCalendarDaySummary(meta, entries, importantDates, compact) {
-        if (compact) {
-          return "";
-        }
-
-        const parts = [];
-        const visibleUrgentCount = entries.filter((entry) => isCalendarUrgentEntry(entry)).length;
-        if (entries.length) {
-          parts.push(`${entries.length} סרטונים`);
-        }
-        if (visibleUrgentCount) {
-          parts.push(`${visibleUrgentCount} דחוף`);
-        } else if (!entries.length && importantDates.length) {
-          parts.push(`${importantDates.length} מועדים`);
-        }
-
-        if (!parts.length) {
-          return "";
-        }
-
-        return `<div class="calendar-summary">${parts.map((part) => `<span>${escapeHtml(part)}</span>`).join("")}</div>`;
       }
 
       function getCalendarRawVideoEntriesForDate(isoDate) {
@@ -5945,6 +5673,17 @@
           date: entry.date
         }));
         const entries = [...staticDates, ...customDates];
+        const hasDerivedFilmingDay = getCalendarRawVideoEntriesForDate(isoDate).some((entry) => isScheduledCategory(entry.category));
+
+        if (hasDerivedFilmingDay && !entries.some((entry) => entry.type === "filming-day")) {
+          entries.unshift({
+            id: `derived-filming:${isoDate}`,
+            derived: true,
+            type: "filming-day",
+            title: "יום צילום",
+            date: isoDate
+          });
+        }
 
         if (state.calendarFilter === "filming") {
           return entries.filter((entry) => entry.type === "filming-day");
@@ -5980,8 +5719,9 @@
         }
 
         const status = getCalendarStatusInfo(entry.category);
+        const urgencyClass = getCalendarUrgencyClass(entry);
         return `
-          <button class="calendar-pill calendar-video-pill ${escapeAttr(status.className)}" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(entry.item.id)}" data-source="calendar" draggable="true" data-drag-type="calendar-video" aria-label="${escapeAttr(`${entry.item.title} · ${status.label}`)}" title="${escapeAttr(entry.item.title)}">
+          <button class="calendar-pill calendar-video-pill ${escapeAttr(status.className)} ${escapeAttr(urgencyClass)}" type="button" data-action="open-item-dialog" data-item-id="${escapeAttr(entry.item.id)}" data-source="calendar" draggable="true" data-drag-type="calendar-video" aria-label="${escapeAttr(`${entry.item.title} · ${status.label}`)}" title="${escapeAttr(entry.item.title)}">
             <span class="calendar-pill-text">${escapeHtml(entry.item.title)}</span>
           </button>
         `;
@@ -6040,7 +5780,18 @@
       }
 
       function isCalendarUrgentEntry(entry) {
-        return Boolean(entry && entry.item && entry.item.due && !isReadyCategory(entry.category) && !isPublishedCategory(entry.category) && getDaysUntil(entry.item.due) <= 7);
+        return getItemUrgencyState(entry && entry.item, entry && entry.category) !== "";
+      }
+
+      function getCalendarUrgencyClass(entry) {
+        const urgency = getItemUrgencyState(entry && entry.item, entry && entry.category);
+        if (urgency === "urgent") {
+          return "calendar-deadline-urgent";
+        }
+        if (urgency === "soon") {
+          return "calendar-deadline-soon";
+        }
+        return "";
       }
 
       function syncCalendarFromFocusDate() {
@@ -6411,10 +6162,6 @@
           return false;
         }
 
-        if (state.filters.priority !== "all" && item.priority !== state.filters.priority) {
-          return false;
-        }
-
         if (state.filters.tag !== "all" && !(item.tags || []).includes(state.filters.tag)) {
           return false;
         }
@@ -6463,7 +6210,6 @@
       function isFiltersActive() {
         return Boolean(
           state.filters.search
-          || state.filters.priority !== "all"
           || state.filters.tag !== "all"
           || state.filters.upcomingRange !== "all"
           || state.openWorkOnly
@@ -6472,9 +6218,6 @@
 
       function getActiveFilterCount() {
         let count = 0;
-        if (state.filters.priority !== "all") {
-          count += 1;
-        }
         if (state.filters.tag !== "all") {
           count += 1;
         }
@@ -6767,12 +6510,6 @@
       }
 
       function handleChange(event) {
-        if (event.target.id === "priorityFilter") {
-          state.filters.priority = event.target.value || "all";
-          render();
-          return;
-        }
-
         if (event.target.id === "tagFilter") {
           state.filters.tag = event.target.value || "all";
           render();
@@ -6793,6 +6530,7 @@
 
         if (event.target.name === "categoryId" && event.target.form === refs.itemForm) {
           populateSubcategoryOptions(event.target.value, refs.itemForm.elements.subcat.value);
+          syncItemFormDueRequirement(event.target.value);
           return;
         }
 
@@ -7119,29 +6857,28 @@
         form.querySelectorAll('input[name="fixedTags"]').forEach((checkbox) => {
           checkbox.checked = false;
         });
-        form.elements.extraTags.value = "";
+        form.dataset.preservedTags = "[]";
 
         if (itemLocation) {
           form.elements.title.value = itemLocation.item.title;
           form.elements.categoryId.value = itemLocation.category.id;
           populateSubcategoryOptions(itemLocation.category.id, itemLocation.item.subcat || "");
           form.elements.subcat.value = itemLocation.item.subcat || "";
-          form.elements.priority.value = itemLocation.item.priority;
           form.elements.due.value = itemLocation.item.due || "";
           const itemTags = itemLocation.item.tags || [];
           form.querySelectorAll('input[name="fixedTags"]').forEach((checkbox) => {
             checkbox.checked = itemTags.includes(checkbox.value);
           });
-          form.elements.extraTags.value = itemTags.filter((tag) => !FIXED_TAG_OPTIONS.includes(tag)).join(", ");
+          form.dataset.preservedTags = JSON.stringify(itemTags.filter((tag) => !FIXED_TAG_OPTIONS.includes(tag)));
           form.elements.outfitRotem.value = itemLocation.item.outfits.rotem || "";
           form.elements.outfitMeir.value = itemLocation.item.outfits.meir || "";
           form.elements.links.value = (itemLocation.item.inspirationLinks || []).join("\n");
         } else {
           populateSubcategoryOptions(categoryId, "");
-          form.elements.priority.value = "yellow";
           form.elements.due.value = normalizeDateValue(options.prefillDue);
         }
 
+        syncItemFormDueRequirement(form.elements.categoryId.value);
         refs.itemDialog.showModal();
         window.setTimeout(() => form.elements.title.focus(), 30);
       }
@@ -7162,6 +6899,34 @@
         refs.itemForm.elements.subcat.innerHTML = options.join("");
       }
 
+      function syncItemFormDueRequirement(categoryId) {
+        const dueInput = refs.itemForm && refs.itemForm.elements && refs.itemForm.elements.due;
+        if (!dueInput) {
+          return;
+        }
+
+        const category = findCategory(categoryId);
+        const required = Boolean(category && category.title === "נקבע תאריך");
+        dueInput.required = required;
+        dueInput.setAttribute("aria-required", required ? "true" : "false");
+      }
+
+      function getPreservedItemTags() {
+        try {
+          return normalizeTagList(JSON.parse(refs.itemForm.dataset.preservedTags || "[]"));
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function getAutoSubcategoryTag(category, subcatId) {
+        if (!category || category.title !== "רעיונות" || !subcatId) {
+          return "";
+        }
+
+        return normalizeTagName(getSubcategoryTitle(category, subcatId));
+      }
+
       function saveItemFromForm() {
         const formData = new FormData(refs.itemForm);
         const title = String(formData.get("title") || "").trim();
@@ -7174,13 +6939,29 @@
 
         const subcat = String(formData.get("subcat") || "");
         const selectedSubcat = category.subcategories.some((entry) => entry.id === subcat) ? subcat : null;
+        const due = normalizeDateValue(formData.get("due"));
+        if (category.title === "נקבע תאריך" && !due) {
+          alert('בקטגוריה "נקבע תאריך" צריך לבחור תאריך.');
+          const dueInput = refs.itemForm.elements.due;
+          if (dueInput) {
+            dueInput.focus();
+          }
+          return;
+        }
+
+        const subcategoryTags = category.title === "רעיונות"
+          ? new Set((category.subcategories || []).map((entry) => normalizeTagName(entry.title)).filter(Boolean))
+          : new Set();
+        const preservedTags = getPreservedItemTags().filter((tag) => !subcategoryTags.has(tag));
+        const autoSubcategoryTag = getAutoSubcategoryTag(category, selectedSubcat);
         const data = {
           title,
-          priority: ["red", "yellow", "green"].includes(formData.get("priority")) ? formData.get("priority") : "yellow",
-          due: normalizeDateValue(formData.get("due")),
-          tags: uniqueStrings([
-            ...formData.getAll("fixedTags").map((tag) => String(tag || "").trim()).filter(Boolean),
-            ...splitList(formData.get("extraTags"), /[,\n]/g)
+          priority: "yellow",
+          due,
+          tags: normalizeTagList([
+            ...preservedTags,
+            ...formData.getAll("fixedTags"),
+            autoSubcategoryTag
           ]),
           inspirationLinks: String(formData.get("links") || "").split("\n").map(normalizeLink).filter(Boolean),
           outfits: {
@@ -7196,6 +6977,7 @@
             return;
           }
 
+          data.priority = ["red", "yellow", "green"].includes(location.item.priority) ? location.item.priority : "yellow";
           Object.assign(location.item, data);
           if (location.category.id !== categoryId) {
             location.category.items = location.category.items.filter((item) => item.id !== location.item.id);
@@ -7568,7 +7350,6 @@
 
       function clearFilters() {
         state.filters.search = "";
-        state.filters.priority = "all";
         state.filters.tag = "all";
         state.filters.upcomingRange = "all";
         state.openWorkOnly = false;
@@ -7804,8 +7585,6 @@
         if (filterKey === "search") {
           state.filters.search = "";
           state.searchOpen = false;
-        } else if (filterKey === "priority") {
-          state.filters.priority = "all";
         } else if (filterKey === "tag") {
           state.filters.tag = "all";
         } else if (filterKey === "upcoming") {
@@ -7824,7 +7603,7 @@
         if (!nextTag) {
           return;
         }
-        const cleanTag = nextTag.trim();
+        const cleanTag = normalizeTagName(nextTag);
         if (!cleanTag || cleanTag === tag) {
           return;
         }
@@ -7835,7 +7614,7 @@
               return;
             }
             item.tags = item.tags.map((entry) => entry === tag ? cleanTag : entry);
-            item.tags = uniqueStrings(item.tags);
+            item.tags = normalizeTagList(item.tags);
           });
         });
 
@@ -7957,6 +7736,13 @@
 
         if (currentCategory.title === HOLD_TITLE) {
           return null;
+        }
+
+        if (currentCategory.title === DUBBING_TITLE) {
+          return state.board.categories.find((category) => category.title === "עריכה בסיסית")
+            || state.board.categories.find((category) => isReadyCategory(category))
+            || state.board.categories.find((category) => isPublishedCategory(category))
+            || null;
         }
 
         const workflowIndex = WORKFLOW_STAGE_TITLES.indexOf(currentCategory.title);
@@ -8110,6 +7896,10 @@
 
       function isPublishedCategory(category) {
         return category.role === "published" || category.title === PUBLISHED_TITLE;
+      }
+
+      function isScheduledCategory(category) {
+        return Boolean(category && category.title === "נקבע תאריך");
       }
 
       function compareText(a, b) {
