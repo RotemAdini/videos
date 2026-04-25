@@ -711,6 +711,13 @@
       font-weight: 700;
     }
 
+    .field-hint {
+      display: block;
+      color: var(--muted);
+      font-size: 0.72rem;
+      line-height: 1.4;
+    }
+
     .footnote {
       color: var(--muted);
       font-size: 0.88rem;
@@ -2216,23 +2223,34 @@
     }
 
     .stats-strip {
+      display: grid;
+      width: 100%;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0.55rem;
+      align-items: stretch;
     }
 
     .stat-card {
       min-width: 0;
-      padding: 0.62rem 0.68rem;
+      min-height: 74px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 0.18rem;
+      padding: 0.58rem 0.64rem;
+      text-align: center;
       background: rgba(255, 255, 255, 0.8);
     }
 
     .stat-card strong {
       font-size: 1rem;
+      line-height: 1;
     }
 
     .stat-card span {
+      display: block;
       font-size: 0.74rem;
-      line-height: 1.25;
+      line-height: 1.3;
     }
 
     .filters-row {
@@ -2928,16 +2946,19 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      gap: 0.42rem;
+      gap: 0.35rem;
       flex-wrap: nowrap;
-      padding-top: 0.12rem;
+      padding-top: 0.18rem;
     }
 
     .compact-action-btn {
-      min-height: 44px;
-      padding-inline: 0.82rem;
-      border-radius: 12px;
-      font-size: 0.82rem;
+      flex: 0 0 auto;
+      width: auto;
+      min-height: 34px;
+      padding: 0.34rem 0.72rem;
+      border-radius: 11px;
+      font-size: 0.75rem;
+      line-height: 1.15;
       white-space: nowrap;
     }
 
@@ -3394,10 +3415,10 @@
       position: relative;
       display: grid;
       align-content: start;
-      gap: 0.35rem;
+      gap: 0.42rem;
       width: 100%;
-      min-height: 108px;
-      padding: 0.5rem;
+      min-height: 126px;
+      padding: 0.58rem;
       border-radius: 18px;
       border: 1px solid rgba(91, 33, 182, 0.07);
       background: rgba(124, 58, 237, 0.035);
@@ -3425,8 +3446,8 @@
     }
 
     .calendar-cell.week-cell {
-      min-height: 128px;
-      padding: 0.75rem;
+      min-height: 152px;
+      padding: 0.78rem;
       background: rgba(255, 255, 255, 0.92);
     }
 
@@ -3467,7 +3488,7 @@
 
     .calendar-date {
       margin: 0;
-      font-size: 0.82rem;
+      font-size: 0.9rem;
       font-weight: 900;
       color: var(--accent-strong);
     }
@@ -3501,7 +3522,7 @@
 
     .calendar-events {
       display: grid;
-      gap: 0.18rem;
+      gap: 0.26rem;
       align-content: start;
     }
 
@@ -3510,9 +3531,9 @@
       align-items: flex-start;
       gap: 0.32rem;
       width: 100%;
-      min-height: 24px;
-      padding: 0.18rem 0.4rem;
-      border-radius: 10px;
+      min-height: 26px;
+      padding: 0.28rem 0.46rem;
+      border-radius: 12px;
       border: 0;
       overflow: hidden;
       text-align: right;
@@ -3521,14 +3542,13 @@
 
     .calendar-pill-text {
       min-width: 0;
-      display: -webkit-box;
-      overflow: hidden;
+      display: block;
+      overflow: visible;
       white-space: normal;
+      word-break: break-word;
       overflow-wrap: anywhere;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      line-height: 1.18;
-      font-size: 0.68rem;
+      line-height: 1.32;
+      font-size: 0.76rem;
       font-weight: 800;
     }
 
@@ -3687,12 +3707,12 @@
       }
 
       .calendar-cell {
-        min-height: 90px;
-        padding: 0.45rem;
+        min-height: 98px;
+        padding: 0.48rem;
       }
 
       .calendar-cell.week-cell {
-        min-height: 116px;
+        min-height: 128px;
       }
 
       .calendar-days {
@@ -3700,7 +3720,7 @@
       }
 
       .calendar-pill-text {
-        font-size: 0.64rem;
+        font-size: 0.7rem;
       }
 
       dialog.day-dialog {
@@ -3740,8 +3760,9 @@
         </div>
 
         <div class="field">
-          <label for="itemDue">תאריך יעד</label>
+          <label for="itemDue" id="itemDueLabel">תאריך יעד</label>
           <input id="itemDue" class="input" type="date" name="due">
+          <small id="itemDueHint" class="field-hint" hidden></small>
         </div>
 
         <div class="field full">
@@ -4128,7 +4149,7 @@
         const subcategoryIds = new Set(subcategories.map((sub) => sub.id));
         const items = Array.isArray(category.items) ? category.items.map((item) => normalizeItem(item, subcategoryIds)).filter(Boolean) : [];
 
-        return {
+        const normalizedCategory = {
           id: isNonEmptyString(category.id) ? category.id : createId("cat"),
           title,
           collapsed: Boolean(category.collapsed),
@@ -4136,6 +4157,9 @@
           subcategories,
           items
         };
+
+        normalizedCategory.items.forEach((item) => syncItemDerivedState(item, normalizedCategory));
+        return normalizedCategory;
       }
 
       function normalizeSubcategories(subcategories) {
@@ -4277,6 +4301,10 @@
           return "מתכון";
         }
 
+        if (clean === "אדום" || clean === "צהוב" || clean === "ירוק") {
+          return "";
+        }
+
         return clean;
       }
 
@@ -4331,16 +4359,7 @@
         const validUndatedSet = new Set(allScheduleUndatedIds);
         state.board.scheduleManual = state.board.scheduleManual.filter((id) => validUndatedSet.has(id));
         state.board.calendarDates = normalizeCalendarDates(state.board.calendarDates);
-
-        const tagColors = { ...state.board.tagColors };
-        getAllTags().forEach((tag) => {
-          if (!tagColors[tag]) {
-            tagColors[tag] = colorFromString(tag);
-          } else {
-            tagColors[tag] = sanitizeColor(tagColors[tag], colorFromString(tag));
-          }
-        });
-        state.board.tagColors = tagColors;
+        const existingTagColors = normalizeTagColors(state.board.tagColors);
 
         state.board.categories.forEach((category) => {
           const subIds = new Set((category.subcategories || []).map((sub) => sub.id));
@@ -4348,16 +4367,24 @@
             if (item.subcat && !subIds.has(item.subcat)) {
               item.subcat = null;
             }
-            item.priority = ["red", "yellow", "green"].includes(item.priority) ? item.priority : "yellow";
-            item.due = normalizeDateValue(item.due);
-            item.tags = normalizeTagList(item.tags || []);
-            item.inspirationLinks = normalizeLinks(item.inspirationLinks || []);
-            item.outfits = item.outfits || { rotem: "", meir: "" };
-            item.outfits.rotem = String(item.outfits.rotem || "").trim();
-            item.outfits.meir = String(item.outfits.meir || "").trim();
-            item.title = String(item.title || "").trim() || "ללא כותרת";
+            syncItemDerivedState(item, category);
           });
         });
+
+        const nextTagColors = {};
+        Object.keys(existingTagColors).forEach((tag) => {
+          nextTagColors[tag] = sanitizeColor(existingTagColors[tag], colorFromString(tag));
+        });
+        state.board.categories.forEach((category) => {
+          category.items.forEach((item) => {
+            (item.tags || []).forEach((tag) => {
+              if (!nextTagColors[tag]) {
+                nextTagColors[tag] = colorFromString(tag);
+              }
+            });
+          });
+        });
+        state.board.tagColors = nextTagColors;
 
         document.body.classList.toggle("compact", Boolean(state.board.ui && state.board.ui.compact));
       }
@@ -4551,12 +4578,12 @@
         const tasks = [...state.board.tasks].sort((a, b) => Number(a.done) - Number(b.done) || compareText(a.text, b.text));
         const openTasks = tasks.filter((task) => !task.done).length;
         const colors = [
-          { className: "color-green", title: "ירוק", hint: "מוכן לעלייה" },
-          { className: "color-orange", title: "כתום", hint: "תאריך קרוב, עדיין לא מוכן" },
-          { className: "color-red", title: "אדום", hint: "דחוף מאוד או עוד יומיים ופחות" },
-          { className: "color-yellow", title: "צהוב", hint: "צולם אבל עדיין לא ערוך" },
-          { className: "color-purple", title: "סגול", hint: "עריכה / דיבוב / שלבי עבודה מתקדמים" },
-          { className: "color-lavender", title: "לילך", hint: "מתלבטת / בהמתנה" }
+          { className: "color-green", title: "מוכן לעלייה", hint: "שלב מוכן ללא אזהרת תאריך." },
+          { className: "color-orange", title: "תאריך קרוב", hint: "עוד עד 7 ימים ועדיין לא מוכן." },
+          { className: "color-red", title: "תאריך דחוף", hint: "עוד עד יומיים ועדיין לא מוכן." },
+          { className: "color-yellow", title: "צולם", hint: "הצילום הושלם והפריט עדיין בעבודה." },
+          { className: "color-purple", title: "עריכה / דיבוב", hint: "שלבי עבודה מתקדמים לפני עלייה." },
+          { className: "color-lavender", title: "מתלבטת", hint: "בהמתנה או לא הוחלט סופית." }
         ];
 
         refs.settingsContent.innerHTML = `
@@ -5167,13 +5194,13 @@
             </div>
 
             <div class="calendar-legend" role="list" aria-label="מקרא צבעים בלוח השנה">
-              <span class="legend-pill status-ready" role="listitem">ירוק · מוכן לעלייה</span>
-              <span class="legend-pill status-filmed" role="listitem">צהוב · צולם</span>
-              <span class="legend-pill status-edit" role="listitem">סגול · בעריכה</span>
-              <span class="legend-pill status-early" role="listitem">אדום · טרם צולם</span>
-              <span class="legend-pill status-hold" role="listitem">לילך · מתלבטת</span>
+              <span class="legend-pill status-ready" role="listitem">מוכן לעלייה</span>
+              <span class="legend-pill status-filmed" role="listitem">צולם</span>
+              <span class="legend-pill status-edit" role="listitem">בעריכה</span>
+              <span class="legend-pill status-early" role="listitem">טרם צולם</span>
+              <span class="legend-pill status-hold" role="listitem">מתלבטת</span>
               <span class="legend-pill holiday" role="listitem">חשוב · תאריך מיוחד</span>
-              <span class="legend-pill filming-day" role="listitem">יום צילום</span>
+              <span class="legend-pill filming-day" role="listitem">סימון יום צילום</span>
             </div>
 
             <div class="calendar-grid ${isYearView ? "year-mode" : "month-mode"}">
@@ -5218,16 +5245,14 @@
         const entries = getCalendarEntriesForDate(isoDate);
         const importantDates = getCalendarImportantDatesForDate(isoDate);
         const isToday = isoDate === getTodayIso();
-        const previewLimit = compact ? 2 : 3;
+        const previewLimit = compact ? 2 : 4;
         const previewEntries = [...entries, ...importantDates].slice(0, previewLimit);
-        const hiddenCount = Math.max(0, importantDates.length + entries.length - previewEntries.length);
 
         return `
           <button class="calendar-cell ${isToday ? "today" : ""}" type="button" data-action="open-calendar-day" data-date="${escapeAttr(isoDate)}" aria-label="פתיחת פרטי היום ${escapeAttr(formatDate(isoDate) || isoDate)}">
             <div class="calendar-date">${dayNumber}</div>
             <div class="calendar-events">
               ${previewEntries.map((entry) => renderCalendarPreviewPill(entry)).join("")}
-              ${hiddenCount ? `<div class="calendar-more">+ ${hiddenCount} עוד</div>` : ""}
             </div>
           </button>
         `;
@@ -5455,15 +5480,15 @@
             </div>
 
             <div class="calendar-legend" role="list" aria-label="מקרא צבעים בלוח השנה">
-              <span class="legend-pill status-early" role="listitem">ורוד · התחלה / לא צולם</span>
-              <span class="legend-pill status-scheduled" role="listitem">כתום · נקבע תאריך</span>
-              <span class="legend-pill status-filmed" role="listitem">צהוב · צולם</span>
-              <span class="legend-pill status-edit" role="listitem">סגול · דיבוב / עריכה</span>
-              <span class="legend-pill status-ready" role="listitem">ירוק · מוכן לעלייה</span>
-              <span class="legend-pill status-published" role="listitem">אפור · עלה</span>
-              <span class="legend-pill status-hold" role="listitem">לילך · מתלבטת</span>
+              <span class="legend-pill status-early" role="listitem">טרם צולם</span>
+              <span class="legend-pill status-scheduled" role="listitem">נקבע תאריך צילום</span>
+              <span class="legend-pill status-filmed" role="listitem">צולם</span>
+              <span class="legend-pill status-edit" role="listitem">דיבוב / עריכה</span>
+              <span class="legend-pill status-ready" role="listitem">מוכן לעלייה</span>
+              <span class="legend-pill status-published" role="listitem">עלה</span>
+              <span class="legend-pill status-hold" role="listitem">מתלבטת</span>
               <span class="legend-pill holiday" role="listitem">חשוב / חג</span>
-              <span class="legend-pill filming-day" role="listitem">יום צילום</span>
+              <span class="legend-pill filming-day" role="listitem">סימון יום צילום</span>
             </div>
 
             <div class="calendar-grid ${escapeAttr(`${calendarView}-mode`)}">
@@ -5597,9 +5622,8 @@
         const entries = filterCalendarVideoEntries(rawEntries);
         const importantDates = getCalendarImportantDatesForDate(isoDate);
         const isToday = isoDate === getTodayIso();
-        const previewLimit = week ? 4 : compact ? 2 : 3;
+        const previewLimit = week ? 5 : compact ? 2 : 4;
         const previewEntries = [...importantDates, ...entries].slice(0, previewLimit);
-        const hiddenCount = Math.max(0, importantDates.length + entries.length - previewEntries.length);
         const meta = getCalendarDayMeta(rawEntries, importantDates);
         const classes = [
           isToday ? "today" : "",
@@ -5616,15 +5640,10 @@
                 ${week ? `<span class="calendar-weekday-label">${escapeHtml(getWeekdayShortLabel(isoDate))}</span>` : ""}
                 <span class="calendar-date">${dayNumber}</span>
               </div>
-              <div class="calendar-day-flags">
-                ${meta.urgentCount ? `<span class="calendar-flag urgent">${meta.urgentCount} דחוף</span>` : ""}
-                ${meta.busy ? '<span class="calendar-flag busy">עמוס</span>' : ""}
-              </div>
             </div>
 
             <div class="calendar-events">
               ${previewEntries.map((entry) => renderCalendarPreviewPill(entry)).join("")}
-              ${hiddenCount ? `<div class="calendar-more">+ ${hiddenCount} עוד</div>` : ""}
             </div>
           </div>
         `;
@@ -5680,7 +5699,7 @@
             id: `derived-filming:${isoDate}`,
             derived: true,
             type: "filming-day",
-            title: "יום צילום",
+            title: "יום צילום שנקבע",
             date: isoDate
           });
         }
@@ -6094,10 +6113,21 @@
       }
 
       function getAllTags() {
-        const tags = new Set(Object.keys(state.board.tagColors || {}));
+        const tags = new Set();
+        Object.keys(state.board.tagColors || {}).forEach((tag) => {
+          const clean = normalizeTagName(tag);
+          if (clean) {
+            tags.add(clean);
+          }
+        });
         state.board.categories.forEach((category) => {
           category.items.forEach((item) => {
-            (item.tags || []).forEach((tag) => tags.add(tag));
+            (item.tags || []).forEach((tag) => {
+              const clean = normalizeTagName(tag);
+              if (clean) {
+                tags.add(clean);
+              }
+            });
           });
         });
         return [...tags].sort(compareText);
@@ -6907,8 +6937,21 @@
 
         const category = findCategory(categoryId);
         const required = Boolean(category && category.title === "נקבע תאריך");
+        const dueLabel = document.getElementById("itemDueLabel");
+        const dueHint = document.getElementById("itemDueHint");
+
         dueInput.required = required;
         dueInput.setAttribute("aria-required", required ? "true" : "false");
+        dueInput.setAttribute("aria-label", required ? "תאריך צילום או תאריך שנקבע" : "תאריך יעד");
+
+        if (dueLabel) {
+          dueLabel.textContent = required ? "תאריך צילום / תאריך שנקבע" : "תאריך יעד";
+        }
+
+        if (dueHint) {
+          dueHint.hidden = !required;
+          dueHint.textContent = required ? 'בקטגוריה "נקבע תאריך" התאריך נשמר כיום צילום שנקבע ומופיע כך גם בלוח השנה.' : "";
+        }
       }
 
       function getPreservedItemTags() {
@@ -6919,12 +6962,48 @@
         }
       }
 
+      function getIdeasSubcategoryTagSet(category) {
+        if (!category || category.title !== "רעיונות") {
+          return new Set();
+        }
+
+        return new Set((category.subcategories || []).map((entry) => normalizeTagName(entry.title)).filter(Boolean));
+      }
+
       function getAutoSubcategoryTag(category, subcatId) {
         if (!category || category.title !== "רעיונות" || !subcatId) {
           return "";
         }
 
         return normalizeTagName(getSubcategoryTitle(category, subcatId));
+      }
+
+      function mergeItemTagsForCategory(tags, category, subcatId, previousCategory = null) {
+        const autoManagedTags = new Set([
+          ...getIdeasSubcategoryTagSet(previousCategory),
+          ...getIdeasSubcategoryTagSet(category)
+        ]);
+        const preserved = normalizeTagList(tags).filter((tag) => !autoManagedTags.has(tag));
+        const autoTag = getAutoSubcategoryTag(category, subcatId);
+        return normalizeTagList([
+          ...preserved,
+          autoTag
+        ]);
+      }
+
+      function syncItemDerivedState(item, category) {
+        if (!item || !category) {
+          return;
+        }
+
+        item.priority = ["red", "yellow", "green"].includes(item.priority) ? item.priority : "yellow";
+        item.due = normalizeDateValue(item.due);
+        item.tags = mergeItemTagsForCategory(item.tags || [], category, item.subcat);
+        item.inspirationLinks = normalizeLinks(item.inspirationLinks || []);
+        item.outfits = item.outfits || { rotem: "", meir: "" };
+        item.outfits.rotem = String(item.outfits.rotem || "").trim();
+        item.outfits.meir = String(item.outfits.meir || "").trim();
+        item.title = String(item.title || "").trim() || "ללא כותרת";
       }
 
       function saveItemFromForm() {
@@ -6940,8 +7019,12 @@
         const subcat = String(formData.get("subcat") || "");
         const selectedSubcat = category.subcategories.some((entry) => entry.id === subcat) ? subcat : null;
         const due = normalizeDateValue(formData.get("due"));
+        const existingLocation = state.editingItemId ? findItemLocation(state.editingItemId) : null;
+        if (state.editingItemId && !existingLocation) {
+          return;
+        }
         if (category.title === "נקבע תאריך" && !due) {
-          alert('בקטגוריה "נקבע תאריך" צריך לבחור תאריך.');
+          alert('בקטגוריה "נקבע תאריך" צריך לבחור תאריך צילום / תאריך שנקבע.');
           const dueInput = refs.itemForm.elements.due;
           if (dueInput) {
             dueInput.focus();
@@ -6949,20 +7032,19 @@
           return;
         }
 
-        const subcategoryTags = category.title === "רעיונות"
-          ? new Set((category.subcategories || []).map((entry) => normalizeTagName(entry.title)).filter(Boolean))
-          : new Set();
-        const preservedTags = getPreservedItemTags().filter((tag) => !subcategoryTags.has(tag));
-        const autoSubcategoryTag = getAutoSubcategoryTag(category, selectedSubcat);
         const data = {
           title,
           priority: "yellow",
           due,
-          tags: normalizeTagList([
-            ...preservedTags,
-            ...formData.getAll("fixedTags"),
-            autoSubcategoryTag
-          ]),
+          tags: mergeItemTagsForCategory(
+            [
+              ...getPreservedItemTags(),
+              ...formData.getAll("fixedTags")
+            ],
+            category,
+            selectedSubcat,
+            existingLocation ? existingLocation.category : null
+          ),
           inspirationLinks: String(formData.get("links") || "").split("\n").map(normalizeLink).filter(Boolean),
           outfits: {
             rotem: String(formData.get("outfitRotem") || "").trim(),
@@ -6972,11 +7054,7 @@
         };
 
         if (state.editingItemId) {
-          const location = findItemLocation(state.editingItemId);
-          if (!location) {
-            return;
-          }
-
+          const location = existingLocation;
           data.priority = ["red", "yellow", "green"].includes(location.item.priority) ? location.item.priority : "yellow";
           Object.assign(location.item, data);
           if (location.category.id !== categoryId) {
@@ -7286,6 +7364,7 @@
         if (!subcategory) {
           return;
         }
+        const previousTag = normalizeTagName(subcategory.title);
         const title = window.prompt("שם חדש לתת־הקטגוריה:", subcategory.title);
         if (!title) {
           return;
@@ -7295,6 +7374,16 @@
           return;
         }
         subcategory.title = cleanTitle;
+        const nextTag = normalizeTagName(cleanTitle);
+        category.items.forEach((item) => {
+          if (item.subcat !== subcatId) {
+            return;
+          }
+          item.tags = normalizeTagList([
+            ...(item.tags || []).filter((tag) => tag !== previousTag),
+            nextTag
+          ]);
+        });
         commit();
       }
 
@@ -7308,11 +7397,13 @@
           return;
         }
         const snapshot = cloneBoard(state.board);
+        const removedTag = normalizeTagName(subcategory.title);
 
         category.subcategories = category.subcategories.filter((entry) => entry.id !== subcatId);
         category.items.forEach((item) => {
           if (item.subcat === subcatId) {
             item.subcat = null;
+            item.tags = normalizeTagList((item.tags || []).filter((tag) => tag !== removedTag));
           }
         });
         commit();
@@ -7513,6 +7604,7 @@
 
         const [item] = fromCategory.items.splice(itemIndex, 1);
         item.subcat = toCategory.subcategories.some((subcat) => subcat.id === targetSubcat) ? targetSubcat : null;
+        item.tags = mergeItemTagsForCategory(item.tags || [], toCategory, item.subcat, fromCategory);
 
         let insertAt = toCategory.items.length;
         if (beforeItemId) {
@@ -7719,6 +7811,7 @@
 
         sourceCategory.items = sourceCategory.items.filter((item) => item.id !== itemId);
         location.item.subcat = null;
+        location.item.tags = mergeItemTagsForCategory(location.item.tags || [], nextCategory, null, sourceCategory);
         nextCategory.items.push(location.item);
         commit();
         showNoticeToast(`"${location.item.title}" הועבר ל־${nextCategory.title}`);
@@ -7742,6 +7835,30 @@
           return state.board.categories.find((category) => category.title === "עריכה בסיסית")
             || state.board.categories.find((category) => isReadyCategory(category))
             || state.board.categories.find((category) => isPublishedCategory(category))
+            || null;
+        }
+
+        if (currentCategory.title === "רעיונות") {
+          return state.board.categories.find((category) => category.title === "נקבע תאריך") || null;
+        }
+
+        if (currentCategory.title === "נקבע תאריך") {
+          return state.board.categories.find((category) => category.title === "צילמנו") || null;
+        }
+
+        if (currentCategory.title === "צילמנו") {
+          return state.board.categories.find((category) => category.title === "עריכה בסיסית") || null;
+        }
+
+        if (currentCategory.title === "עריכה בסיסית") {
+          return state.board.categories.find((category) => isReadyCategory(category))
+            || state.board.categories.find((category) => category.title === READY_TITLE)
+            || null;
+        }
+
+        if (isReadyCategory(currentCategory)) {
+          return state.board.categories.find((category) => isPublishedCategory(category))
+            || state.board.categories.find((category) => category.title === PUBLISHED_TITLE)
             || null;
         }
 
